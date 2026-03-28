@@ -1,0 +1,40 @@
+// Información de la tarjeta del cliente
+import { User } from 'lucide-react'
+
+interface Props {
+  cliente: {
+    nombre: string
+    dni_ruc?: string
+    tipo: string
+  }
+}
+
+export function InfoClienteVenta({ cliente }: Props) {
+  const tipoBadgeClass = {
+    mayorista: 'bg-green-100 text-green-700',
+    especial: 'bg-purple-100 text-purple-700',
+    minorista: 'bg-gray-100 text-gray-500',
+  }
+
+  return (
+    <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+      <div className="flex items-center gap-3">
+        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+          <User size={24} className="text-blue-600" />
+        </div>
+        <div className="flex-1">
+          <p className="text-xs text-gray-400 uppercase tracking-wide">Cliente</p>
+          <p className="font-semibold text-gray-900">{cliente.nombre}</p>
+          {cliente.dni_ruc && (
+            <p className="text-xs text-gray-500">{cliente.dni_ruc}</p>
+          )}
+        </div>
+        <span className={`text-xs font-bold px-3 py-1 rounded-full uppercase ${
+          tipoBadgeClass[cliente.tipo as keyof typeof tipoBadgeClass]
+        }`}>
+          {cliente.tipo}
+        </span>
+      </div>
+    </div>
+  )
+}
