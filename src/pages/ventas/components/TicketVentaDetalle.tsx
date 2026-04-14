@@ -1,6 +1,6 @@
 // Componente para reimpresión de ticket de venta
 import type { Venta } from '@/types/venta.types'
-import { NOMBRE_NEGOCIO, RUC_NEGOCIO, DIRECCION_NEGOCIO } from '@/config/constantes'
+import { useConfigNegocio } from '@/hooks/useConfigNegocio'
 import { METODO_LABELS } from './MetodoPago'
 
 interface Props {
@@ -10,13 +10,14 @@ interface Props {
 }
 
 export function TicketVentaDetalle({ venta, cliente, esAnulada }: Props) {
+  const { nombre, ruc, direccion } = useConfigNegocio()
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       {/* Cabecera del ticket */}
       <div className="bg-blue-600 text-white text-center py-6 px-4">
-        <p className="text-lg font-bold tracking-wide">{NOMBRE_NEGOCIO}</p>
-        <p className="text-blue-200 text-xs mt-1">RUC: {RUC_NEGOCIO}</p>
-        <p className="text-blue-200 text-xs">{DIRECCION_NEGOCIO}</p>
+        <p className="text-lg font-bold tracking-wide">{nombre}</p>
+        <p className="text-blue-200 text-xs mt-1">RUC: {ruc}</p>
+        <p className="text-blue-200 text-xs">{direccion}</p>
       </div>
 
       {/* Cuerpo del ticket */}

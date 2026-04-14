@@ -12,7 +12,7 @@ export function FilaProveedor({ proveedor }: Props) {
   const navigate = useNavigate()
 
   const handleClick = () => {
-    navigate(`${RUTAS.PROVEEDORES}/${proveedor.id}`)
+    navigate(`${RUTAS.ADMIN.PROVEEDORES}/${proveedor.id}`)
   }
 
   return (

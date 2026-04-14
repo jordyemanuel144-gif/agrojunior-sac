@@ -1,0 +1,388 @@
+═══════════════════════════════════════════════════════════
+PROMPT MAESTRO — SAM JOSÉ AVÍCOLA
+Guía de desarrollo para IAs y colaboradores
+═══════════════════════════════════════════════════════════
+
+Lee este documento completo antes de tocar cualquier
+archivo. Este es el contrato de cómo se desarrolla
+este proyecto.
+
+───────────────────────────────────────────────────────────
+1. QUÉ ES EL SISTEMA
+───────────────────────────────────────────────────────────
+
+Sistema de Punto de Venta y Gestión para una tienda
+avícola llamada "Sam José Avícola" ubicada en Arequipa,
+Perú. Maneja venta de pollos y derivados por kg y por
+unidad.
+
+Stack tecnológico:
+  - React 19 + TypeScript
+  - Tailwind CSS 4
+  - Vite
+  - Supabase (base de datos y auth — aún no conectado)
+  - Lucide React (íconos)
+  - Recharts (gráficos)
+  - React Router DOM (rutas)
+
+Estado actual del proyecto:
+  - Los datos vienen de archivos mock en datos-mock/
+  - Supabase existe pero aún no está conectado
+  - El login existe pero está en mock (AuthContext)
+  - El POS principal está funcional con mock
+
+───────────────────────────────────────────────────────────
+2. CÓMO ESTÁ ORGANIZADO EL CÓDIGO
+───────────────────────────────────────────────────────────
+
+TIPOS (src/types/)
+  Un archivo por entidad del negocio.
+  Los componentes NUNCA definen tipos inline.
+  Siempre importan de aquí.
+  Archivos: comun.types.ts, producto.types.ts,
+  cliente.types.ts, proveedor.types.ts, venta.types.ts,
+  compra.types.ts, inventario.types.ts, usuario.types.ts
+
+CONFIGURACIÓN (src/config/)
+  constantes.ts → valores fijos del negocio:
+    NOMBRE_NEGOCIO, MONEDA, IGV_PORCENTAJE, etc.
+  rutas.ts → todas las rutas como constantes:
+    RUTAS.POS, RUTAS.PRODUCTOS, etc.
+  Nunca escribir strings de rutas o valores hardcodeados
+  directamente en los componentes.
+
+DATOS MOCK (src/datos-mock/)
+  Datos de prueba mientras Supabase no está conectado.
+  REGLA CRÍTICA: solo los services importan de aquí.
+  Ningún componente ni página importa mock directamente.
+  Se eliminarán en la fase de conexión a Supabase.
+
+SERVICES (src/services/)
+  ⚠️ La capa más importante del proyecto.
+  Toda operación de datos pasa por aquí.
+  Los componentes NUNCA llaman a Supabase directamente.
+  Cada service tiene estas funciones:
+    obtenerTodos()   → lista completa
+    obtenerPorId()   → un registro
+    crear()          → nuevo registro
+    actualizar()     → editar existente
+    eliminar()       → desactiva, nunca borra físicamente
+  HOY leen de datos-mock.
+  FASE SUPABASE: solo se cambia la implementación aquí.
+  Las páginas no se tocan al hacer ese cambio.
+
+HOOKS GLOBALES (src/hooks/)
+  Solo hooks que usan 2 o más módulos distintos.
+  Si un hook solo lo usa un módulo, va dentro de ese
+  módulo en pages/modulo/hooks/.
+  Hooks globales actuales:
+    useAuth.ts       → sesión y rol del usuario
+    useDebounce.ts   → retrasa búsquedas
+    usePaginacion.ts → lógica de paginación
+
+HOOKS LOCALES (pages/modulo/hooks/)
+  Lógica específica de un módulo.
+  Extraen toda la lógica del componente principal
+  para que la página quede limpia (máx 60-80 líneas).
+  Ejemplos:
+    pages/pos/hooks/useCarrito.ts
+    pages/compras/hooks/useNuevaCompra.ts
+    pages/reportes/hooks/useReportes.ts
+
+COMPONENTES GLOBALES (src/components/)
+  Solo componentes que usan 2+ módulos distintos.
+  Se dividen en tres grupos:
+
+  layout/ → estructura visual de la app
+    Layout.tsx   wrapper principal
+    Sidebar.tsx  navegación desktop
+    NavMovil.tsx barra inferior móvil
+
+  ui/ → piezas visuales genéricas SIN lógica de negocio
+    Un <Boton> no sabe que existen "ventas".
+    Un <Modal> no sabe que existen "productos".
+    Componentes: Boton, Input, Select, Modal, Badge,
+    Tarjeta, Tabla, Cargando, EstadoVacio
+
+  compartidos/ → componentes de negocio reutilizables
+    Usados en 2+ módulos distintos.
+    Ejemplos: SelectorCliente, SelectorProducto,
+    TicketImprimible
+
+COMPONENTES LOCALES (pages/modulo/components/)
+  Componentes que solo usa ese módulo.
+  Si después lo necesita otro módulo, se mueve a
+  components/compartidos/.
+
+PÁGINAS (src/pages/)
+  Un módulo del negocio = una carpeta.
+  La página principal del módulo SOLO ensambla
+  componentes. Máximo 60-80 líneas.
+  Toda la lógica va en el hook local del módulo.
+  Módulos: auth, dashboard, pos, ventas, productos,
+  compras, proveedores, clientes, inventario,
+  reportes, configuracion
+
+───────────────────────────────────────────────────────────
+3. REGLAS DE TAMAÑO
+───────────────────────────────────────────────────────────
+
+  Página principal de módulo  → máximo 60-80 líneas
+  Componente React            → máximo 100-150 líneas
+  Componente ui/              → máximo 80 líneas
+  Hook                        → máximo 80-100 líneas
+  Service                     → máximo 100-150 líneas
+  Tipos                       → máximo 100 líneas
+
+Si un archivo supera su límite:
+  Componente largo → divide en subcomponentes
+  Hook largo       → divide en hooks más pequeños
+  Service largo    → separa por funcionalidad
+
+REGLA PRÁCTICA: si tienes que hacer scroll para leer
+un archivo, está haciendo demasiado.
+
+───────────────────────────────────────────────────────────
+4. REGLAS DE NOMBRES
+───────────────────────────────────────────────────────────
+
+  Componentes React    → PascalCase    TarjetaProducto.tsx
+  Hooks                → camelCase     useCarrito.ts
+  Services             → camelCase     ventas.service.ts
+  Tipos e interfaces   → PascalCase    type Producto
+  Variables/funciones  → camelCase     precioTotal
+  Constantes globales  → UPPER_SNAKE   IGV_PORCENTAJE
+  Archivos de tipos    → kebab.types   producto.types.ts
+  Archivos mock        → kebab.mock    productos.mock.ts
+
+Todo en español excepto palabras técnicas de React
+(useState, useEffect, props, children, etc.)
+
+───────────────────────────────────────────────────────────
+5. REGLAS DE IMPORTS
+───────────────────────────────────────────────────────────
+
+Orden obligatorio en cada archivo:
+  1. React y librerías externas
+     (react, react-router-dom, lucide-react, recharts)
+  2. Tipos propios (@/types/...)
+  3. Config (@/config/...)
+  4. Context y hooks globales (@/context/, @/hooks/)
+  5. Services (@/services/...)
+  6. Componentes globales (@/components/...)
+  7. Componentes locales (./components/...)
+  8. Utils (@/lib/utils)
+
+Usar siempre alias @/ en vez de rutas relativas ../../
+El alias @/ apunta a src/.
+
+───────────────────────────────────────────────────────────
+6. REGLAS DE COMENTARIOS
+───────────────────────────────────────────────────────────
+
+Cada archivo empieza con 2-3 líneas que explican:
+  - Qué hace este archivo
+  - Por qué existe
+  - Nota importante si aplica (ej: "HOY usa mock,
+    FASE SUPABASE: reemplazar por supabase.from()")
+
+Las funciones complejas tienen un comentario breve.
+Sin comentarios obvios que no aportan nada.
+
+───────────────────────────────────────────────────────────
+7. DISEÑO VISUAL — REGLAS OBLIGATORIAS
+───────────────────────────────────────────────────────────
+
+COLOR Y ESTILO BASE:
+  Fondo general:     bg-gray-50
+  Tarjetas:          bg-white rounded-2xl shadow-sm
+                     border border-gray-100
+  Color primario:    blue-600 (#2563eb)
+  Hover primario:    blue-700
+  Texto principal:   text-gray-900
+  Texto secundario:  text-gray-400
+  Texto terciario:   text-gray-500
+  Bordes:            border-gray-100 o border-gray-200
+  Éxito:             green-600
+  Peligro:           red-500
+  Advertencia:       yellow-500
+
+TIPOGRAFÍA:
+  Título página:     text-xl font-bold text-gray-900
+  Título sección:    text-base font-bold text-gray-900
+  Subtítulo:         text-xs font-semibold text-gray-400
+                     uppercase tracking-wider
+  Cuerpo:            text-sm text-gray-700
+  Precio/número:     font-bold text-blue-600
+  Etiqueta campo:    text-xs font-semibold text-gray-400
+                     uppercase tracking-wider
+
+INPUTS Y FORMULARIOS:
+  Contenedor campo:  bg-white rounded-xl p-3 shadow-sm
+  Label:             text-xs text-gray-400 font-semibold
+                     uppercase tracking-wider mb-1
+  Input:             w-full text-sm font-medium
+                     text-gray-900 outline-none
+                     bg-transparent
+  CRÍTICO EN MÓVIL:  text-base siempre en inputs
+                     (evita zoom automático en iOS)
+  Focus:             border-blue-300 o ring-2 ring-blue-200
+
+BOTONES:
+  Primario:          bg-blue-600 text-white rounded-2xl
+                     py-4 font-bold text-sm w-full
+                     hover:bg-blue-700
+  Secundario:        bg-gray-100 text-gray-600 rounded-2xl
+                     py-3 font-semibold text-sm w-full
+  Peligro:           bg-red-500 text-white
+  Éxito:             bg-green-600 text-white
+  Touch target:      mínimo py-3 en móvil (44px)
+
+HEADERS DE PÁGINA:
+  bg-white px-4 pt-5 pb-3 border-b border-gray-100
+
+NAVEGACIÓN INTERNA (volver atrás):
+  Botón ← circular: w-9 h-9 rounded-full bg-gray-100
+  flex items-center justify-center
+
+BADGES DE ESTADO:
+  Completado:  bg-green-100 text-green-700
+  Anulado:     bg-red-100 text-red-600
+  Pendiente:   bg-yellow-100 text-yellow-700
+  Mayorista:   bg-green-100 text-green-700
+  Especial:    bg-purple-100 text-purple-700
+  Minorista:   bg-gray-100 text-gray-600
+
+───────────────────────────────────────────────────────────
+8. RESPONSIVO — OBLIGATORIO EN TODAS LAS VISTAS
+───────────────────────────────────────────────────────────
+
+FILOSOFÍA: diseña primero para móvil, luego expande.
+Breakpoint principal: md: (≥ 768px)
+
+PATRONES POR TIPO DE VISTA:
+
+  Listas:
+    Móvil →     cards apiladas una por fila
+    Desktop →   tabla con columnas o grid 2-3 col
+
+  Formularios:
+    Móvil →     campos en una columna
+    Desktop →   campos en dos columnas (grid-cols-2)
+
+  POS:
+    Móvil →     una columna, carrito en pantalla aparte
+    Desktop →   dos columnas fijas [1fr 340px]
+
+  Dashboard:
+    Móvil →     KPI cards en grid 2x2
+    Desktop →   KPI cards en fila + gráfico grande
+
+  Modales:
+    Móvil →     bottom sheet (desde abajo, rounded-t-3xl)
+    Desktop →   centrado, max-w-lg, rounded-2xl
+
+  Navegación:
+    Móvil →     barra inferior fija (NavMovil.tsx)
+    Desktop →   sidebar izquierdo fijo (Sidebar.tsx)
+
+ESPACIADO:
+  Padding contenedor: p-4 md:p-6
+  Gap entre cards:    gap-3 md:gap-4
+
+CALIDAD:
+  Sin texto cortado → usar truncate o line-clamp
+  Sin scroll horizontal en móvil
+  Imágenes siempre con object-cover
+  Tablas en desktop con overflow-x-auto
+  Inputs siempre text-base en móvil
+
+───────────────────────────────────────────────────────────
+9. LÓGICA DE NEGOCIO IMPORTANTE
+───────────────────────────────────────────────────────────
+
+PRECIOS POR TIPO DE CLIENTE:
+  minorista → precio_minorista
+  mayorista → precio_mayorista (descuento 10% auto)
+  especial  → precio_especial  (descuento 5% auto)
+
+STOCK:
+  Al registrar una venta  → stock baja automático
+  Al registrar una compra → stock sube automático
+  Esto lo manejan triggers en Supabase (ya creados)
+  El frontend solo guarda la venta/compra normalmente
+
+TICKET NÚMERO:
+  Formato: SAM-00001, SAM-00002...
+  Se genera automático en Supabase con un trigger
+  El frontend no lo genera manualmente
+
+ANULAR VENTA:
+  Solo el rol admin puede anular
+  Al anular: estado = 'anulada'
+  El trigger de Supabase devuelve el stock automático
+
+IGV:
+  Configurable desde Configuración (on/off)
+  Por defecto: desactivado
+  Porcentaje: 18%
+  Se calcula sobre el total después de descuentos
+
+MERMA:
+  merma = stock_esperado - stock_real
+  Se registra en conteos físicos de inventario
+  Se calcula automático, el usuario solo ingresa
+  stock_esperado y stock_real
+
+ROLES:
+  admin    → acceso total al sistema
+  empleado → solo puede: ver y registrar ventas,
+             ver inventario (sin costos)
+  El rol viene del AuthContext (mock hoy, JWT después)
+
+───────────────────────────────────────────────────────────
+10. MONEDA Y FORMATO
+───────────────────────────────────────────────────────────
+
+  Moneda:   Soles peruanos (S/)
+  Decimales: siempre 2 (S/ 12.50, nunca S/ 12.5)
+  Pesos:    hasta 3 decimales (1.500 kg)
+  Fechas:   formato peruano dd/mm/yyyy
+  Hora:     formato 12h con AM/PM
+
+Usar siempre las funciones de src/lib/utils.ts:
+  formatMoneda(numero)  → "S/ 12.50"
+  formatFecha(fecha)    → "24 Oct, 2024"
+  formatPeso(numero)    → "1.500 kg"
+
+───────────────────────────────────────────────────────────
+11. LO QUE NO SE HACE EN ESTE PROYECTO
+───────────────────────────────────────────────────────────
+
+  ✗ No llamar a Supabase directamente desde componentes
+  ✗ No definir tipos inline en componentes
+  ✗ No hardcodear strings de rutas (usar RUTAS.xxx)
+  ✗ No hardcodear valores de negocio (usar constantes)
+  ✗ No importar datos-mock desde páginas directamente
+  ✗ No crear componentes de más de 200 líneas sin dividir
+  ✗ No borrar registros físicamente (solo desactivar)
+  ✗ No usar rutas relativas ../../ (usar alias @/)
+  ✗ No mezclar lógica de negocio en componentes ui/
+  ✗ No poner estado global en context si es local
+
+───────────────────────────────────────────────────────────
+12. ANTES DE CREAR CUALQUIER ARCHIVO — CHECKLIST
+───────────────────────────────────────────────────────────
+
+  □ ¿Los tipos están en src/types/?
+  □ ¿Los datos vienen del service, no del mock directo?
+  □ ¿La página tiene menos de 80 líneas?
+  □ ¿La lógica está en un hook, no en el componente?
+  □ ¿Los imports usan @/ en vez de rutas relativas?
+  □ ¿El diseño funciona en 375px y en 1280px?
+  □ ¿Los inputs tienen text-base en móvil?
+  □ ¿Los botones tienen mínimo py-3?
+  □ ¿Los valores de negocio vienen de config/constantes?
+  □ ¿npm run dev compila sin errores?
+
+═══════════════════════════════════════════════════════════

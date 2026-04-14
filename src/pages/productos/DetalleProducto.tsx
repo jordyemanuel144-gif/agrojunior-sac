@@ -5,7 +5,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft, Package, Edit2, ToggleLeft, ToggleRight } from 'lucide-react'
-import { Layout } from '@/components/layout/Layout'
 import { FormularioProducto } from './components/FormularioProducto'
 import { productosService } from '@/services/productos.service'
 import { RUTAS } from '@/config/rutas'
@@ -41,23 +40,19 @@ export default function DetalleProducto() {
 
   if (cargando) {
     return (
-      <Layout>
-        <div className="flex items-center justify-center h-64">
-          <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      </Layout>
+      <div className="flex items-center justify-center h-64">
+        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
     )
   }
 
   if (!producto) {
     return (
-      <Layout>
-        <div className="p-6 max-w-screen-xl mx-auto">
-          <div className="text-center py-12">
-            <p className="text-gray-500">Producto no encontrado</p>
-          </div>
+      <div className="p-6 max-w-screen-xl mx-auto">
+        <div className="text-center py-12">
+          <p className="text-gray-500">Producto no encontrado</p>
         </div>
-      </Layout>
+      </div>
     )
   }
 
@@ -69,14 +64,14 @@ export default function DetalleProducto() {
   const stockBg = !tieneStock ? 'bg-red-50' : stockBajo ? 'bg-amber-50' : 'bg-green-50'
 
   return (
-    <Layout>
+    <>
       {/* Header sticky */}
       <div className="bg-white border-b border-gray-100 sticky top-0 z-10">
         <div className="max-w-screen-xl mx-auto">
           {/* Barra superior con volver */}
           <div className="flex items-center gap-4 p-4">
             <button
-              onClick={() => navigate(RUTAS.PRODUCTOS)}
+              onClick={() => navigate(RUTAS.ADMIN.PRODUCTOS)}
               className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
             >
               <ArrowLeft size={20} />
@@ -197,6 +192,6 @@ export default function DetalleProducto() {
           onGuardar={handleGuardar}
         />
       )}
-    </Layout>
+    </>
   )
 }

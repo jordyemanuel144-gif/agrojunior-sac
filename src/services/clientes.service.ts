@@ -18,11 +18,25 @@ export const clientesService = {
     const nuevo: Cliente = {
       ...datos,
       id: generarId(),
+      pendiente_aprobacion: true,
       created_at: now,
       updated_at: now,
     }
     clientes = [nuevo, ...clientes]
     return nuevo
+  },
+
+  obtenerPendientes: async (): Promise<Cliente[]> => {
+    return clientes.filter(c => c.pendiente_aprobacion)
+  },
+
+  aprobarCliente: async (id: string, tipo: Cliente['tipo']): Promise<Cliente> => {
+    clientes = clientes.map(c =>
+      c.id === id 
+        ? { ...c, tipo, pendiente_aprobacion: false, updated_at: new Date().toISOString() }
+        : c
+    )
+    return clientes.find(c => c.id === id)!
   },
 
   actualizar: async (id: string, datos: Partial<Cliente>): Promise<Cliente> => {

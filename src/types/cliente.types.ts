@@ -6,8 +6,9 @@ export interface Cliente {
   dni_ruc?: string
   telefono?: string
   tipo: TipoCliente
+  pendiente_aprobacion: boolean
   created_at: string
   updated_at: string
 }
 
-export type NuevoCliente = Omit<Cliente, 'id' | 'created_at' | 'updated_at'>
+export type NuevoCliente = Omit<Cliente, 'id' | 'created_at' | 'updated_at' | 'pendiente_aprobacion'>

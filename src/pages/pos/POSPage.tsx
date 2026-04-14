@@ -1,7 +1,6 @@
 // POSPage - Punto de Venta principal
 // Controla la vista y usa el hook usePOS para la lógica
 import { useState, useEffect } from 'react'
-import { Layout } from '@/components/layout/Layout'
 import { HeaderPOS } from './components/HeaderPOS'
 import { SelectorCliente } from './components/SelectorCliente'
 import { GridProductos } from './components/GridProductos'
@@ -55,46 +54,46 @@ export function POSPage() {
 
   if (cargando) {
     return (
-      <Layout>
-        <div className="flex items-center justify-center h-screen">
-          <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      </Layout>
+      <div className="flex items-center justify-center h-screen">
+        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
     )
   }
 
   if (vista === 'confirmar') {
     return (
-      <Layout>
-        <ConfirmarPedido
-          items={items}
-          cliente={clienteSeleccionado!}
-          igvActivo={false}
-          onVolver={() => setVista('pos')}
-          onConfirmar={handleConfirmar}
-          onActualizarCantidad={actualizarCantidad}
-          onEliminarItem={eliminarItem}
-        />
-      </Layout>
+      <ConfirmarPedido
+        key={items.length + '-' + items.reduce((acc, i) => acc + i.cantidad, 0)}
+        items={items}
+        cliente={clienteSeleccionado!}
+        clientes={clientes}
+        stockInfo={stockInfo}
+        igvActivo={false}
+        showClientePicker={showClientePicker}
+        onVolver={() => setVista('pos')}
+        onConfirmar={handleConfirmar}
+        onActualizarCantidad={actualizarCantidad}
+        onEliminarItem={eliminarItem}
+        onCambiarCliente={handleSeleccionarCliente}
+        onAbrirClientePicker={() => setShowClientePicker(true)}
+        onCerrarClientePicker={() => setShowClientePicker(false)}
+      />
     )
   }
 
   if (vista === 'ticket' && ventaConfirmada) {
     return (
-      <Layout>
-        <ModalTicket
-          items={items}
-          cliente={clienteSeleccionado!}
-          venta={ventaConfirmada}
-          onNuevaVenta={handleNuevaVenta}
-        />
-      </Layout>
+      <ModalTicket
+        items={items}
+        cliente={clienteSeleccionado!}
+        venta={ventaConfirmada}
+        onNuevaVenta={handleNuevaVenta}
+      />
     )
   }
 
   return (
-    <Layout>
-      <div className="relative flex flex-col min-h-screen bg-gray-50">
+    <div className="relative flex flex-col min-h-screen bg-gray-50">
         <HeaderPOS busqueda={busqueda} onBusquedaChange={setBusqueda} />
         
         {clienteSeleccionado && (
@@ -121,6 +120,8 @@ export function POSPage() {
           getPrecio={getPrecio}
           getCantidadEnCarrito={getCantidadEnCarrito}
           onAnadir={agregarProducto}
+          onActualizar={actualizarCantidad}
+          onEliminar={eliminarItem}
         />
         
         {showClientePicker && (
@@ -141,6 +142,5 @@ export function POSPage() {
           />
         )}
       </div>
-    </Layout>
   )
 }

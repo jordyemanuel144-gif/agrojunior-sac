@@ -34,7 +34,11 @@ export function FormularioCliente({ cliente, onCerrar, onGuardar }: Props) {
 
     setGuardando(true)
     try {
-      await onGuardar(form)
+      const datosConAprobacion = {
+        ...form,
+        pendiente_aprobacion: false,
+      }
+      await onGuardar(datosConAprobacion as NuevoCliente)
       onCerrar()
     } finally {
       setGuardando(false)

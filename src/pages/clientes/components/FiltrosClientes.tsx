@@ -1,11 +1,13 @@
 // Filtros para la lista de clientes
 import { Search, Filter } from 'lucide-react'
 
+type FiltroTipo = 'todos' | 'minorista' | 'mayorista' | 'especial' | 'pendientes'
+
 interface Props {
   busqueda: string
-  filtroTipo: 'todos' | 'minorista' | 'mayorista' | 'especial'
+  filtroTipo: FiltroTipo
   onBusquedaChange: (value: string) => void
-  onTipoChange: (value: 'todos' | 'minorista' | 'mayorista' | 'especial') => void
+  onTipoChange: (value: FiltroTipo) => void
 }
 
 export function FiltrosClientes({
@@ -34,10 +36,11 @@ export function FiltrosClientes({
 
         <select
           value={filtroTipo}
-          onChange={e => onTipoChange(e.target.value as typeof filtroTipo)}
-          className="px-4 py-2.5 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all min-w-[150px]"
+          onChange={e => onTipoChange(e.target.value as FiltroTipo)}
+          className="px-4 py-2.5 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all min-w-[180px]"
         >
-          <option value="todos">Todos</option>
+          <option value="todos">Todos los clientes</option>
+          <option value="pendientes">⏳ Pendientes de revisión</option>
           <option value="minorista">Minoristas</option>
           <option value="mayorista">Mayoristas</option>
           <option value="especial">Especiales</option>

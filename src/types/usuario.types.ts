@@ -1,4 +1,4 @@
-export type RolUsuario = 'admin' | 'empleado'
+export type RolUsuario = 'admin' | 'vendedor'
 
 export interface User {
   id: string
@@ -9,6 +9,8 @@ export interface User {
   created_at: string
   updated_at: string
 }
+
+export type NuevoUsuario = Omit<User, 'id' | 'created_at' | 'updated_at'>
 
 export interface Sesion {
   user: User | null

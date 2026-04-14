@@ -1,14 +1,16 @@
 import { Navigate } from 'react-router-dom'
-import { useAuthContext } from '../context/AuthContext'
+import { useAuthContext } from '@/context/AuthContext'
 import { Loader2 } from 'lucide-react'
+
+type Role = 'admin' | 'vendedor' | 'all'
 
 interface ProtectedRouteProps {
   children: React.ReactNode
-  adminOnly?: boolean
+  allowedRoles?: Role[]
 }
 
-export default function ProtectedRoute({ children, adminOnly = false }: ProtectedRouteProps) {
-  const { user, loading, isAdmin } = useAuthContext()
+export default function ProtectedRoute({ children, allowedRoles = ['admin', 'vendedor'] }: ProtectedRouteProps) {
+  const { user, loading } = useAuthContext()
 
   if (loading) {
     return (
@@ -22,8 +24,8 @@ export default function ProtectedRoute({ children, adminOnly = false }: Protecte
     return <Navigate to="/login" replace />
   }
 
-  if (adminOnly && !isAdmin) {
-    return <Navigate to="/" replace />
+  if (!allowedRoles.includes('all') && !allowedRoles.includes(user.role)) {
+    return <Navigate to="/admin/pos" replace />
   }
 
   return <>{children}</>

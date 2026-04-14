@@ -16,6 +16,7 @@ export const PRODUCTOS_MOCK: Producto[] = [
     stock_actual: 85.4, stock_minimo: 10, activo: true,
     imagen_url: 'https://images.unsplash.com/photo-1587593810167-a84920ea0781?w=300&q=80',
     tag: 'oferta',
+    destacado: true,
   },
   {
     id: '2', codigo: 'H001', nombre: 'Cartón Huevos x30',
@@ -24,6 +25,7 @@ export const PRODUCTOS_MOCK: Producto[] = [
     stock_actual: 45, stock_minimo: 5, activo: true,
     imagen_url: 'https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=300&q=80',
     tag: null,
+    destacado: true,
   },
   {
     id: '3', codigo: 'P002', nombre: 'Pechuga Especial',
@@ -31,7 +33,8 @@ export const PRODUCTOS_MOCK: Producto[] = [
     precio_costo: 10.0, precio_minorista: 12.00, precio_mayorista: 11.00, precio_especial: 10.50,
     stock_actual: 32.0, stock_minimo: 5, activo: true,
     imagen_url: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=300&q=80',
-    tag: null,
+    tag: 'nuevo',
+    destacado: true,
   },
   {
     id: '4', codigo: 'P003', nombre: 'Muslos de Pollo',

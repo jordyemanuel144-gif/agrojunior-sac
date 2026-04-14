@@ -1,20 +1,30 @@
 import { useState, useEffect, useMemo } from 'react'
-import { Plus } from 'lucide-react'
-import { Layout } from '@/components/layout/Layout'
-import { HeaderClientes } from './components/HeaderClientes'
+import { useSearchParams } from 'react-router-dom'
+import { Plus, Users } from 'lucide-react'
+import { PageHeader } from '@/components/layout/PageHeader'
 import { FiltrosClientes } from './components/FiltrosClientes'
 import { FilaCliente } from './components/FilaCliente'
 import { FormularioCliente } from './components/FormularioCliente'
 import { clientesService } from '@/services/clientes.service'
 import type { Cliente, NuevoCliente } from '@/types/cliente.types'
 
+type FiltroTipo = 'todos' | 'minorista' | 'mayorista' | 'especial' | 'pendientes'
+
 export default function ListaClientes() {
+  const [searchParams] = useSearchParams()
   const [clientes, setClientes] = useState<Cliente[]>([])
   const [cargando, setCargando] = useState(true)
   const [mostrarForm, setMostrarForm] = useState(false)
   const [clienteEditando, setClienteEditando] = useState<Cliente | null>(null)
   const [busqueda, setBusqueda] = useState('')
-  const [filtroTipo, setFiltroTipo] = useState<'todos' | 'minorista' | 'mayorista' | 'especial'>('todos')
+  const [filtroTipo, setFiltroTipo] = useState<FiltroTipo>(() => {
+    const filtro = searchParams.get('filtro')
+    if (filtro === 'pendientes') return 'pendientes'
+    if (filtro === 'minorista') return 'minorista'
+    if (filtro === 'mayorista') return 'mayorista'
+    if (filtro === 'especial') return 'especial'
+    return 'todos'
+  })
 
   useEffect(() => {
     const init = async () => {
@@ -34,7 +44,9 @@ export default function ListaClientes() {
         (c.telefono?.toLowerCase().includes(busqueda.toLowerCase()) ?? false)
 
       const matchTipo =
-        filtroTipo === 'todos' || c.tipo === filtroTipo
+        filtroTipo === 'todos' || 
+        (filtroTipo === 'pendientes' && c.pendiente_aprobacion) ||
+        c.tipo === filtroTipo
 
       return matchBusqueda && matchTipo
     })
@@ -55,20 +67,33 @@ export default function ListaClientes() {
     setClientes(data)
   }
 
+  const minoristas = clientes.filter(c => c.tipo === 'minorista').length
+  const mayoristas = clientes.filter(c => c.tipo === 'mayorista').length
+  const especiales = clientes.filter(c => c.tipo === 'especial').length
+  const pendientes = clientes.filter(c => c.pendiente_aprobacion).length
+
   if (cargando) {
     return (
-      <Layout>
-        <div className="flex items-center justify-center h-64">
-          <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      </Layout>
+      <div className="flex items-center justify-center h-64">
+        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
     )
   }
 
   return (
-    <Layout>
+    <>
       <div className="p-4 md:p-6">
-        <HeaderClientes clientes={clientes} />
+        <PageHeader
+          titulo="Clientes"
+          icono={Users}
+          stats={[
+            { label: 'Total', value: clientes.length, color: 'gray' },
+            { label: 'Pendientes', value: pendientes, color: pendientes > 0 ? 'amber' : 'gray' },
+            { label: 'Minoristas', value: minoristas, color: 'blue' },
+            { label: 'Mayoristas', value: mayoristas, color: 'green' },
+            { label: 'Especiales', value: especiales, color: 'purple' },
+          ]}
+        />
 
         <div className="max-w-screen-xl mx-auto">
           <button
@@ -119,6 +144,6 @@ export default function ListaClientes() {
           onGuardar={handleGuardar}
         />
       )}
-    </Layout>
+    </>
   )
 }

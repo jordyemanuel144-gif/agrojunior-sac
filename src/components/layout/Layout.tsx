@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { ReactNode } from 'react'
-import { Sidebar, MobileHeader } from './Sidebar'
+import { Sidebar } from './Sidebar'
+import { MobileHeader } from './MobileHeader'
 import { NavMovil } from './NavMovil'
 
 interface LayoutProps {

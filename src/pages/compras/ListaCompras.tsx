@@ -1,31 +1,33 @@
-// ============================================================
 // ListaCompras - Página principal de gestión de compras
-// Muestra historial con filtros, búsqueda y botón de crear
-// ============================================================
 import { useState, useEffect, useMemo } from 'react'
-import { Link } from 'react-router-dom'
-import { Plus } from 'lucide-react'
-import { Layout } from '@/components/layout/Layout'
-import { HeaderCompras } from './components/HeaderCompras'
+import { Plus, ShoppingCart } from 'lucide-react'
+import { PageHeader } from '@/components/layout/PageHeader'
 import { FiltrosCompras } from './components/FiltrosCompras'
 import { FilaCompra } from './components/FilaCompra'
+import { FormularioNuevaCompra } from './components/FormularioNuevaCompra'
 import { comprasService } from '@/services/compras.service'
-import { RUTAS } from '@/config/rutas'
 import type { Compra } from '@/types/compra.types'
+import { 
+  type RangoFecha, 
+  esHoy, 
+  esEstaSemana, 
+  esEsteMes, 
+  estaEnRango,
+  getFechaISO 
+} from '@/lib/utils'
 
 export default function ListaCompras() {
-  // ============================================================
-  // Estado local de la página
-  // ============================================================
   const [compras, setCompras] = useState<Compra[]>([])
   const [cargando, setCargando] = useState(true)
+  const [mostrarForm, setMostrarForm] = useState(false)
   const [busqueda, setBusqueda] = useState('')
   const [filtroEstado, setFiltroEstado] = useState<'todos' | 'completada' | 'anulada' | 'pendiente'>('todos')
-  const [filtroFecha, setFiltroFecha] = useState('')
+  const [filtroFecha, setFiltroFecha] = useState<RangoFecha>('hoy')
+  const [rangoPersonalizado, setRangoPersonalizado] = useState({
+    inicio: getFechaISO(new Date()),
+    fin: getFechaISO(new Date()),
+  })
 
-  // ============================================================
-  // Efecto: cargar compras al montar el componente
-  // ============================================================
   useEffect(() => {
     const init = async () => {
       const data = await comprasService.obtenerTodos()
@@ -35,81 +37,87 @@ export default function ListaCompras() {
     init()
   }, [])
 
-  // ============================================================
-  // Memo: filtra compras según criterios de búsqueda y filtros
-  // ============================================================
   const comprasFiltradas = useMemo(() => {
     return compras.filter(c => {
-      // Filtro por búsqueda: número de compra o nombre del proveedor
       const matchBusqueda =
         busqueda === '' ||
         c.numero.toLowerCase().includes(busqueda.toLowerCase()) ||
         comprasService.getProveedor(c.proveedor_id).toLowerCase().includes(busqueda.toLowerCase())
 
-      // Filtro por estado
       const matchEstado = filtroEstado === 'todos' || c.estado === filtroEstado
 
-      // Filtro por fecha
-      const matchFecha = filtroFecha === '' || c.fecha.split('T')[0] === filtroFecha
+      let matchFecha = true
+      if (filtroFecha === 'hoy') {
+        matchFecha = esHoy(c.fecha)
+      } else if (filtroFecha === 'semana') {
+        matchFecha = esEstaSemana(c.fecha)
+      } else if (filtroFecha === 'mes') {
+        matchFecha = esEsteMes(c.fecha)
+      } else if (filtroFecha === 'rango') {
+        matchFecha = estaEnRango(c.fecha, rangoPersonalizado.inicio, rangoPersonalizado.fin)
+      }
 
       return matchBusqueda && matchEstado && matchFecha
     })
-  }, [compras, busqueda, filtroEstado, filtroFecha])
+  }, [compras, busqueda, filtroEstado, filtroFecha, rangoPersonalizado])
 
-  // ============================================================
-  // Estado de carga
-  // ============================================================
+  const completadas = comprasFiltradas.filter(c => c.estado === 'completada')
+  const totalMonto = completadas.reduce((acc, c) => acc + c.total, 0)
+  const anuladas = comprasFiltradas.filter(c => c.estado === 'anulada').length
+  const pendientes = comprasFiltradas.filter(c => c.estado === 'pendiente').length
+
   if (cargando) {
     return (
-      <Layout>
-        <div className="flex items-center justify-center h-64">
-          <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      </Layout>
+      <div className="flex items-center justify-center h-64">
+        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
     )
   }
 
-  // ============================================================
-  // Render principal
-  // ============================================================
   return (
-    <Layout>
+    <>
       <div className="p-4 md:p-6">
-        {/* Header con título y estadísticas inline */}
-        <HeaderCompras compras={comprasFiltradas} />
+        <PageHeader
+          titulo="Historial de Compras"
+          icono={ShoppingCart}
+          stats={[
+            { label: 'Total', value: `S/ ${totalMonto.toFixed(2)}`, color: 'gray' },
+            { label: 'Completadas', value: completadas.length, color: 'green' },
+            ...(pendientes > 0 ? [{ label: 'Pendientes', value: pendientes, color: 'amber' as const }] : []),
+            ...(anuladas > 0 ? [{ label: 'Anuladas', value: anuladas, color: 'red' as const }] : []),
+          ]}
+        />
 
-        {/* Contenido centrado con max-width */}
         <div className="max-w-screen-xl mx-auto">
-          {/* Botón para crear nueva compra */}
-          <Link
-            to={`${RUTAS.COMPRAS}/nueva`}
+          <button
+            onClick={() => setMostrarForm(true)}
             className="w-full md:w-auto flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors mb-4"
           >
             <Plus size={20} />
             <span className="font-medium">Nueva Compra</span>
-          </Link>
+          </button>
 
-          {/* Filtros de búsqueda */}
           <FiltrosCompras
             busqueda={busqueda}
             filtroEstado={filtroEstado}
             filtroFecha={filtroFecha}
+            rangoPersonalizado={rangoPersonalizado}
             onBusquedaChange={setBusqueda}
             onEstadoChange={setFiltroEstado}
             onFechaChange={setFiltroFecha}
+            onRangoChange={setRangoPersonalizado}
           />
 
-          {/* Lista de compras o mensaje vacío */}
           {comprasFiltradas.length === 0 ? (
             <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 text-center">
               <p className="text-gray-500">
-                {busqueda || filtroEstado !== 'todos' || filtroFecha
+                {busqueda || filtroEstado !== 'todos' || filtroFecha !== 'todos'
                   ? 'No se encontraron compras con los filtros aplicados'
                   : 'No hay compras registradas'}
               </p>
-              {(busqueda || filtroEstado !== 'todos' || filtroFecha) && (
+              {(busqueda || filtroEstado !== 'todos' || filtroFecha !== 'todos') && (
                 <button
-                  onClick={() => { setBusqueda(''); setFiltroEstado('todos'); setFiltroFecha('') }}
+                  onClick={() => { setBusqueda(''); setFiltroEstado('todos'); setFiltroFecha('hoy') }}
                   className="mt-4 text-blue-600 hover:underline"
                 >
                   Limpiar filtros
@@ -124,7 +132,22 @@ export default function ListaCompras() {
             </div>
           )}
         </div>
+
+        {mostrarForm && (
+          <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+              <FormularioNuevaCompra
+                onCerrar={() => setMostrarForm(false)}
+                onGuardar={async () => {
+                  setMostrarForm(false)
+                  const data = await comprasService.obtenerTodos()
+                  setCompras(data)
+                }}
+              />
+            </div>
+          </div>
+        )}
       </div>
-    </Layout>
+    </>
   )
 }

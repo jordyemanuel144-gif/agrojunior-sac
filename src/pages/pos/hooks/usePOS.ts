@@ -5,10 +5,12 @@ import { useState, useEffect, useMemo, useCallback } from 'react'
 import { productosService } from '@/services/productos.service'
 import { clientesService } from '@/services/clientes.service'
 import { ventasService } from '@/services/ventas.service'
+import { comprobantesService } from '@/services/comprobantes.service'
 import { useCarrito } from './useCarrito'
+import { useAuthContext } from '@/context/AuthContext'
 import type { Producto } from '@/types/producto.types'
 import type { Cliente } from '@/types/cliente.types'
-import type { MetodoPago } from '@/types/venta.types'
+import type { MetodoPago, EstadoPago, Venta } from '@/types/venta.types'
 
 type Vista = 'pos' | 'confirmar' | 'ticket'
 
@@ -25,6 +27,7 @@ export function usePOS() {
   const [productos, setProductos] = useState<Producto[]>([])
   const [clientes, setClientes] = useState<Cliente[]>([])
   const [cargando, setCargando] = useState(true)
+  const { user } = useAuthContext()
 
   // Estado UI
   const [vista, setVista] = useState<Vista>('pos')
@@ -83,8 +86,8 @@ export function usePOS() {
   }, [productos, categoriaActiva, busqueda])
 
   // Confirmar venta
-  const handleConfirmar = useCallback(async (metodo: MetodoPago, descuento: number, igv: number, total: number) => {
-    console.log('handleConfirmar iniciado', { metodo, descuento, igv, total })
+  const handleConfirmar = useCallback(async (metodo: MetodoPago, descuento: number, igv: number, total: number, montoPagado: number, estadoPago: EstadoPago) => {
+    console.log('handleConfirmar iniciado', { metodo, descuento, igv, total, montoPagado, estadoPago })
     
     if (!clienteSeleccionado) {
       console.error('No hay cliente seleccionado')
@@ -96,6 +99,7 @@ export function usePOS() {
       const nuevaVenta = await ventasService.crear({
         ticket_numero: '',
         cliente_id: clienteSeleccionado.id,
+        vendedor_id: user?.id || 'usr_001',
         items: items.map(item => ({
           producto: item.producto,
           cantidad: item.cantidad,
@@ -107,6 +111,8 @@ export function usePOS() {
         descuento,
         igv,
         total,
+        monto_pagado: montoPagado,
+        estado_pago: estadoPago,
       })
       console.log('Venta creada:', nuevaVenta)
 
@@ -131,14 +137,21 @@ export function usePOS() {
         total,
       }
       console.log('Seteando ticket:', ticket)
-      setVentaConfirmada(ticket)
+
+      // Guardar comprobante de venta
+      const ventaParaComprobante: Venta & { vendedor_nombre: string } = {
+        ...nuevaVenta,
+        vendedor_nombre: user?.name || 'Cajero',
+      }
+      comprobantesService.crearVenta(ventaParaComprobante)
+
       console.log('Cambiando vista a ticket')
       setVista('ticket')
       console.log('handleConfirmar completado')
     } catch (error) {
       console.error('Error al registrar venta:', error)
     }
-  }, [clienteSeleccionado, items, subtotal, productos])
+  }, [clienteSeleccionado, items, subtotal, productos, user])
 
   // Nueva venta
   const handleNuevaVenta = useCallback(() => {
@@ -158,6 +171,12 @@ export function usePOS() {
 
   // Seleccionar cliente
   const handleSeleccionarCliente = useCallback((cliente: Cliente) => {
+    setClienteSeleccionado(cliente)
+    setShowClientePicker(false)
+  }, [])
+
+  // Cambiar cliente sin salir de la vista de confirmar
+  const cambiarCliente = useCallback((cliente: Cliente) => {
     setClienteSeleccionado(cliente)
     setShowClientePicker(false)
   }, [])
@@ -196,6 +215,7 @@ export function usePOS() {
     handleNuevaVenta,
     handleCancelar,
     handleSeleccionarCliente,
+    cambiarCliente,
     getPrecio,
     getStockDisponible,
     getCantidadEnCarrito,

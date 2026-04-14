@@ -1,8 +1,11 @@
 // ============================================================
 // FilaInventario - Fila de item de inventario en la lista
 // Muestra producto con stock actual, mínimo y estado visual
+// Es clickeable para ir al detalle
 // ============================================================
+import { useNavigate } from 'react-router-dom'
 import { AlertTriangle, Package } from 'lucide-react'
+import { RUTAS } from '@/config/rutas'
 import type { ItemStock } from '@/types/inventario.types'
 
 interface Props {
@@ -10,6 +13,8 @@ interface Props {
 }
 
 export function FilaInventario({ item }: Props) {
+  const navigate = useNavigate()
+
   const estadoConfig = {
     ok: {
       color: 'green',
@@ -38,7 +43,10 @@ export function FilaInventario({ item }: Props) {
   const EstadoIcon = estado.icon
 
   return (
-    <div className="flex items-center gap-3 md:gap-4 p-4 bg-white border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors">
+    <div 
+      onClick={() => navigate(`${RUTAS.ADMIN.INVENTARIO}/detalle/${item.id}`)}
+      className="flex items-center gap-3 md:gap-4 p-4 bg-white border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors cursor-pointer"
+    >
       {/* Ícono de estado */}
       <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${estado.bg}`}>
         {EstadoIcon ? (

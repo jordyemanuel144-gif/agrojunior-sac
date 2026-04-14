@@ -23,7 +23,7 @@ export function FilaProducto({ producto }: Props) {
   const stockBg = stockAgotado ? 'bg-red-50' : stockBajo ? 'bg-amber-50' : 'bg-green-50'
 
   const handleClick = () => {
-    navigate(`${RUTAS.PRODUCTOS}/${producto.id}`)
+    navigate(`${RUTAS.ADMIN.PRODUCTOS}/${producto.id}`)
   }
 
   return (

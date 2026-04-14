@@ -1,4 +1,4 @@
-// Información de la tarjeta del cliente
+// Información de la tarjeta del cliente y vendedor
 import { User } from 'lucide-react'
 
 interface Props {
@@ -7,9 +7,12 @@ interface Props {
     dni_ruc?: string
     tipo: string
   }
+  vendedor?: {
+    nombre: string
+  }
 }
 
-export function InfoClienteVenta({ cliente }: Props) {
+export function InfoClienteVenta({ cliente, vendedor }: Props) {
   const tipoBadgeClass = {
     mayorista: 'bg-green-100 text-green-700',
     especial: 'bg-purple-100 text-purple-700',
@@ -17,7 +20,7 @@ export function InfoClienteVenta({ cliente }: Props) {
   }
 
   return (
-    <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+    <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 space-y-3">
       <div className="flex items-center gap-3">
         <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
           <User size={24} className="text-blue-600" />
@@ -35,6 +38,13 @@ export function InfoClienteVenta({ cliente }: Props) {
           {cliente.tipo}
         </span>
       </div>
+      
+      {vendedor && (
+        <div className="pt-3 border-t border-gray-100">
+          <p className="text-xs text-gray-400 uppercase tracking-wide">Vendido por</p>
+          <p className="font-medium text-gray-700">{vendedor.nombre}</p>
+        </div>
+      )}
     </div>
   )
 }

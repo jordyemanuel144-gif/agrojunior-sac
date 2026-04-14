@@ -77,7 +77,7 @@ export function HistorialComprasProveedor({ proveedorId }: HistorialComprasProve
           {compras.map((compra) => (
             <button
               key={compra.id}
-              onClick={() => navigate(`${RUTAS.COMPRAS}/${compra.id}`)}
+              onClick={() => navigate(`${RUTAS.ADMIN.COMPRAS}/${compra.id}`)}
               className="w-full bg-white rounded-xl p-3 shadow-sm border border-gray-100 flex items-center justify-between hover:bg-gray-50 transition-colors"
             >
               <div className="flex items-center gap-3">
@@ -112,7 +112,7 @@ export function HistorialComprasProveedor({ proveedorId }: HistorialComprasProve
               {compras.map((compra) => (
                 <tr
                   key={compra.id}
-                  onClick={() => navigate(`${RUTAS.COMPRAS}/${compra.id}`)}
+              onClick={() => navigate(`${RUTAS.ADMIN.COMPRAS}/${compra.id}`)}
                   className="border-b border-gray-50 hover:bg-gray-50 cursor-pointer transition-colors"
                 >
                   <td className="py-3 text-sm text-gray-700">{formatFecha(compra.fecha)}</td>

@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
-import { Plus } from 'lucide-react'
-import { Layout } from '@/components/layout/Layout'
-import { HeaderProveedores } from './components/HeaderProveedores'
+import { Plus, Truck } from 'lucide-react'
+import { PageHeader } from '@/components/layout/PageHeader'
 import { FiltrosProveedores } from './components/FiltrosProveedores'
 import { FilaProveedor } from './components/FilaProveedor'
 import { FormularioProveedor } from './components/FormularioProveedor'
@@ -57,20 +56,29 @@ export default function ListaProveedores() {
     setProveedores(data)
   }
 
+  const activos = proveedores.filter(p => p.activo).length
+  const inactivos = proveedores.length - activos
+
   if (cargando) {
     return (
-      <Layout>
-        <div className="flex items-center justify-center h-64">
-          <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      </Layout>
+      <div className="flex items-center justify-center h-64">
+        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
     )
   }
 
   return (
-    <Layout>
+    <>
       <div className="p-4 md:p-6">
-        <HeaderProveedores proveedores={proveedores} />
+        <PageHeader
+          titulo="Proveedores"
+          icono={Truck}
+          stats={[
+            { label: 'Total', value: proveedores.length, color: 'gray' },
+            { label: 'Activos', value: activos, color: 'green' },
+            { label: 'Inactivos', value: inactivos, color: 'red' },
+          ]}
+        />
 
         <div className="max-w-screen-xl mx-auto">
           <button
@@ -121,6 +129,6 @@ export default function ListaProveedores() {
           onGuardar={handleGuardar}
         />
       )}
-    </Layout>
+    </>
   )
 }

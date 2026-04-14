@@ -1,23 +1,27 @@
-// ============================================================
 // StockActual - Página principal de control de inventario
-// Muestra stock actual de todos los productos con filtros
-// ============================================================
 import { useState, useEffect, useMemo } from 'react'
-import { Layout } from '@/components/layout/Layout'
-import { HeaderInventario } from './components/HeaderInventario'
+import { useSearchParams, useNavigate } from 'react-router-dom'
+import { Warehouse } from 'lucide-react'
+import { PageHeader } from '@/components/layout/PageHeader'
 import { FiltrosInventario } from './components/FiltrosInventario'
 import { FilaInventario } from './components/FilaInventario'
 import { inventarioService } from '@/services/inventario.service'
+import { RUTAS } from '@/config/rutas'
 import type { ItemStock } from '@/types/inventario.types'
 
 export default function StockActual() {
-  // ============================================================
-  // Estado local de la página
-  // ============================================================
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [items, setItems] = useState<ItemStock[]>([])
   const [cargando, setCargando] = useState(true)
   const [busqueda, setBusqueda] = useState('')
-  const [filtroEstado, setFiltroEstado] = useState<'todos' | 'ok' | 'bajo' | 'agotado'>('todos')
+  const [filtroEstado, setFiltroEstado] = useState<'todos' | 'ok' | 'bajo' | 'agotado'>(() => {
+    const filtro = searchParams.get('filtro')
+    if (filtro === 'stock_bajo') return 'bajo'
+    if (filtro === 'agotado') return 'agotado'
+    if (filtro === 'ok') return 'ok'
+    return 'todos'
+  })
 
   // ============================================================
   // Efecto: cargar inventario al montar el componente
@@ -36,28 +40,25 @@ export default function StockActual() {
   // ============================================================
   const itemsFiltrados = useMemo(() => {
     return items.filter(item => {
-      // Filtro por búsqueda: nombre del producto
       const matchBusqueda =
         busqueda === '' ||
         item.nombre.toLowerCase().includes(busqueda.toLowerCase())
 
-      // Filtro por estado
       const matchEstado = filtroEstado === 'todos' || item.estado === filtroEstado
 
       return matchBusqueda && matchEstado
     })
   }, [items, busqueda, filtroEstado])
 
-  // ============================================================
-  // Estado de carga
-  // ============================================================
+  const normal = itemsFiltrados.filter(i => i.estado === 'ok').length
+  const bajoStock = itemsFiltrados.filter(i => i.estado === 'bajo').length
+  const agotados = itemsFiltrados.filter(i => i.estado === 'agotado').length
+
   if (cargando) {
     return (
-      <Layout>
-        <div className="flex items-center justify-center h-64">
-          <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      </Layout>
+      <div className="flex items-center justify-center h-64">
+        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
     )
   }
 
@@ -65,13 +66,28 @@ export default function StockActual() {
   // Render principal
   // ============================================================
   return (
-    <Layout>
+    <>
       <div className="p-4 md:p-6">
-        {/* Header con título y estadísticas inline */}
-        <HeaderInventario items={itemsFiltrados} />
+        <PageHeader
+          titulo="Stock Actual"
+          icono={Warehouse}
+          stats={[
+            { label: 'Total', value: itemsFiltrados.length, color: 'gray' },
+            { label: 'Normal', value: normal, color: 'green' },
+            ...(bajoStock > 0 ? [{ label: 'Bajo stock', value: bajoStock, color: 'amber' as const }] : []),
+            ...(agotados > 0 ? [{ label: 'Agotados', value: agotados, color: 'red' as const }] : []),
+          ]}
+        />
 
-        {/* Contenido centrado con max-width */}
         <div className="max-w-screen-xl mx-auto">
+          <div className="flex gap-2 mb-4">
+            <button
+              onClick={() => navigate(RUTAS.ADMIN.INVENTARIO_CONTEO)}
+              className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium text-sm"
+            >
+              Ajuste de Inventario
+            </button>
+          </div>
           {/* Filtros de búsqueda */}
           <FiltrosInventario
             busqueda={busqueda}
@@ -106,6 +122,6 @@ export default function StockActual() {
           )}
         </div>
       </div>
-    </Layout>
+    </>
   )
 }

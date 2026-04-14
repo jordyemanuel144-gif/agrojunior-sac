@@ -1,6 +1,7 @@
-// ClientePicker - Modal para seleccionar cliente
-import { UserCircle, X } from 'lucide-react'
-import type { Cliente } from '@/types/cliente.types'
+// ClientePicker - Modal para seleccionar cliente con búsqueda y filtros
+import { useState, useMemo } from 'react'
+import { UserCircle, X, Search } from 'lucide-react'
+import type { Cliente, TipoCliente } from '@/types/cliente.types'
 
 interface Props {
   clientes: Cliente[]
@@ -9,13 +10,39 @@ interface Props {
   onCerrar: () => void
 }
 
+const TIPOS_CLIENTE: { value: TipoCliente | 'todos'; label: string }[] = [
+  { value: 'todos', label: 'Todos' },
+  { value: 'minorista', label: 'Minorista' },
+  { value: 'mayorista', label: 'Mayorista' },
+  { value: 'especial', label: 'Especial' },
+]
+
 export function ClientePicker({ clientes, clienteSeleccionado, onSeleccionar, onCerrar }: Props) {
+  const [busqueda, setBusqueda] = useState('')
+  const [filtroTipo, setFiltroTipo] = useState<TipoCliente | 'todos'>('todos')
+
+  const clientesFiltrados = useMemo(() => {
+    const busquedaLower = busqueda.toLowerCase().trim()
+    
+    return clientes.filter(cliente => {
+      const coincideBusqueda = !busquedaLower || 
+        cliente.nombre.toLowerCase().includes(busquedaLower) ||
+        cliente.dni_ruc?.toLowerCase().includes(busquedaLower) ||
+        cliente.telefono?.toLowerCase().includes(busquedaLower)
+
+      const coincideTipo = filtroTipo === 'todos' || cliente.tipo === filtroTipo
+
+      return coincideBusqueda && coincideTipo
+    })
+  }, [clientes, busqueda, filtroTipo])
+
   return (
     <div
       className="fixed inset-0 bg-black/50 z-50 flex items-end md:items-center md:justify-center"
       onClick={(e) => e.target === e.currentTarget && onCerrar()}
     >
-      <div className="bg-white w-full md:w-96 md:rounded-3xl rounded-t-3xl p-4 max-h-[75%] flex flex-col animate-slide-up">
+      <div className="bg-white w-full md:w-[420px] md:rounded-3xl rounded-t-3xl p-4 max-h-[85%] flex flex-col animate-slide-up">
+        {/* Header */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
@@ -30,39 +57,100 @@ export function ClientePicker({ clientes, clienteSeleccionado, onSeleccionar, on
             <X size={16} />
           </button>
         </div>
-        <div className="w-10 h-1 bg-gray-200 rounded-full mx-auto mb-3" />
-        <div className="flex-1 overflow-y-auto space-y-2 -mr-2 pr-2">
-          {clientes.map(c => (
+
+        {/* Buscador */}
+        <div className="relative mb-3">
+          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <input
+            type="text"
+            value={busqueda}
+            onChange={(e) => setBusqueda(e.target.value)}
+            placeholder="Buscar por nombre, DNI/RUC o teléfono..."
+            className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+
+        {/* Filtros de tipo */}
+        <div className="flex gap-2 mb-4 overflow-x-auto pb-1">
+          {TIPOS_CLIENTE.map((tipo) => (
             <button
-              key={c.id}
-              onClick={() => onSeleccionar(c)}
-              className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all ${
-                clienteSeleccionado?.id === c.id
-                  ? 'bg-blue-50 border-2 border-blue-200'
-                  : 'bg-gray-50 hover:bg-gray-100'
+              key={tipo.value}
+              onClick={() => setFiltroTipo(tipo.value)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
+                filtroTipo === tipo.value
+                  ? tipo.value === 'todos'
+                    ? 'bg-blue-600 text-white'
+                    : tipo.value === 'mayorista'
+                    ? 'bg-green-600 text-white'
+                    : tipo.value === 'especial'
+                    ? 'bg-purple-600 text-white'
+                    : 'bg-gray-600 text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
-              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <UserCircle size={20} className="text-blue-600" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-900 truncate">{c.nombre}</p>
-                {c.dni_ruc && <p className="text-xs text-gray-400">{c.dni_ruc}</p>}
-              </div>
-              <span
-                className={`text-[10px] font-bold px-2 py-1 rounded-full uppercase ${
-                  c.tipo === 'mayorista'
-                    ? 'bg-green-100 text-green-700'
-                    : c.tipo === 'especial'
-                    ? 'bg-purple-100 text-purple-700'
-                    : 'bg-gray-100 text-gray-500'
-                }`}
-              >
-                {c.tipo}
-              </span>
+              {tipo.label}
             </button>
           ))}
         </div>
+
+        {/* Resultados */}
+        <div className="flex-1 overflow-y-auto space-y-2 -mr-2 pr-2 min-h-[200px]">
+          {clientesFiltrados.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-8 text-gray-400">
+              <Search size={32} className="mb-2 opacity-50" />
+              <p className="text-sm">No se encontraron clientes</p>
+              <p className="text-xs">Intenta con otros filtros</p>
+            </div>
+          ) : (
+            clientesFiltrados.map((cliente) => (
+              <button
+                key={cliente.id}
+                onClick={() => onSeleccionar(cliente)}
+                className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all ${
+                  clienteSeleccionado?.id === cliente.id
+                    ? 'bg-blue-50 border-2 border-blue-200'
+                    : 'bg-gray-50 hover:bg-gray-100'
+                }`}
+              >
+                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <UserCircle size={20} className="text-blue-600" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-gray-900 truncate">{cliente.nombre}</p>
+                  <div className="flex items-center gap-2">
+                    {cliente.dni_ruc && (
+                      <p className="text-xs text-gray-400">{cliente.dni_ruc}</p>
+                    )}
+                    {cliente.dni_ruc && cliente.telefono && (
+                      <span className="text-gray-300">•</span>
+                    )}
+                    {cliente.telefono && (
+                      <p className="text-xs text-gray-400">{cliente.telefono}</p>
+                    )}
+                  </div>
+                </div>
+                <span
+                  className={`text-[10px] font-bold px-2 py-1 rounded-full uppercase flex-shrink-0 ${
+                    cliente.tipo === 'mayorista'
+                      ? 'bg-green-100 text-green-700'
+                      : cliente.tipo === 'especial'
+                      ? 'bg-purple-100 text-purple-700'
+                      : 'bg-gray-100 text-gray-500'
+                  }`}
+                >
+                  {cliente.tipo}
+                </span>
+              </button>
+            ))
+          )}
+        </div>
+
+        {/* Indicador de resultados */}
+        {busqueda || filtroTipo !== 'todos' ? (
+          <p className="text-xs text-gray-400 text-center pt-2 border-t mt-2">
+            {clientesFiltrados.length} de {clientes.length} clientes
+          </p>
+        ) : null}
       </div>
     </div>
   )

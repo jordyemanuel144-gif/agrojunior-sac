@@ -22,7 +22,7 @@ export function HeaderDetalleCliente({ cliente }: Props) {
       <div className="max-w-screen-xl mx-auto">
         <div className="flex items-center gap-4 p-4">
           <button
-            onClick={() => navigate(RUTAS.CLIENTES)}
+            onClick={() => navigate(RUTAS.ADMIN.CLIENTES)}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
           >
             <ArrowLeft size={20} />

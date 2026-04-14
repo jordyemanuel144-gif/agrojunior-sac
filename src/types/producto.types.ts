@@ -19,6 +19,7 @@ export interface Producto {
   stock_minimo: number
   activo: boolean
   imagen_url?: string
+  destacado?: boolean
   tag?: 'oferta' | 'nuevo' | null
 }
 

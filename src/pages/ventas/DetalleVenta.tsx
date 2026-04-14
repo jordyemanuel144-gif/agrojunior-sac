@@ -1,13 +1,13 @@
 // DetalleVenta - Muestra los detalles de una venta específica
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Layout } from '@/components/layout/Layout'
 import { HeaderDetalleVenta } from './components/HeaderDetalleVenta'
 import { InfoClienteVenta } from './components/InfoClienteVenta'
 import { TicketVentaDetalle } from './components/TicketVentaDetalle'
 import { AccionesVentaDetalle } from './components/AccionesVentaDetalle'
 import { ModalAnularVenta } from './components/ModalAnularVenta'
 import { ventasService } from '@/services/ventas.service'
+import { useAuthContext } from '@/context/AuthContext'
 import { NOMBRE_NEGOCIO } from '@/config/constantes'
 import { RUTAS } from '@/config/rutas'
 import type { Venta } from '@/types/venta.types'
@@ -15,18 +15,34 @@ import type { Venta } from '@/types/venta.types'
 export default function DetalleVenta() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const { user, isAdmin } = useAuthContext()
   const [venta, setVenta] = useState<Venta | null>(null)
   const [loading, setLoading] = useState(true)
   const [anulando, setAnulando] = useState(false)
   const [showConfirmAnular, setShowConfirmAnular] = useState(false)
+  const [errorAcceso, setErrorAcceso] = useState(false)
 
-  // Carga la venta por ID
+  // Carga la venta por ID con verificación de seguridad
   useEffect(() => {
     if (!id) return
     ventasService.obtenerPorId(id)
-      .then(setVenta)
+      .then(v => {
+        if (!v) {
+          setVenta(null)
+        } else {
+          // Verificar que el usuario puede ver esta venta
+          const esVendedor = !isAdmin
+          const noPertenece = v.vendedor_id !== user?.id
+          if (esVendedor && noPertenece) {
+            setErrorAcceso(true)
+            setVenta(null)
+          } else {
+            setVenta(v)
+          }
+        }
+      })
       .finally(() => setLoading(false))
-  }, [id])
+  }, [id, isAdmin, user])
 
   // Anula la venta
   const handleAnular = async () => {
@@ -61,28 +77,24 @@ export default function DetalleVenta() {
   // Loading
   if (loading) {
     return (
-      <Layout>
-        <div className="flex items-center justify-center h-64">
-          <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      </Layout>
+      <div className="flex items-center justify-center h-64">
+        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
     )
   }
 
-  // No encontrada
+  // No encontrada o acceso denegado
   if (!venta) {
     return (
-      <Layout>
-        <div className="flex flex-col items-center justify-center h-64 text-gray-500">
-          <p className="text-lg">Venta no encontrada</p>
-          <button
-            onClick={() => navigate(RUTAS.VENTAS)}
-            className="mt-2 text-blue-600 hover:underline"
-          >
-            Volver al historial
-          </button>
-        </div>
-      </Layout>
+      <div className="flex flex-col items-center justify-center h-64 text-gray-500">
+        <p className="text-lg">{errorAcceso ? 'No tienes acceso a esta venta' : 'Venta no encontrada'}</p>
+        <button
+          onClick={() => navigate(RUTAS.ADMIN.VENTAS)}
+          className="mt-2 text-blue-600 hover:underline"
+        >
+          Volver al historial
+        </button>
+      </div>
     )
   }
 
@@ -90,20 +102,48 @@ export default function DetalleVenta() {
   const esAnulada = venta.estado === 'anulada'
 
   return (
-    <Layout>
+    <>
       <div className="min-h-screen bg-gray-50">
         {/* Header sticky con volver y estado */}
         <HeaderDetalleVenta
           venta={venta}
           esAnulada={esAnulada}
-          onVolver={() => navigate(RUTAS.VENTAS)}
+          onVolver={() => navigate(RUTAS.ADMIN.VENTAS)}
           onAnular={() => setShowConfirmAnular(true)}
         />
 
         {/* Contenido principal centrado */}
         <div className="p-4 md:p-6 max-w-xl mx-auto space-y-4">
           {/* Info del cliente */}
-          <InfoClienteVenta cliente={cliente} />
+          <InfoClienteVenta 
+            cliente={cliente} 
+            vendedor={{ nombre: venta.vendedor_nombre }}
+          />
+
+          {/* Banner de saldo pendiente */}
+          {esAnulada === false && venta.estado_pago !== 'pagado' && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
+                    <span className="text-yellow-600">⏱</span>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-yellow-800">Saldo pendiente</p>
+                    <p className="text-sm text-yellow-700">
+                      Pendiente: S/ {(venta.total - venta.monto_pagado).toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => navigate(RUTAS.ADMIN.COBRANZAS)}
+                  className="px-4 py-2 bg-yellow-500 text-white rounded-lg text-sm font-medium hover:bg-yellow-600 transition-colors"
+                >
+                  Cobrar
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Ticket reimpreso */}
           <TicketVentaDetalle
@@ -130,6 +170,6 @@ export default function DetalleVenta() {
           />
         )}
       </div>
-    </Layout>
+    </>
   )
 }

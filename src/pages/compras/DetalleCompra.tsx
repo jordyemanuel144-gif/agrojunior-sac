@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Layout } from '@/components/layout/Layout'
 import { HeaderDetalleCompra } from './components/HeaderDetalleCompra'
 import { InfoProveedorCompra } from './components/InfoProveedorCompra'
 import { FilaItemCompra } from './components/FilaItemCompra'
@@ -33,30 +32,26 @@ export default function DetalleCompra() {
 
   if (cargando) {
     return (
-      <Layout>
-        <div className="flex items-center justify-center h-64">
-          <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      </Layout>
+      <div className="flex items-center justify-center h-64">
+        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
     )
   }
 
   if (!compra) {
     return (
-      <Layout>
-        <div className="p-6 max-w-screen-xl mx-auto">
-          <div className="text-center py-12">
-            <p className="text-gray-500">Compra no encontrada</p>
-          </div>
+      <div className="p-6 max-w-screen-xl mx-auto">
+        <div className="text-center py-12">
+          <p className="text-gray-500">Compra no encontrada</p>
         </div>
-      </Layout>
+      </div>
     )
   }
 
   const esAnulada = compra.estado === 'anulada'
 
   return (
-    <Layout>
+    <>
       <HeaderDetalleCompra compra={compra} />
 
       <div className="p-4 md:p-6 max-w-screen-xl mx-auto">
@@ -130,6 +125,6 @@ export default function DetalleCompra() {
           }}
         />
       )}
-    </Layout>
+    </>
   )
 }

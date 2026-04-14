@@ -15,7 +15,7 @@ export function HeaderDetalleProveedor({ proveedor }: Props) {
       <div className="max-w-screen-xl mx-auto">
         <div className="flex items-center gap-4 p-4">
           <button
-            onClick={() => navigate(RUTAS.PROVEEDORES)}
+            onClick={() => navigate(RUTAS.ADMIN.PROVEEDORES)}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
           >
             <ArrowLeft size={20} />

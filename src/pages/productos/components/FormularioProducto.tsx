@@ -2,9 +2,10 @@
 // FormularioProducto - Modal para crear/editar un producto
 // ============================================================
 import { useState, useEffect } from 'react'
-import { X } from 'lucide-react'
+import { X, Calculator } from 'lucide-react'
 import type { Producto, NuevoProducto, TipoMedida } from '@/types/producto.types'
 import { CATEGORIAS } from '@/datos-mock/productos.mock'
+import { DESCUENTO_MAYORISTA, DESCUENTO_ESPECIAL } from '@/config/constantes'
 
 interface Props {
   producto?: Producto | null
@@ -27,6 +28,7 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
     activo: true,
     imagen_url: '',
     tag: null,
+    destacado: false,
   })
   const [guardando, setGuardando] = useState(false)
 
@@ -46,6 +48,7 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
         activo: producto.activo,
         imagen_url: producto.imagen_url ?? '',
         tag: producto.tag ?? null,
+        destacado: producto.destacado ?? false,
       })
     }
   }, [producto])
@@ -63,7 +66,7 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
     }
   }
 
-  const actualizarCampo = (campo: keyof NuevoProducto, valor: string | number | boolean) => {
+  const actualizarCampo = (campo: keyof NuevoProducto, valor: string | number | boolean | null) => {
     setForm(prev => ({ ...prev, [campo]: valor }))
   }
 
@@ -135,10 +138,41 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
             </div>
           </div>
 
-          {/* Precios */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {/* Precios - Solo precio base, los demás se calculan automáticamente */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <Calculator size={16} />
+              <span>Los precios para Mayorista y Especial se calculan automáticamente</span>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Precio Minorista *</label>
+                <input
+                  type="number"
+                  value={form.precio_minorista}
+                  onChange={e => actualizarCampo('precio_minorista', Number(e.target.value))}
+                  step="0.01"
+                  min={0}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="0.00"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Mayorista (-{DESCUENTO_MAYORISTA}%)</label>
+                <div className="w-full px-3 py-2 bg-gray-100 border border-gray-200 rounded-lg text-green-700 font-medium">
+                  S/ {((form.precio_minorista || 0) * (1 - DESCUENTO_MAYORISTA / 100)).toFixed(2)}
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Especial (-{DESCUENTO_ESPECIAL}%)</label>
+                <div className="w-full px-3 py-2 bg-gray-100 border border-gray-200 rounded-lg text-purple-700 font-medium">
+                  S/ {((form.precio_minorista || 0) * (1 - DESCUENTO_ESPECIAL / 100)).toFixed(2)}
+                </div>
+              </div>
+            </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Precio costo</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Precio costo (opcional)</label>
               <input
                 type="number"
                 value={form.precio_costo}
@@ -146,39 +180,7 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
                 step="0.01"
                 min={0}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Minorista</label>
-              <input
-                type="number"
-                value={form.precio_minorista}
-                onChange={e => actualizarCampo('precio_minorista', Number(e.target.value))}
-                step="0.01"
-                min={0}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Mayorista</label>
-              <input
-                type="number"
-                value={form.precio_mayorista}
-                onChange={e => actualizarCampo('precio_mayorista', Number(e.target.value))}
-                step="0.01"
-                min={0}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Especial</label>
-              <input
-                type="number"
-                value={form.precio_especial}
-                onChange={e => actualizarCampo('precio_especial', Number(e.target.value))}
-                step="0.01"
-                min={0}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                placeholder="0.00"
               />
             </div>
           </div>
@@ -219,6 +221,33 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               placeholder="https://..."
             />
+          </div>
+
+          {/* Etiqueta y Destacado */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Etiqueta</label>
+              <select
+                value={form.tag ?? ''}
+                onChange={e => actualizarCampo('tag', e.target.value === '' ? null : e.target.value as 'oferta' | 'nuevo')}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">Ninguna</option>
+                <option value="oferta">Oferta</option>
+                <option value="nuevo">Nuevo</option>
+              </select>
+            </div>
+            <div className="flex items-center justify-start md:justify-center pt-6">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={form.destacado}
+                  onChange={e => actualizarCampo('destacado', e.target.checked)}
+                  className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                />
+                <span className="text-sm font-medium text-gray-700">Producto destacado</span>
+              </label>
+            </div>
           </div>
 
           {/* Botones */}

@@ -15,6 +15,8 @@ interface Props {
   getPrecio: (producto: Producto) => number
   getCantidadEnCarrito: (productoId: string) => number
   onAnadir: (producto: Producto, cantidad: number) => { success: boolean; error?: string }
+  onActualizar: (productoId: string, cantidad: number) => { success: boolean; error?: string }
+  onEliminar: (productoId: string) => void
 }
 
 export function GridProductos({
@@ -27,6 +29,8 @@ export function GridProductos({
   getPrecio,
   getCantidadEnCarrito,
   onAnadir,
+  onActualizar,
+  onEliminar,
 }: Props) {
   const [categorias, setCategorias] = useState<Categoria[]>([])
 
@@ -54,26 +58,26 @@ export function GridProductos({
         </div>
       </div>
 
-      <div className="md:hidden px-3 pb-2">
+      <div className="md:hidden px-3 pt-2 pb-2 border-b border-gray-100 bg-white">
         <div className="relative mb-2">
           <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
             type="text"
             value={busqueda}
             onChange={e => onBusquedaChange(e.target.value)}
-            placeholder="Buscar..."
-            className="w-full pl-8 pr-3 py-2 bg-gray-100 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-blue-200 text-gray-900 placeholder-gray-400"
+            placeholder="Buscar productos..."
+            className="w-full pl-8 pr-3 py-2 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 text-gray-900 placeholder-gray-400"
           />
         </div>
-        <div className="flex gap-3 overflow-x-auto pb-1 scrollbar-hide">
+        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-3 px-3">
           {categorias.map(cat => (
             <button
               key={cat.id}
               onClick={() => onCategoriaChange(cat.id)}
-              className={`text-xs font-semibold whitespace-nowrap pb-1 border-b-2 transition-all flex-shrink-0 ${
+              className={`text-xs font-semibold whitespace-nowrap px-2 py-1 rounded-lg transition-all flex-shrink-0 ${
                 categoriaActiva === cat.id
-                  ? 'text-blue-600 border-blue-600'
-                  : 'text-gray-400 border-transparent'
+                  ? 'text-blue-600 bg-blue-50'
+                  : 'text-gray-500 bg-gray-100'
               }`}
             >
               {cat.nombre}
@@ -92,6 +96,8 @@ export function GridProductos({
               stockDisponible={stockInfo[producto.id] ?? 0}
               cantidadEnCarrito={getCantidadEnCarrito(producto.id)}
               onAnadir={onAnadir}
+              onActualizar={onActualizar}
+              onEliminar={onEliminar}
             />
           ))}
         </div>

@@ -33,7 +33,7 @@ export function FilaCompra({ compra }: Props) {
 
   // Navega al detalle de la compra
   const handleClick = () => {
-    navigate(`${RUTAS.COMPRAS}/${compra.id}`)
+    navigate(`${RUTAS.ADMIN.COMPRAS}/${compra.id}`)
   }
 
   return (

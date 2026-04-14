@@ -1,11 +1,7 @@
-// ============================================================
 // ListaProductos - Página principal de gestión de productos
-// Muestra lista con filtros, búsqueda y botón de crear
-// ============================================================
 import { useState, useEffect, useMemo } from 'react'
-import { Plus } from 'lucide-react'
-import { Layout } from '@/components/layout/Layout'
-import { HeaderProductos } from './components/HeaderProductos'
+import { Plus, Package } from 'lucide-react'
+import { PageHeader } from '@/components/layout/PageHeader'
 import { FiltrosProductos } from './components/FiltrosProductos'
 import { FilaProducto } from './components/FilaProducto'
 import { FormularioProducto } from './components/FormularioProducto'
@@ -87,24 +83,30 @@ export default function ListaProductos() {
   // ============================================================
   if (cargando) {
     return (
-      <Layout>
-        <div className="flex items-center justify-center h-64">
-          <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-        </div>
-      </Layout>
+      <div className="flex items-center justify-center h-64">
+        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
     )
   }
 
-  // ============================================================
-  // Render principal
-  // ============================================================
-  return (
-    <Layout>
-      <div className="p-4 md:p-6">
-        {/* Header con título y estadísticas inline */}
-        <HeaderProductos productos={productosFiltrados} />
+  const activos = productosFiltrados.filter(p => p.activo).length
+  const bajoStock = productosFiltrados.filter(p => p.stock_actual <= p.stock_minimo && p.stock_actual > 0).length
+  const agotados = productosFiltrados.filter(p => p.stock_actual === 0).length
 
-        {/* Contenido centrado con max-width */}
+  return (
+    <>
+      <div className="p-4 md:p-6">
+        <PageHeader
+          titulo="Productos"
+          icono={Package}
+          stats={[
+            { label: 'Total', value: productosFiltrados.length, color: 'gray' },
+            { label: 'Activos', value: activos, color: 'green' },
+            ...(bajoStock > 0 ? [{ label: 'Bajo stock', value: bajoStock, color: 'amber' as const }] : []),
+            ...(agotados > 0 ? [{ label: 'Agotados', value: agotados, color: 'red' as const }] : []),
+          ]}
+        />
+
         <div className="max-w-screen-xl mx-auto">
           {/* Botón para crear nuevo producto */}
           <button
@@ -160,6 +162,6 @@ export default function ListaProductos() {
           onGuardar={handleGuardar}
         />
       )}
-    </Layout>
+    </>
   )
 }
