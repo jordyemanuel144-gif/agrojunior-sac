@@ -3,6 +3,7 @@ import type { Venta } from '@/types/venta.types'
 import type { CuentaCorriente } from '@/types/cuenta-corriente.types'
 import { generarId, generarNumeroComprobanteVenta, generarNumeroComprobantePago } from '@/lib/utils'
 import { NOMBRE_NEGOCIO, RUC_NEGOCIO, DIRECCION_NEGOCIO, TELEFONO } from '@/config/constantes'
+import { CLIENTES_MOCK } from '@/datos-mock/clientes.mock'
 
 let comprobantes: Comprobante[] = []
 
@@ -30,7 +31,10 @@ export const comprobantesService = {
       negocio_telefono: TELEFONO,
       
       cliente_id: venta.cliente_id,
-      cliente_nombre: venta.items[0]?.producto?.nombre || 'Cliente Mostrador',
+      cliente_nombre: (() => {
+        const cliente = CLIENTES_MOCK.find(c => c.id === venta.cliente_id)
+        return cliente?.nombre || 'Público General'
+      })(),
       cliente_documento: undefined,
       
       items: mapItemsFromVenta(venta.items),

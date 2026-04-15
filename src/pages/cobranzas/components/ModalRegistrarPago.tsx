@@ -1,14 +1,14 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { X, Check, DollarSign, Zap, Settings } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import { useDetalleCobranza } from '../hooks/useCobranzas'
 import { formatMoneda } from '@/lib/utils'
 import type { MetodoPago } from '@/types/venta.types'
 import type { Venta } from '@/types/venta.types'
 import { DetalleVentaCollapse } from './DetalleVentaCollapse'
 import { DistribucionPago } from './DistribucionPago'
-import { ComprobantePago } from '@/components/compartidos/ComprobantePago'
 import { comprobantesService } from '@/services/comprobantes.service'
-import type { ComprobantePago as ComprobantePagoTipo } from '@/types/comprobante.types'
+import { RUTAS } from '@/config/rutas'
 
 interface ModalRegistrarPagoProps {
   clienteId: string
@@ -35,6 +35,7 @@ function aplicarFIFO(ventas: Venta[], monto: number): string[] {
 }
 
 export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoProps) {
+  const navigate = useNavigate()
   const { cuenta, ventas, recargar, registrarPago } = useDetalleCobranza(clienteId)
   const [monto, setMonto] = useState('')
   const [metodoPago, setMetodoPago] = useState<MetodoPago>('efectivo')
@@ -42,7 +43,8 @@ export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoPr
   const [ventasSeleccionadas, setVentasSeleccionadas] = useState<string[]>([])
   const [loading, setLoading] = useState(false)
   const [modoPago, setModoPago] = useState<ModoPago>('rapido')
-  const [comprobanteGenerado, setComprobanteGenerado] = useState<ComprobantePagoTipo | null>(null)
+  const [mostrarToast, setMostrarToast] = useState(false)
+  const [comprobanteId, setComprobanteId] = useState<string | null>(null)
 
   useEffect(() => {
     recargar()
@@ -132,7 +134,13 @@ export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoPr
         observaciones || undefined,
         'Cajero'
       )
-      setComprobanteGenerado(comprobante)
+      
+      setComprobanteId(comprobante.id)
+      setMostrarToast(true)
+      
+      setTimeout(() => {
+        onCerrar()
+      }, 2500)
     } catch (error) {
       console.error('Error al registrar pago:', error)
     } finally {
@@ -140,8 +148,17 @@ export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoPr
     }
   }
 
-  if (comprobanteGenerado) {
-    return <ComprobantePago comprobante={comprobanteGenerado} onCerrar={onCerrar} />
+  const handleVerComprobante = () => {
+    setMostrarToast(false)
+    onCerrar()
+    if (comprobanteId) {
+      navigate(`${RUTAS.ADMIN.COMPROBANTES}/${comprobanteId}`)
+    }
+  }
+
+  const handleCerrarToast = () => {
+    setMostrarToast(false)
+    onCerrar()
   }
 
   if (!cuenta) {
@@ -362,6 +379,31 @@ export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoPr
           </button>
         </div>
       </div>
+
+      {mostrarToast && (
+        <div className="fixed bottom-6 right-6 bg-green-600 text-white rounded-xl shadow-lg p-4 max-w-sm animate-in slide-in-from-bottom-4">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+              <Check className="w-5 h-5" />
+            </div>
+            <div className="flex-1">
+              <p className="font-bold">¡Pago registrado!</p>
+              <p className="text-sm text-green-100">El comprobante se ha guardado</p>
+            </div>
+            <button onClick={handleCerrarToast} className="text-green-200 hover:text-white">
+              <X size={18} />
+            </button>
+          </div>
+          <div className="mt-3 flex gap-2">
+            <button 
+              onClick={handleVerComprobante}
+              className="flex-1 bg-white text-green-700 py-2 rounded-lg text-sm font-medium hover:bg-green-50"
+            >
+              Ver comprobante
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

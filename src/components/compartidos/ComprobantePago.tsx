@@ -1,8 +1,10 @@
-import { Printer, Share2, ArrowLeft, Image, FileDown, Loader2 } from 'lucide-react'
+import { CheckCircle, Printer, Share2, Image, FileDown, Loader2 } from 'lucide-react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import type { ComprobantePago } from '@/types/comprobante.types'
 import { formatMoneda, formatFecha } from '@/lib/utils'
 import { generarImagenDesdeElemento, descargarImagen } from '@/lib/imagen'
+import { RUTAS } from '@/config/rutas'
 
 interface Props {
   comprobante: ComprobantePago
@@ -10,6 +12,7 @@ interface Props {
 }
 
 export function ComprobantePago({ comprobante, onCerrar }: Props) {
+  const navigate = useNavigate()
   const [enviandoImagen, setEnviandoImagen] = useState(false)
 
   const handleImprimir = () => window.print()
@@ -72,18 +75,21 @@ export function ComprobantePago({ comprobante, onCerrar }: Props) {
     }
   }
 
+  const handleVerComprobante = () => {
+    onCerrar()
+    navigate(`${RUTAS.ADMIN.COMPROBANTES}/${comprobante.id}`)
+  }
+
   const porcentajePagado = Math.round(((comprobante.total_pagado_anterior + comprobante.monto_pagado) / comprobante.deuda_total_original) * 100)
 
   return (
     <div className="flex flex-col h-full bg-gray-50">
-      <div className="bg-white px-4 pt-6 pb-4 flex items-center border-b border-gray-100">
-        <button onClick={onCerrar} className="p-2 -ml-2 hover:bg-gray-100 rounded-full">
-          <ArrowLeft size={20} className="text-gray-600" />
-        </button>
-        <div className="flex-1">
-          <h1 className="text-lg font-bold text-gray-900">Comprobante de Pago</h1>
-          <p className="text-gray-400 text-sm">{comprobante.numero}</p>
+      <div className="bg-white px-4 pt-6 pb-4 flex flex-col items-center border-b border-gray-100">
+        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-3">
+          <CheckCircle size={36} className="text-green-600" />
         </div>
+        <h1 className="text-xl font-bold text-gray-900">¡Pago registrado!</h1>
+        <p className="text-gray-400 text-sm mt-1">{comprobante.numero}</p>
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 py-4">
@@ -243,6 +249,13 @@ export function ComprobantePago({ comprobante, onCerrar }: Props) {
             Descargar
           </button>
         </div>
+
+        <button 
+          onClick={handleVerComprobante}
+          className="w-full bg-gray-100 text-gray-700 py-3.5 rounded-2xl font-bold text-sm"
+        >
+          Cerrar
+        </button>
       </div>
     </div>
   )
