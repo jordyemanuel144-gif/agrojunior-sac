@@ -94,11 +94,7 @@ export function TarjetaProducto({ producto, precio, stockDisponible, cantidadEnC
           <div className="w-full h-full flex items-center justify-center text-4xl">🐔</div>
         )}
         
-        {producto.tag === 'oferta' && (
-          <span className="absolute top-1.5 left-1.5 bg-yellow-400 text-yellow-900 text-[9px] font-bold px-1.5 py-0.5 rounded-md uppercase tracking-wide">
-            Oferta
-          </span>
-        )}
+
 
         {sinStock && (
           <div className="absolute inset-0 bg-gray-900/40 flex items-center justify-center">

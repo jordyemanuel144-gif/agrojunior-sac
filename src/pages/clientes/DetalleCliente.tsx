@@ -8,6 +8,7 @@ import { HistorialVentasCliente } from './components/HistorialVentasCliente'
 import { clientesService } from '@/services/clientes.service'
 import { cuentaCorrienteService } from '@/services/cuenta-corriente.service'
 import { ventasService } from '@/services/ventas.service'
+import { formatFecha, formatHora } from '@/lib/utils'
 import { descargarTexto, descargarImagen, descargarPdf } from '@/lib/deuda'
 import type { Cliente, NuevoCliente } from '@/types/cliente.types'
 import type { CuentaCorriente } from '@/types/cuenta-corriente.types'
@@ -75,11 +76,11 @@ export default function DetalleCliente() {
 
     const lineasVentas = ventasPendientes.map((venta) => {
       const pendiente = venta.total - venta.monto_pagado
-      const items = venta.items.map(i => `│ • ${i.producto.nombre} x${i.cantidad} = S/ ${i.subtotal.toFixed(2)}`).join('\n')
+      const items = (venta.items || []).map(i => `│ • ${i.producto.nombre} x${i.cantidad} = S/ ${i.subtotal.toFixed(2)}`).join('\n')
       const descuento = venta.descuento > 0 ? `\n│ Descuento: -S/ ${venta.descuento.toFixed(2)}` : ''
       const yaPagado = venta.monto_pagado > 0 ? `\n│ (Ya pagaste: S/ ${venta.monto_pagado.toFixed(2)})` : ''
-      const fechaDia = venta.fecha.toLocaleDateString('es-PE', { weekday: 'short', day: '2-digit', month: 'short' })
-      const hora = venta.fecha.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' })
+      const fechaDia = formatFecha(venta.fecha)
+      const hora = formatHora(venta.fecha)
       return `┌─ ${venta.ticket_numero.toUpperCase()} - ${fechaDia} ${hora} ─┐\n${items}${descuento}${yaPagado}\n└ 💰 Total: S/ ${venta.total.toFixed(2)} → Falta: S/ ${pendiente.toFixed(2)} ┘`
     }).join('\n\n')
 

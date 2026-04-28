@@ -3,7 +3,8 @@
 // Incluye: buscador por nombre/código, filtro por categoría y estado
 // ============================================================
 import { Search, Filter } from 'lucide-react'
-import { CATEGORIAS } from '@/datos-mock/productos.mock'
+import { useState, useEffect } from 'react'
+import { productosService } from '@/services/productos.service'
 
 interface Props {
   busqueda: string
@@ -22,6 +23,12 @@ export function FiltrosProductos({
   onCategoriaChange,
   onEstadoChange,
 }: Props) {
+  const [categorias, setCategorias] = useState<{id: string, nombre: string}[]>([])
+
+  useEffect(() => {
+    productosService.obtenerCategorias().then(setCategorias)
+  }, [])
+
   return (
     <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 mb-4">
       {/* Encabezado de filtros */}
@@ -50,7 +57,7 @@ export function FiltrosProductos({
           onChange={e => onCategoriaChange(e.target.value)}
           className="px-4 py-2.5 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all min-w-[150px]"
         >
-          {CATEGORIAS.map(cat => (
+          {categorias.map(cat => (
             <option key={cat.id} value={cat.id}>{cat.nombre}</option>
           ))}
         </select>

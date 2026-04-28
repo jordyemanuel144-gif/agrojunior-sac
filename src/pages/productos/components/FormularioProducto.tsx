@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react'
 import { X, Calculator } from 'lucide-react'
 import type { Producto, NuevoProducto, TipoMedida } from '@/types/producto.types'
-import { CATEGORIAS } from '@/datos-mock/productos.mock'
+import { productosService } from '@/services/productos.service'
 import { DESCUENTO_MAYORISTA, DESCUENTO_ESPECIAL } from '@/config/constantes'
 
 interface Props {
@@ -27,10 +27,13 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
     stock_minimo: 0,
     activo: true,
     imagen_url: '',
-    tag: null,
-    destacado: false,
   })
   const [guardando, setGuardando] = useState(false)
+  const [categorias, setCategorias] = useState<{id: string, nombre: string}[]>([])
+
+  useEffect(() => {
+    productosService.obtenerCategorias().then(setCategorias)
+  }, [])
 
   useEffect(() => {
     if (producto) {
@@ -120,7 +123,7 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
                 onChange={e => actualizarCampo('categoria_id', e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
-                {CATEGORIAS.filter(c => c.id !== 'all').map(cat => (
+                {categorias.map(cat => (
                   <option key={cat.id} value={cat.id}>{cat.nombre}</option>
                 ))}
               </select>

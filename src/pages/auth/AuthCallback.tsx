@@ -18,20 +18,8 @@ export default function AuthCallback() {
         console.log('[AuthCallback] Session:', session ? 'YES' : 'NO')
 
         if (!session) {
-          const { data: sessionFromURL, error: urlError } = await supabase.auth.getSessionFromURL()
-          
-          if (urlError) {
-            console.error('[AuthCallback] URL error:', urlError)
-            if (isMounted) setError('Error al obtener sesión desde URL')
-            return
-          }
-          
-          if (!sessionFromURL) {
-            if (isMounted) setError('No se pudo completar la autenticación')
-            return
-          }
-          
-          session = sessionFromURL
+          if (isMounted) setError('No se pudo completar la autenticación')
+          return
         }
 
         const { data: { user } } = await supabase.auth.getUser()

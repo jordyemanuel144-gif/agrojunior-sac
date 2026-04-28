@@ -35,16 +35,6 @@ export function ModalProducto({ producto, precio, tipoCliente, onClose }: ModalP
           )}
 
           <div className="absolute top-3 left-3 flex flex-col gap-1">
-            {producto.destacado && (
-              <span className="px-3 py-1 text-xs font-bold text-white bg-gradient-to-r from-green-500 to-emerald-600 rounded-full">
-                Destacado
-              </span>
-            )}
-            {producto.tag && (
-              <span className="px-3 py-1 text-xs font-bold text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-full">
-                {producto.tag === 'oferta' ? 'Oferta' : producto.tag === 'nuevo' ? 'Nuevo' : producto.tag}
-              </span>
-            )}
           </div>
 
           {sinStock && (

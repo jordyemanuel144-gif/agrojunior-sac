@@ -1,6 +1,6 @@
 import type { Venta } from '@/types/venta.types'
 import type { CuentaCorriente } from '@/types/cuenta-corriente.types'
-import { formatMoneda } from '@/lib/utils'
+import { formatMoneda, formatFecha, formatHora } from '@/lib/utils'
 import { configuracionService } from '@/services/configuracion.service'
 import html2canvas from 'html2canvas'
 import { jsPDF } from 'jspdf'
@@ -23,7 +23,7 @@ function obtenerDatosPago(): DatosPago {
 }
 
 function formatearItemsVenta(venta: Venta): string {
-  const items = venta.items
+  const items = (venta.items || [])
     .map(
       (item) =>
         `│ • ${item.producto.nombre} x${item.cantidad} = ${formatMoneda(item.subtotal)}`
@@ -43,8 +43,8 @@ export function generarMensajeDeuda(
     const items = formatearItemsVenta(venta)
     const descuento = venta.descuento > 0 ? `\n│ Descuento: -${formatMoneda(venta.descuento)}` : ''
     const yaPagado = venta.monto_pagado > 0 ? `\n│ (Ya pagaste: ${formatMoneda(venta.monto_pagado)})` : ''
-    const fechaDia = venta.fecha.toLocaleDateString('es-PE', { weekday: 'short', day: '2-digit', month: 'short' })
-    const hora = venta.fecha.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' })
+    const fechaDia = formatFecha(venta.fecha)
+    const hora = formatHora(venta.fecha)
 
     return `┌─ ${venta.ticket_numero.toUpperCase()} - ${fechaDia} ${hora} ─┐\n${items}${descuento}${yaPagado}\n└ 💰 Total: ${formatMoneda(venta.total)} → Falta: ${formatMoneda(pendiente)} ┘`
   })
@@ -80,7 +80,7 @@ export function generarHtmlDeuda(
   const lineasVentas = ventas
     .map((venta) => {
       const pendiente = venta.total - venta.monto_pagado
-      const items = venta.items
+      const items = (venta.items || [])
         .map(
           (item) =>
             `<div style="padding: 2px 0;">• ${item.producto.nombre} x${item.cantidad} = ${formatMoneda(item.subtotal)}</div>`
@@ -92,8 +92,8 @@ export function generarHtmlDeuda(
       const yaPagado = venta.monto_pagado > 0 
         ? `<div style="padding: 2px 0;">(Ya pagaste: ${formatMoneda(venta.monto_pagado)})</div>` 
         : ''
-      const fechaDia = venta.fecha.toLocaleDateString('es-PE', { weekday: 'short', day: '2-digit', month: 'short' })
-      const hora = venta.fecha.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' })
+      const fechaDia = formatFecha(venta.fecha)
+      const hora = formatHora(venta.fecha)
 
       return `
       <div style="margin-bottom: 16px; border: 2px solid #1f2937; border-radius: 8px; overflow: hidden;">
@@ -230,14 +230,14 @@ export function descargarPdf(cuenta: CuentaCorriente, ventas: Venta[]): void {
       doc.rect(10, y, pageWidth - 20, 8, 'F')
       doc.setTextColor(255, 255, 255)
       doc.setFontSize(9)
-      const fechaDia = venta.fecha.toLocaleDateString('es-PE', { weekday: 'short', day: '2-digit', month: 'short' })
-      const hora = venta.fecha.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' })
+      const fechaDia = formatFecha(venta.fecha)
+      const hora = formatHora(venta.fecha)
       doc.text(`${venta.ticket_numero.toUpperCase()} - ${fechaDia} ${hora}`, 12, y + 5.5)
       y += 12
       
       doc.setTextColor(0, 0, 0)
       doc.setFontSize(9)
-      for (const item of venta.items) {
+      for (const item of (venta.items || [])) {
         doc.text(`• ${item.producto.nombre} x${item.cantidad} = S/ ${item.subtotal.toFixed(2)}`, 12, y)
         y += 5
       }

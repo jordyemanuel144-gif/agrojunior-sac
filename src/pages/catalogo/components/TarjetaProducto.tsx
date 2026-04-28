@@ -42,16 +42,6 @@ export function TarjetaProducto({ producto, precio, tipoCliente, onClick }: Tarj
         )}
 
         <div className="absolute top-2 left-2 flex flex-col gap-1">
-          {producto.destacado && (
-            <span className="px-2 py-0.5 text-[10px] font-bold text-white bg-gradient-to-r from-green-500 to-emerald-600 rounded-full shadow-sm">
-              Destacado
-            </span>
-          )}
-          {producto.tag && (
-            <span className="px-2 py-0.5 text-[10px] font-bold text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-full shadow-sm">
-              {producto.tag === 'oferta' ? 'Oferta' : producto.tag === 'nuevo' ? 'Nuevo' : producto.tag}
-            </span>
-          )}
         </div>
 
         {sinStock && (

@@ -103,7 +103,7 @@ export function ComprobantePago({ comprobante, onCerrar }: Props) {
           <div className="px-4 py-4 space-y-4 text-sm">
             <div className="flex justify-between text-gray-500 text-xs">
               <span>{formatFecha(comprobante.fecha)}</span>
-              <span>{comprobante.fecha.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' })}</span>
+              <span>{comprobante.hora}</span>
             </div>
 
             <div className="bg-gray-50 rounded-xl p-3 space-y-2">
