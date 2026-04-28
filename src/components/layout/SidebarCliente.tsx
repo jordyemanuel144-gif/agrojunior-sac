@@ -44,7 +44,7 @@ export function SidebarCliente({ isOpen, onClose }: SidebarClienteProps) {
 
       <div className={`fixed top-0 left-0 h-full w-72 bg-white shadow-2xl z-50 md:hidden transform transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex flex-col h-full">
-          <div className="p-5 border-b border-gray-100">
+          <div className="p-4 border-b border-gray-100">
             <Link to={RUTAS.CLIENTE.MI_CUENTA} onClick={onClose} className="flex items-center gap-3">
               <img src="/logo.png" alt="Logo" className="w-14 h-14 rounded-xl object-cover" />
               <div>
@@ -94,7 +94,7 @@ export function SidebarCliente({ isOpen, onClose }: SidebarClienteProps) {
 
       <aside className="fixed left-0 top-0 w-64 h-screen bg-white border-r border-gray-200 z-40 hidden md:block">
         <div className="flex flex-col h-full">
-          <div className="p-5 border-b border-gray-100">
+          <div className="p-4 border-b border-gray-100">
             <Link to={RUTAS.CLIENTE.MI_CUENTA} className="flex items-center gap-3">
               <img src="/logo.png" alt="Logo" className="w-14 h-14 rounded-xl object-cover" />
               <div>
