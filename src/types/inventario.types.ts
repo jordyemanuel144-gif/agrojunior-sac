@@ -1,25 +1,22 @@
-export type EstadoConteo = 'borrador' | 'completado' | 'anulado'
+import type { EstadoConteo, TipoMovimiento, MotivoMovimiento, TipoMedida } from './supabase.types'
 
-export type TipoMovimiento = 'entrada' | 'salida'
-export type MotivoMovimiento = 'merma' | 'regalo' | 'correccion' | 'ajuste' | 'compra' | 'venta'
+export type { EstadoConteo, TipoMovimiento, MotivoMovimiento }
 
 export interface MovimientoInventario {
   id: string
   producto_id: string
-  producto_nombre: string
   tipo: TipoMovimiento
   cantidad: number
   motivo: MotivoMovimiento
-  notas?: string
-  fecha: Date
+  notas?: string | null
+  fecha: string
   usuario_id: string
-  documento_tipo?: 'venta' | 'compra' | 'conteo'
-  documento_id?: string
+  documento_tipo?: 'venta' | 'compra' | 'conteo' | null
+  documento_id?: string | null
 }
 
 export interface ItemConteo {
   producto_id: string
-  producto_nombre: string
   stock_sistema: number
   stock_fisico: number
   diferencia: number
@@ -29,10 +26,8 @@ export interface ConteoInventario {
   id: string
   numero: string
   usuario_id: string
-  usuario_nombre?: string
-  items: ItemConteo[]
   estado: EstadoConteo
-  notas?: string
+  notas?: string | null
   fecha: string
   created_at: string
 }
@@ -40,10 +35,10 @@ export interface ConteoInventario {
 export interface ItemStock {
   id: string
   nombre: string
-  codigo?: string
+  codigo: string
   stock_actual: number
   stock_minimo: number
-  tipo_medida: 'kg' | 'unidad'
+  tipo_medida: TipoMedida
   categoria: string
   estado: 'ok' | 'bajo' | 'agotado'
 }

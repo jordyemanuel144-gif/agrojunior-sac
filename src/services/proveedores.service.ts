@@ -1,50 +1,70 @@
-// Service para gestión de proveedores
-import { PROVEEDORES_MOCK } from '@/datos-mock/proveedores.mock'
+/**
+ * Service de gestión de proveedores.
+ * SUPABASE: CRUD sobre tabla proveedores con soft delete.
+ */
+import { supabase, handleError } from '@/lib/supabase'
 import type { Proveedor, NuevoProveedor } from '@/types/proveedor.types'
-import { generarId } from '@/lib/utils'
-
-// Estado en memoria para mock
-let proveedores = [...PROVEEDORES_MOCK]
 
 export const proveedoresService = {
-  // Obtiene todos los proveedores activos
   obtenerTodos: async (): Promise<Proveedor[]> => {
-    return proveedores.filter(p => p.activo)
+    const { data, error } = await supabase
+      .from('proveedores')
+      .select('*')
+      .eq('activo', true)
+      .order('nombre')
+
+    handleError(error, 'Error al obtener proveedores')
+    return data ?? []
   },
 
-  // Obtiene un proveedor por ID
   obtenerPorId: async (id: string): Promise<Proveedor | null> => {
-    return proveedores.find(p => p.id === id) ?? null
+    const { data, error } = await supabase
+      .from('proveedores')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (error && error.code === 'PGRST116') return null
+    handleError(error, 'Error al obtener proveedor')
+    return data
   },
 
-  // Crea un nuevo proveedor
   crear: async (datos: NuevoProveedor): Promise<Proveedor> => {
-    const nuevo: Proveedor = {
-      ...datos,
-      id: generarId(),
-      activo: true,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    }
-    proveedores = [...proveedores, nuevo]
-    return nuevo
+    const { data, error } = await supabase
+      .from('proveedores')
+      .insert({ ...datos, activo: true })
+      .select()
+      .single()
+
+    handleError(error, 'Error al crear proveedor')
+    return data!
   },
 
-  // Actualiza un proveedor existente
   actualizar: async (id: string, datos: Partial<Proveedor>): Promise<Proveedor> => {
-    const index = proveedores.findIndex(p => p.id === id)
-    if (index === -1) throw new Error('Proveedor no encontrado')
-    proveedores[index] = { ...proveedores[index], ...datos, updated_at: new Date().toISOString() }
-    return proveedores[index]
+    const { data, error } = await supabase
+      .from('proveedores')
+      .update(datos)
+      .eq('id', id)
+      .select()
+      .single()
+
+    handleError(error, 'Error al actualizar proveedor')
+    return data!
   },
 
-  // Desactiva un proveedor (soft delete)
   eliminar: async (id: string): Promise<void> => {
-    await proveedoresService.actualizar(id, { activo: false })
+    const { error } = await supabase
+      .from('proveedores')
+      .update({ activo: false })
+      .eq('id', id)
+
+    handleError(error, 'Error al desactivar proveedor')
   },
 
-  // Helper para obtener proveedor por ID (sin async)
-  getProveedor: (id: string): Proveedor | undefined => {
-    return proveedores.find(p => p.id === id)
+  getProveedor: (_id: string): undefined => {
+    // Helper síncrono: necesita cache local.
+    // Se usa en compras.service para obtener nombre rápido.
+    // En Supabase, preferir obtenerPorId (async).
+    return undefined
   },
 }

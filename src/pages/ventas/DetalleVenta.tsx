@@ -7,6 +7,7 @@ import { TicketVentaDetalle } from './components/TicketVentaDetalle'
 import { AccionesVentaDetalle } from './components/AccionesVentaDetalle'
 import { ModalAnularVenta } from './components/ModalAnularVenta'
 import { ventasService } from '@/services/ventas.service'
+import { clientesService } from '@/services/clientes.service'
 import { useAuthContext } from '@/context/AuthContext'
 import { NOMBRE_NEGOCIO } from '@/config/constantes'
 import { RUTAS } from '@/config/rutas'
@@ -21,12 +22,13 @@ export default function DetalleVenta() {
   const [anulando, setAnulando] = useState(false)
   const [showConfirmAnular, setShowConfirmAnular] = useState(false)
   const [errorAcceso, setErrorAcceso] = useState(false)
+  const [clienteInfo, setClienteInfo] = useState<{ nombre: string; dni_ruc?: string; tipo: string } | null>(null)
 
   // Carga la venta por ID con verificación de seguridad
   useEffect(() => {
     if (!id) return
     ventasService.obtenerPorId(id)
-      .then(v => {
+      .then(async v => {
         if (!v) {
           setVenta(null)
         } else {
@@ -38,6 +40,15 @@ export default function DetalleVenta() {
             setVenta(null)
           } else {
             setVenta(v)
+            // Cargar info del cliente
+            const cli = await clientesService.obtenerPorId(v.cliente_id)
+            if (cli) {
+              setClienteInfo({
+                nombre: cli.nombre,
+                dni_ruc: cli.dni_ruc,
+                tipo: cli.tipo
+              })
+            }
           }
         }
       })
@@ -98,7 +109,6 @@ export default function DetalleVenta() {
     )
   }
 
-  const cliente = ventasService.getCliente(venta.cliente_id)
   const esAnulada = venta.estado === 'anulada'
 
   return (
@@ -115,10 +125,10 @@ export default function DetalleVenta() {
         {/* Contenido principal centrado */}
         <div className="p-4 md:p-6 max-w-xl mx-auto space-y-4">
           {/* Info del cliente */}
-          <InfoClienteVenta 
-            cliente={cliente} 
-            vendedor={{ nombre: venta.vendedor_nombre }}
-          />
+<InfoClienteVenta 
+              cliente={clienteInfo || { nombre: 'Cliente', dni_ruc: '', tipo: 'minorista' }} 
+              vendedor={{ nombre: venta.vendedor_nombre }}
+            />
 
           {/* Banner de saldo pendiente */}
           {esAnulada === false && venta.estado_pago !== 'pagado' && (
@@ -148,7 +158,7 @@ export default function DetalleVenta() {
           {/* Ticket reimpreso */}
           <TicketVentaDetalle
             venta={venta}
-            cliente={cliente}
+            cliente={clienteInfo || { nombre: 'Cliente', dni_ruc: '', tipo: 'minorista' }}
             esAnulada={esAnulada}
           />
 

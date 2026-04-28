@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { User, Session } from '@supabase/supabase-js'
 
-type UserRole = 'admin' | 'employee'
+type UserRole = 'admin' | 'vendedor'
 
 interface AuthState {
   user: (User & { role?: UserRole }) | null
@@ -21,14 +21,14 @@ export function useAuth() {
 
   const fetchUserProfile = useCallback(async (userId: string, session: Session) => {
     const { data: profile, error } = await supabase
-      .from('users')
+      .from('usuarios')
       .select('*')
       .eq('id', userId)
       .single()
 
     if (error) {
       setState({
-        user: { ...session.user, role: 'employee' as UserRole },
+        user: { ...session.user, role: 'vendedor' as UserRole },
         session,
         loading: false,
         error: null,

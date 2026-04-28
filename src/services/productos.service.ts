@@ -1,9 +1,13 @@
+/**
+ * Service de gestión de productos.
+ * SUPABASE: CRUD sobre tabla productos.
+ * Los precios mayorista/especial se calculan automáticamente
+ * desde el precio minorista usando los descuentos de configuración.
+ * El trigger trg_producto_precio_historial registra cambios de precio.
+ */
+import { supabase, handleError } from '@/lib/supabase'
 import type { Producto, NuevoProducto, Categoria } from '@/types/producto.types'
-import { PRODUCTOS_MOCK, CATEGORIAS } from '@/datos-mock/productos.mock'
-import { generarId } from '@/lib/utils'
 import { configuracionService } from './configuracion.service'
-
-let productos: Producto[] = [...PRODUCTOS_MOCK]
 
 function calcularPrecios(precioBase: number): { precio_mayorista: number; precio_especial: number } {
   const descuentos = configuracionService.getDescuentos()
@@ -15,68 +19,133 @@ function calcularPrecios(precioBase: number): { precio_mayorista: number; precio
 
 export const productosService = {
   obtenerTodos: async (): Promise<Producto[]> => {
-    return productos.filter(p => p.activo)
+    const { data, error } = await supabase
+      .from('productos')
+      .select('*')
+      .eq('activo', true)
+      .order('nombre')
+
+    handleError(error, 'Error al obtener productos')
+    return data ?? []
   },
 
   obtenerTodosIncluyendoInactivos: async (): Promise<Producto[]> => {
-    return productos
+    const { data, error } = await supabase
+      .from('productos')
+      .select('*')
+      .order('nombre')
+
+    handleError(error, 'Error al obtener todos los productos')
+    return data ?? []
   },
 
   obtenerPorId: async (id: string): Promise<Producto | null> => {
-    return productos.find(p => p.id === id) ?? null
+    const { data, error } = await supabase
+      .from('productos')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (error && error.code === 'PGRST116') return null
+    handleError(error, 'Error al obtener producto')
+    return data
   },
 
   crear: async (datos: NuevoProducto): Promise<Producto> => {
     const preciosCalculados = calcularPrecios(datos.precio_minorista)
-    const nuevo: Producto = {
-      ...datos,
-      id: generarId(),
-      precio_mayorista: preciosCalculados.precio_mayorista,
-      precio_especial: preciosCalculados.precio_especial,
-    }
-    productos = [nuevo, ...productos]
-    return nuevo
+
+    const { data, error } = await supabase
+      .from('productos')
+      .insert({
+        ...datos,
+        precio_mayorista: preciosCalculados.precio_mayorista,
+        precio_especial: preciosCalculados.precio_especial,
+      })
+      .select()
+      .single()
+
+    handleError(error, 'Error al crear producto')
+    return data!
   },
 
   actualizar: async (id: string, datos: Partial<Producto>): Promise<Producto> => {
-    let productoActualizado = datos
-    
+    let datosActualizar = { ...datos }
+
     if (datos.precio_minorista) {
       const preciosCalculados = calcularPrecios(datos.precio_minorista)
-      productoActualizado = {
-        ...datos,
+      datosActualizar = {
+        ...datosActualizar,
         precio_mayorista: datos.precio_mayorista ?? preciosCalculados.precio_mayorista,
         precio_especial: datos.precio_especial ?? preciosCalculados.precio_especial,
       }
     }
-    
-    productos = productos.map(p =>
-      p.id === id ? { ...p, ...productoActualizado } : p
-    )
-    return productos.find(p => p.id === id)!
+
+    const { id: _, created_at: __, updated_at: ___, ...datosLimpios } = datosActualizar as Producto
+
+    const { data, error } = await supabase
+      .from('productos')
+      .update(datosLimpios)
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (error) {
+      handleError(error, 'Error al actualizar producto')
+    }
+
+    if (!data) {
+      const existing = await supabase.from('productos').select('*').eq('id', id).single()
+      handleError(existing.error, 'Error al verificar producto actualizado')
+      return existing.data
+    }
+
+    return data
   },
 
   eliminar: async (id: string): Promise<void> => {
-    productos = productos.map(p =>
-      p.id === id ? { ...p, activo: false } : p
-    )
+    const { error } = await supabase
+      .from('productos')
+      .update({ activo: false })
+      .eq('id', id)
+
+    handleError(error, 'Error al desactivar producto')
   },
 
-  getProducto: (id: string): string => {
-    const producto = productos.find(p => p.id === id)
+  getProducto: async (id: string): Promise<string> => {
+    const producto = await productosService.obtenerPorId(id)
     return producto?.nombre ?? 'Producto no encontrado'
   },
 
-  getCategoria: (categoriaId: string): string => {
-    const categoria = CATEGORIAS.find(c => c.id === categoriaId)
-    return categoria?.nombre ?? categoriaId
+  getCategoria: async (categoriaId: string): Promise<string> => {
+    const { data } = await supabase
+      .from('categorias')
+      .select('nombre')
+      .eq('id', categoriaId)
+      .single()
+
+    return data?.nombre ?? categoriaId
   },
 
   obtenerCategorias: async (): Promise<Categoria[]> => {
-    return CATEGORIAS
+    const { data, error } = await supabase
+      .from('categorias')
+      .select('id, nombre')
+      .eq('activo', true)
+      .order('nombre')
+
+    handleError(error, 'Error al obtener categorías')
+    return data ?? []
   },
 
   obtenerDestacados: async (): Promise<Producto[]> => {
-    return productos.filter(p => p.activo && p.destacado === true)
+    const { data, error } = await supabase
+      .from('productos')
+      .select('*')
+      .eq('activo', true)
+      .eq('destacado', true)
+      .order('nombre')
+
+    handleError(error, 'Error al obtener productos destacados')
+    return data ?? []
   },
 }

@@ -1,14 +1,15 @@
-export type MetodoPago = 'efectivo' | 'yape' | 'transferencia'
+import type { MetodoPago } from './supabase.types'
+
+export type { MetodoPago }
 
 export interface VentaPago {
   id: string
   venta_id: string
   monto: number
   metodo_pago: MetodoPago
-  fecha: Date
-  observaciones?: string
+  fecha: string
+  observaciones?: string | null
   usuario_id: string
-  usuario_nombre: string
 }
 
-export type NuevoVentaPago = Omit<VentaPago, 'id' | 'fecha' | 'usuario_nombre'>
+export type NuevoVentaPago = Omit<VentaPago, 'id' | 'fecha'>

@@ -13,23 +13,46 @@ export default function ListaProductos() {
   // Estado local de la página
   // ============================================================
   const [productos, setProductos] = useState<Producto[]>([])
+  const [categorias, setCategorias] = useState<Record<string, string>>({})
   const [cargando, setCargando] = useState(true)
   const [mostrarForm, setMostrarForm] = useState(false)
   const [productoEditando, setProductoEditando] = useState<Producto | null>(null)
   const [busqueda, setBusqueda] = useState('')
   const [filtroCategoria, setFiltroCategoria] = useState('all')
   const [filtroEstado, setFiltroEstado] = useState<'todos' | 'activo' | 'inactivo'>('todos')
+  const [error, setError] = useState<string | null>(null)
 
-  // ============================================================
-  // Efecto: cargar productos al montar el componente
-  // ============================================================
+
   useEffect(() => {
+
     const init = async () => {
-      const data = filtroEstado === 'todos'
-        ? await productosService.obtenerTodosIncluyendoInactivos()
-        : await productosService.obtenerTodos()
-      setProductos(data)
-      setCargando(false)
+      try {
+        setCargando(true)
+        setError(null)
+        
+        // Cargar productos y categorías en paralelo
+        const [data, cats] = await Promise.all([
+          filtroEstado === 'todos'
+            ? await productosService.obtenerTodosIncluyendoInactivos()
+            : await productosService.obtenerTodos(),
+          await productosService.obtenerCategorias()
+        ])
+        
+        setProductos(data)
+        
+        // Convertir array de categorías a mapa id->nombre
+        const mapa: Record<string, string> = {}
+        for (const cat of cats) {
+          mapa[cat.id] = cat.nombre
+        }
+        setCategorias(mapa)
+      } catch (err) {
+        const mensaje = err instanceof Error ? err.message : 'Error desconocido'
+        console.error('Error al cargar productos:', mensaje)
+        setError(mensaje)
+      } finally {
+        setCargando(false)
+      }
     }
     init()
   }, [filtroEstado])
@@ -72,10 +95,18 @@ export default function ListaProductos() {
     } else {
       await productosService.crear(datos)
     }
-    const data = filtroEstado === 'todos'
-      ? await productosService.obtenerTodosIncluyendoInactivos()
-      : await productosService.obtenerTodos()
+    const [data, cats] = await Promise.all([
+      filtroEstado === 'todos'
+        ? await productosService.obtenerTodosIncluyendoInactivos()
+        : await productosService.obtenerTodos(),
+      await productosService.obtenerCategorias()
+    ])
     setProductos(data)
+    const mapa: Record<string, string> = {}
+    for (const cat of cats) {
+      mapa[cat.id] = cat.nombre
+    }
+    setCategorias(mapa)
   }
 
   // ============================================================
@@ -85,6 +116,23 @@ export default function ListaProductos() {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+          <p className="text-red-600 font-medium mb-2">Error al cargar productos</p>
+          <p className="text-red-500 text-sm">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+          >
+            Reintentar
+          </button>
+        </div>
       </div>
     )
   }
@@ -147,7 +195,11 @@ export default function ListaProductos() {
           ) : (
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
               {productosFiltrados.map(producto => (
-                <FilaProducto key={producto.id} producto={producto} />
+                <FilaProducto 
+                  key={producto.id} 
+                  producto={producto}
+                  nombreCategoria={categorias[producto.categoria_id] ?? producto.categoria_id}
+                />
               ))}
             </div>
           )}

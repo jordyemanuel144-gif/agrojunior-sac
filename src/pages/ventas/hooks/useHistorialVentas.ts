@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { useAuthContext } from '@/context/AuthContext'
 import { ventasService } from '@/services/ventas.service'
 import { usuariosService } from '@/services/usuarios.service'
+import { clientesService } from '@/services/clientes.service'
 import type { Venta } from '@/types/venta.types'
 import type { User } from '@/types/usuario.types'
 import type { RangoFecha } from '@/lib/utils'
@@ -51,11 +52,12 @@ export function useHistorialVentas(): UseHistorialVentasReturn {
   })
   const [filtroVendedor, setFiltroVendedor] = useState('todos')
 
-  // Cargar ventas y vendedores
+  // Cargar ventas, vendedores y clientes
   useEffect(() => {
     Promise.all([
       ventasService.obtenerTodos(),
       usuariosService.obtenerActivos(),
+      clientesService.obtenerTodos(),
     ])
       .then(([ventasData, usuariosData]) => {
         setVentas(ventasData)
@@ -77,10 +79,11 @@ export function useHistorialVentas(): UseHistorialVentasReturn {
       }
 
       // Filtro búsqueda
+      const nombreCliente = clientesService.obtenerClienteSync(v.cliente_id)?.nombre?.toLowerCase() || ''
       const matchBusqueda =
         busqueda === '' ||
         v.ticket_numero.toLowerCase().includes(busqueda.toLowerCase()) ||
-        ventasService.getCliente(v.cliente_id).nombre.toLowerCase().includes(busqueda.toLowerCase())
+        nombreCliente.includes(busqueda.toLowerCase())
 
       // Filtro estado
       const matchEstado = filtroEstado === 'todos' || v.estado === filtroEstado

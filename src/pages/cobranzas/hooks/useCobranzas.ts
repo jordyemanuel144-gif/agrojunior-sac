@@ -33,6 +33,7 @@ export function useCobranzas() {
   }, [cargarDatos])
 
   const cuentasFiltradas = cuentas.filter(cuenta => {
+    if (cuenta.saldo_pendiente <= 0) return false
     if (!filtros.busqueda) return true
     const busq = filtros.busqueda.toLowerCase()
     return (

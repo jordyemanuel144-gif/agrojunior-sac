@@ -3,7 +3,7 @@ import { ArrowLeft, CheckCircle2, Banknote, QrCode, Building2, Minus, Plus, Tras
 import type { CartItem } from '@/types/venta.types'
 import type { MetodoPago, EstadoPago } from '@/types/venta.types'
 import type { Cliente } from '@/types/cliente.types'
-import { DESCUENTOS_MAYORISTA } from '@/datos-mock/descuentos.mock'
+import { configuracionService } from '@/services/configuracion.service'
 
 interface Props {
   items: CartItem[]
@@ -36,12 +36,14 @@ const TIPOS_PAGO: { id: EstadoPago; label: string; icon: React.ReactNode; desc: 
 export function ConfirmarPedido({ items, cliente, clientes, stockInfo: _stockInfo, igvActivo = false, showClientePicker: _showClientePicker, onVolver, onConfirmar, onActualizarCantidad, onEliminarItem, onCambiarCliente, onAbrirClientePicker: _onAbrirClientePicker, onCerrarClientePicker: _onCerrarClientePicker }: Props) {
   const [metodo, setMetodo] = useState<MetodoPago>('efectivo')
   const [cargando, setCargando] = useState(false)
+  const [errorConfirmacion, setErrorConfirmacion] = useState<string | null>(null)
   const [editando, setEditando] = useState<Record<string, string>>({})
   const [showClientSelector, setShowClientSelector] = useState(false)
   const [busquedaCliente, setBusquedaCliente] = useState('')
   const [filtroTipo, setFiltroTipo] = useState<'todos' | 'minorista' | 'mayorista' | 'especial'>('todos')
   const [tipoPago, setTipoPago] = useState<EstadoPago>('pagado')
   const [montoPagadoInput, setMontoPagadoInput] = useState('')
+  const pctDescuento = configuracionService.getDescuentos()[cliente.tipo] ?? 0
 
   const clientesFiltrados = useMemo(() => {
     if (!clientes || clientes.length === 0) return []
@@ -106,7 +108,6 @@ export function ConfirmarPedido({ items, cliente, clientes, stockInfo: _stockInf
     setEditando(rest)
   }
 
-  const pctDescuento = DESCUENTOS_MAYORISTA[cliente.tipo] ?? 0
   const subtotalCalculado = items.reduce((acc, item) => acc + item.subtotal, 0)
   const montoDescuento = subtotalCalculado * pctDescuento
   const baseIgv = subtotalCalculado - montoDescuento
@@ -130,6 +131,7 @@ export function ConfirmarPedido({ items, cliente, clientes, stockInfo: _stockInf
   const handleConfirmar = async () => {
     if (cargando || montoInvalido || mostrarAlertaCliente) return
     setCargando(true)
+    setErrorConfirmacion(null)
     console.log('Iniciando confirmación...')
     await new Promise(r => setTimeout(r, 500))
     try {
@@ -138,7 +140,7 @@ export function ConfirmarPedido({ items, cliente, clientes, stockInfo: _stockInf
       console.log('Confirmación exitosa')
     } catch (error) {
       console.error('Error en confirmación:', error)
-      alert('Error al procesar la venta: ' + String(error))
+      setErrorConfirmacion('Error al procesar la venta. Intenta de nuevo.')
     }
     setCargando(false)
     console.log('Fin de confirmación')
@@ -332,6 +334,11 @@ export function ConfirmarPedido({ items, cliente, clientes, stockInfo: _stockInf
             ))}
           </div>
         </div>
+        {errorConfirmacion && (
+          <div className="bg-red-50 border border-red-200 rounded-2xl p-4">
+            <p className="text-sm text-red-600 font-medium">{errorConfirmacion}</p>
+          </div>
+        )}
         <div className="bg-white rounded-2xl p-4 shadow-sm space-y-2">
           <div className="flex justify-between text-sm text-gray-500"><span>Subtotal</span><span className="font-medium text-gray-900">S/ {subtotalCalculado.toFixed(2)}</span></div>
           {pctDescuento > 0 && <div className="flex justify-between text-sm"><span className="text-green-600 font-medium">Descuento {tipoLabel[cliente.tipo]} (-{(pctDescuento * 100).toFixed(0)}%)</span><span className="text-green-600 font-semibold">-S/ {montoDescuento.toFixed(2)}</span></div>}

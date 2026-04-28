@@ -9,6 +9,10 @@ export interface ConfigNegocio {
     laboral: string
     domingo: string
   }
+  yape: string
+  banco_nombre: string
+  banco_titular: string
+  banco_cuenta: string
 }
 
 export interface ConfigImpuestos {

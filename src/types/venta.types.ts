@@ -1,6 +1,6 @@
-export type MetodoPago = 'efectivo' | 'yape' | 'transferencia'
-export type EstadoVenta = 'completada' | 'anulada'
-export type EstadoPago = 'pagado' | 'parcial' | 'pendiente'
+import type { MetodoPago, EstadoVenta, EstadoPago } from './supabase.types'
+
+export type { MetodoPago, EstadoVenta, EstadoPago }
 
 export interface CartItem {
   producto: import('./producto.types').Producto
@@ -14,16 +14,16 @@ export interface ItemVenta {
   producto_id: string
   cantidad: number
   precio_unitario: number
-  total: number
+  subtotal: number
 }
 
 export interface Venta {
   id: string
   ticket_numero: string
-  cliente_id: string
+  cliente_id: string | null
   vendedor_id: string
-  vendedor_nombre: string
-  items: CartItem[]
+  vendedor_nombre?: string
+  items?: CartItem[]
   metodo_pago: MetodoPago
   subtotal: number
   descuento: number
@@ -31,11 +31,11 @@ export interface Venta {
   total: number
   monto_pagado: number
   estado_pago: EstadoPago
-  fecha: Date
+  fecha: string
   estado: EstadoVenta
 }
 
-export type NuevaVenta = Omit<Venta, 'id' | 'fecha' | 'estado' | 'vendedor_nombre' | 'monto_pagado' | 'estado_pago'> & {
+export type NuevaVenta = Omit<Venta, 'id' | 'fecha' | 'estado' | 'vendedor_nombre'> & {
   monto_pagado: number
   estado_pago: EstadoPago
 }

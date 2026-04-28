@@ -30,9 +30,15 @@ export default function ListaCompras() {
 
   useEffect(() => {
     const init = async () => {
-      const data = await comprasService.obtenerTodos()
-      setCompras(data)
-      setCargando(false)
+      try {
+        setCargando(true)
+        const data = await comprasService.obtenerTodos()
+        setCompras(data)
+      } catch (error) {
+        console.error('Error al cargar compras:', error)
+      } finally {
+        setCargando(false)
+      }
     }
     init()
   }, [])

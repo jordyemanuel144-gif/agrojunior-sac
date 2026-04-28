@@ -1,201 +1,130 @@
-// Servicio de cuenta corriente - Gestion de cuentas por cobrar
-import { ventasService } from './ventas.service'
-import { CLIENTES_MOCK } from '@/datos-mock/clientes.mock'
-import { USUARIOS_MOCK } from '@/datos-mock/usuarios.mock'
+/**
+ * Service de cuenta corriente (cuentas por cobrar).
+ * SUPABASE: Usa vista_cuentas_corrientes y RPC registrar_pago_cobranza.
+ */
+import { supabase, handleError } from '@/lib/supabase'
 import type { CuentaCorriente, ResumenCuentasPorCobrar, MovimientoCuentaCorriente } from '@/types/cuenta-corriente.types'
 import type { Venta } from '@/types/venta.types'
-import type { Cliente } from '@/types/cliente.types'
 import type { VentaPago, NuevoVentaPago } from '@/types/venta-pago.types'
-import { generarId } from '@/lib/utils'
+import { ventasService } from './ventas.service'
 
-let pagosRegistrados: VentaPago[] = []
-
-function getCliente(clienteId: string): Cliente | undefined {
-  return CLIENTES_MOCK.find(c => c.id === clienteId)
-}
-
-function getUsuario(usuarioId: string): string {
-  const usuario = USUARIOS_MOCK.find(u => u.id === usuarioId)
-  return usuario?.name ?? 'Usuario'
-}
-
-function calcularSaldosCliente(ventas: Venta[]) {
-  const totalDeuda = ventas.reduce((sum, v) => sum + v.total, 0)
-  const totalPagado = ventas.reduce((sum, v) => sum + v.monto_pagado, 0)
-  return { totalDeuda, totalPagado, saldoPendiente: totalDeuda - totalPagado }
+function mapCuenta(r: Record<string, unknown>): CuentaCorriente {
+  return {
+    cliente_id: r.cliente_id as string,
+    cliente_nombre: r.cliente_nombre as string,
+    cliente_dni_ruc: r.cliente_dni_ruc as string | undefined,
+    cliente_telefono: r.cliente_telefono as string | undefined,
+    cliente_tipo: r.cliente_tipo as CuentaCorriente['cliente_tipo'],
+    total_deuda: r.total_deuda as number,
+    total_pagado: r.total_pagado as number,
+    saldo_pendiente: r.saldo_pendiente as number,
+    cantidad_ventas_pendientes: r.cantidad_ventas_pendientes as number,
+    total_ventas_sin_descuento: (r.total_ventas_sin_descuento as number) ?? 0,
+    ultima_venta_fecha: r.ultima_venta_fecha ? new Date(r.ultima_venta_fecha as string) : undefined,
+    ultima_venta_monto: r.ultima_venta_monto as number | undefined,
+    estado: 'activa' as const,
+  }
 }
 
 export const cuentaCorrienteService = {
   obtenerResumen: async (): Promise<ResumenCuentasPorCobrar> => {
-    const allVentas = await ventasService.obtenerTodos()
-    const clientesConDeuda = new Map<string, { ventas: Venta[]; cliente: Cliente }>()
+    const { data } = await supabase
+      .from('vista_resumen_cobranzas' as 'configuracion')
+      .select('*')
+      .single()
 
-    for (const venta of allVentas) {
-      if (venta.estado === 'completada' && venta.estado_pago !== 'pagado') {
-        const cliente = getCliente(venta.cliente_id)
-        if (cliente) {
-          if (!clientesConDeuda.has(venta.cliente_id)) {
-            clientesConDeuda.set(venta.cliente_id, { ventas: [], cliente })
-          }
-          clientesConDeuda.get(venta.cliente_id)!.ventas.push(venta)
-        }
-      }
-    }
+    const { data: deudores } = await supabase
+      .from('vista_cuentas_corrientes' as 'configuracion')
+      .select('cliente_id, cliente_nombre, saldo_pendiente')
+      .order('saldo_pendiente', { ascending: false })
+      .limit(5)
 
-    let totalDeuda = 0
-    let totalPendiente = 0
-    const clientesMayoresDeudores: Array<{ cliente_id: string; cliente_nombre: string; saldo: number }> = []
-
-    for (const [, data] of clientesConDeuda) {
-      const suma = data.ventas.reduce((sum, v) => sum + v.total, 0)
-      const pagado = data.ventas.reduce((sum, v) => sum + v.monto_pagado, 0)
-      const saldo = suma - pagado
-      totalDeuda += suma
-      totalPendiente += saldo
-      clientesMayoresDeudores.push({ cliente_id: data.cliente.id, cliente_nombre: data.cliente.nombre, saldo })
-    }
-
-    clientesMayoresDeudores.sort((a, b) => b.saldo - a.saldo)
-
+    const r = (data ?? {}) as Record<string, number>
     return {
-      total_deuda: totalDeuda,
-      total_pendiente: totalPendiente,
-      cantidad_clientes_con_deuda: clientesConDeuda.size,
-      cantidad_ventas_pendientes: Array.from(clientesConDeuda.values()).reduce((sum, d) => sum + d.ventas.length, 0),
-      clientes_mayores_deudores: clientesMayoresDeudores.slice(0, 5),
+      total_deuda: r.total_deuda ?? 0,
+      total_pendiente: r.total_pendiente ?? 0,
+      cantidad_clientes_con_deuda: r.cantidad_clientes_con_deuda ?? 0,
+      cantidad_ventas_pendientes: r.cantidad_ventas_pendientes ?? 0,
+      clientes_mayores_deudores: (deudores ?? []).map(d => {
+        const row = d as unknown as Record<string, unknown>
+        return { cliente_id: row.cliente_id as string, cliente_nombre: row.cliente_nombre as string, saldo: row.saldo_pendiente as number }
+      }),
     }
   },
 
   obtenerTodas: async (): Promise<CuentaCorriente[]> => {
-    const allVentas = await ventasService.obtenerTodos()
-    const cuentas = new Map<string, CuentaCorriente>()
+    const { data, error } = await supabase
+      .from('vista_cuentas_corrientes' as 'configuracion')
+      .select('*')
 
-    for (const cliente of CLIENTES_MOCK) {
-      if (cliente.id === 'publico') continue
-
-      const ventasCliente = allVentas.filter(v => v.cliente_id === cliente.id && v.estado === 'completada' && v.estado_pago !== 'pagado')
-      if (ventasCliente.length === 0) continue
-
-      const { totalDeuda, totalPagado, saldoPendiente } = calcularSaldosCliente(ventasCliente)
-      const ventasOrdenadas = [...ventasCliente].sort((a, b) => b.fecha.getTime() - a.fecha.getTime())
-
-      cuentas.set(cliente.id, {
-        cliente_id: cliente.id,
-        cliente_nombre: cliente.nombre,
-        cliente_dni_ruc: cliente.dni_ruc,
-        cliente_telefono: cliente.telefono,
-        cliente_tipo: cliente.tipo,
-        total_deuda: totalDeuda,
-        total_pagado: totalPagado,
-        saldo_pendiente: saldoPendiente,
-        cantidad_ventas_pendientes: ventasCliente.length,
-        ultima_venta_fecha: ventasOrdenadas[0]?.fecha,
-        ultima_venta_monto: ventasOrdenadas[0]?.total,
-        estado: 'activa',
-      })
-    }
-
-    return Array.from(cuentas.values()).sort((a, b) => b.saldo_pendiente - a.saldo_pendiente)
+    handleError(error, 'Error al obtener cuentas corrientes')
+    return (data ?? []).map(r => mapCuenta(r as unknown as Record<string, unknown>))
   },
 
   obtenerPorCliente: async (clienteId: string): Promise<CuentaCorriente | null> => {
-    const cliente = getCliente(clienteId)
-    if (!cliente) return null
+    const { data, error } = await supabase
+      .from('vista_cuentas_corrientes' as 'configuracion')
+      .select('*')
+      .eq('cliente_id', clienteId)
+      .maybeSingle()
 
-    const allVentas = await ventasService.obtenerTodos()
-    const ventas = allVentas.filter(v => v.cliente_id === clienteId && v.estado === 'completada' && v.estado_pago !== 'pagado')
-    const { totalDeuda, totalPagado, saldoPendiente } = calcularSaldosCliente(ventas)
-
-    return {
-      cliente_id: cliente.id,
-      cliente_nombre: cliente.nombre,
-      cliente_dni_ruc: cliente.dni_ruc,
-      cliente_telefono: cliente.telefono,
-      cliente_tipo: cliente.tipo,
-      total_deuda: totalDeuda,
-      total_pagado: totalPagado,
-      saldo_pendiente: saldoPendiente,
-      cantidad_ventas_pendientes: ventas.length,
-      ultima_venta_fecha: ventas[0]?.fecha,
-      ultima_venta_monto: ventas[0]?.total,
-      estado: 'activa',
-    }
+    if (error || !data) return null
+    return mapCuenta(data as unknown as Record<string, unknown>)
   },
 
   obtenerVentasPendientes: async (clienteId: string): Promise<Venta[]> => {
-    const allVentas = await ventasService.obtenerTodos()
-    return allVentas.filter(v => v.cliente_id === clienteId && v.estado === 'completada' && v.estado_pago !== 'pagado')
+    const ventas = await ventasService.obtenerPorCliente(clienteId)
+    return ventas.filter(v => v.estado === 'completada' && v.estado_pago !== 'pagado')
   },
 
   registrarPago: async (
-    _clienteId: string,
+    clienteId: string,
     datos: { ventasSeleccionadas: string[]; monto: number; metodo_pago: NuevoVentaPago['metodo_pago']; observaciones?: string; usuario_id: string }
   ): Promise<VentaPago[]> => {
-    const { ventasSeleccionadas, monto, metodo_pago, observaciones, usuario_id } = datos
-    const pagos: VentaPago[] = []
-    let montoRestante = monto
+    const { error } = await supabase.rpc('registrar_pago_cobranza', {
+      p_cliente_id: clienteId,
+      p_monto: datos.monto,
+      p_metodo_pago: datos.metodo_pago,
+      p_observaciones: datos.observaciones ?? null,
+      p_usuario_id: datos.usuario_id,
+      p_ventas_ids: datos.ventasSeleccionadas,
+    })
 
-    const allVentas = await ventasService.obtenerTodos()
-    const ventas = ventasSeleccionadas
-      .map(id => allVentas.find(v => v.id === id))
-      .filter((v): v is Venta => v !== undefined)
-      .sort((a, b) => a.fecha.getTime() - b.fecha.getTime())
+    handleError(error, 'Error al registrar pago')
 
-    for (const venta of ventas) {
-      if (montoRestante <= 0) break
-      const saldoVenta = venta.total - venta.monto_pagado
-      const montoAplicar = Math.min(montoRestante, saldoVenta)
+    const { data: pagos } = await supabase
+      .from('venta_pagos')
+      .select('*, usuario:usuarios!usuario_id(name)')
+      .eq('usuario_id', datos.usuario_id)
+      .order('fecha', { ascending: false })
+      .limit(datos.ventasSeleccionadas.length)
 
-      if (montoAplicar <= 0) continue
-
-      const pago: VentaPago = {
-        id: generarId(),
-        venta_id: venta.id,
-        monto: montoAplicar,
-        metodo_pago,
-        fecha: new Date(),
-        observaciones,
-        usuario_id,
-        usuario_nombre: getUsuario(usuario_id),
-      }
-
-      const nuevoMontoPagado = venta.monto_pagado + montoAplicar
-      await ventasService.actualizar(venta.id, {
-        monto_pagado: nuevoMontoPagado,
-        estado_pago: nuevoMontoPagado >= venta.total ? 'pagado' : 'parcial',
-      })
-
-      pagosRegistrados.push(pago)
-      pagos.push(pago)
-      montoRestante -= montoAplicar
-    }
-
-    return pagos
+    return (pagos ?? []).map(p => ({
+      id: p.id,
+      venta_id: p.venta_id,
+      monto: p.monto,
+      metodo_pago: p.metodo_pago as VentaPago['metodo_pago'],
+      fecha: new Date(p.fecha),
+      observaciones: p.observaciones ?? undefined,
+      usuario_id: p.usuario_id,
+      usuario_nombre: (p.usuario as { name: string } | null)?.name ?? 'Usuario',
+    }))
   },
 
   obtenerMovimientos: async (clienteId: string): Promise<MovimientoCuentaCorriente[]> => {
-    const allVentas = await ventasService.obtenerTodos()
-    const movimientos: MovimientoCuentaCorriente[] = []
-    let saldoAcumulado = 0
-
-    const ventas = allVentas.filter(v => v.cliente_id === clienteId && v.estado === 'completada' && v.estado_pago !== 'pagado')
+    const ventas = await ventasService.obtenerPorCliente(clienteId)
+    const pendientes = ventas
+      .filter(v => v.estado === 'completada' && v.estado_pago !== 'pagado')
       .sort((a, b) => a.fecha.getTime() - b.fecha.getTime())
 
-    for (const venta of ventas) {
-      saldoAcumulado += venta.total
-      movimientos.push({
-        id: generarId(),
-        tipo: 'venta',
-        documento_id: venta.id,
-        documento_tipo: 'venta',
-        documento_numero: venta.ticket_numero,
-        monto: venta.total,
-        saldo_antes: saldoAcumulado - venta.total,
-        saldo_despues: saldoAcumulado,
-        fecha: venta.fecha,
-      })
-    }
-
-    return movimientos.sort((a, b) => b.fecha.getTime() - a.fecha.getTime())
+    let saldo = 0
+    return pendientes.map(v => {
+      saldo += v.total
+      return {
+        id: v.id, tipo: 'venta' as const,
+        documento_id: v.id, documento_tipo: 'venta', documento_numero: v.ticket_numero,
+        monto: v.total, saldo_antes: saldo - v.total, saldo_despues: saldo, fecha: v.fecha,
+      }
+    }).reverse()
   },
 }

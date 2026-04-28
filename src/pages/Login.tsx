@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuthContext } from '../context/AuthContext'
-import { Loader2, Lock, Mail, Eye, EyeOff } from 'lucide-react'
+import { Loader2, Lock, Mail, Eye, EyeOff, ArrowLeft } from 'lucide-react'
 import { RUTAS } from '@/config/rutas'
 import { useConfigNegocio } from '@/hooks/useConfigNegocio'
 
@@ -14,10 +14,13 @@ export default function Login() {
   const { nombre } = useConfigNegocio()
 
   useEffect(() => {
-    if (user) {
-      navigate(user.role === 'admin' ? RUTAS.ADMIN.DASHBOARD : RUTAS.ADMIN.POS)
+    if (user && !loading) {
+      navigate(
+        user.role === 'admin' ? RUTAS.ADMIN.DASHBOARD : RUTAS.ADMIN.POS,
+        { replace: true }
+      )
     }
-  }, [user, navigate])
+  }, [user, loading, navigate])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -30,6 +33,15 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
+        <div className="mb-4">
+          <Link
+            to={RUTAS.PUBLICO.HOME}
+            className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 transition-colors"
+          >
+            <ArrowLeft size={18} />
+            <span>Volver</span>
+          </Link>
+        </div>
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
           <div className="text-center mb-8">
             <Link to={RUTAS.PUBLICO.HOME} className="inline-block">
@@ -38,7 +50,6 @@ export default function Login() {
               </div>
               <h1 className="text-xl md:text-2xl font-bold text-gray-900">{nombre}</h1>
             </Link>
-            <p className="text-gray-500 mt-1 text-sm">Ingresa al sistema</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -85,8 +96,8 @@ export default function Login() {
 
             {error && (
               <div className="bg-red-50 text-red-600 text-sm p-3 rounded-xl">
-                {error === 'Invalid login credentials' 
-                  ? 'Credenciales incorrectas' 
+                {error === 'Invalid login credentials'
+                  ? 'Credenciales incorrectas'
                   : error}
               </div>
             )}

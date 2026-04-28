@@ -6,17 +6,9 @@ interface Props {
   onCerrar: () => void
   titulo?: string
   children: ReactNode
-  tamano?: 'sm' | 'md' | 'lg' | 'xl'
 }
 
-const tamanos = {
-  sm: 'max-w-sm',
-  md: 'max-w-lg',
-  lg: 'max-w-2xl',
-  xl: 'max-w-4xl',
-}
-
-export function Modal({ abierto, onCerrar, titulo, children, tamano = 'md' }: Props) {
+export function Modal({ abierto, onCerrar, titulo, children }: Props) {
   const dialogRef = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
@@ -46,17 +38,21 @@ export function Modal({ abierto, onCerrar, titulo, children, tamano = 'md' }: Pr
     <dialog
       ref={dialogRef}
       className={`
-        fixed inset-0 m-auto p-0 rounded-2xl backdrop:bg-black/50 backdrop:inset-0
-        w-[calc(100%-2rem)] ${tamanos[tamano]} max-h-[90vh] overflow-hidden
+        fixed inset-x-0 bottom-0 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2
+        md:flex md:items-center md:justify-center
+        w-full md:w-auto md:max-w-lg
+        p-0 rounded-t-3xl md:rounded-2xl
+        backdrop:bg-black/50 backdrop:inset-0
+        max-h-[85vh] md:max-h-[90vh] overflow-hidden
         data-[closing]:animate-fade-out data-[open]:animate-fade-in
       `}
       onClick={(e) => {
         if (e.target === e.currentTarget) onCerrar()
       }}
     >
-      <div className="flex flex-col max-h-[90vh]">
+      <div className="flex flex-col max-h-[85vh] md:max-h-[90vh] bg-white w-full md:w-auto">
         {titulo && (
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 shrink-0">
             <h2 className="text-lg font-semibold text-gray-900">{titulo}</h2>
             <button
               onClick={onCerrar}

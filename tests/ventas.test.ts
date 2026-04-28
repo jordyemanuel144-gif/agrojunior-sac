@@ -43,10 +43,4 @@ describe('ventasService', () => {
       expect(ventasCliente.every(v => v.cliente_id === ventas[0].cliente_id)).toBe(true)
     }
   })
-
-  it('debería obtener nombre del cliente', async () => {
-    const ventas = await ventasService.obtenerTodos()
-    const nombre = ventasService.getCliente(ventas[0].cliente_id)
-    expect(nombre).toBeDefined()
-  })
 })

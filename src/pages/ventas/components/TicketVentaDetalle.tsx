@@ -95,6 +95,27 @@ export function TicketVentaDetalle({ venta, cliente, esAnulada }: Props) {
           </div>
         )}
 
+        {/* Información de pago (para ventas a cuenta) */}
+        {!esAnulada && venta.estado_pago !== 'pagado' && (
+          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mt-3">
+            <p className="text-xs font-semibold text-yellow-700 uppercase mb-2">Información de Pago</p>
+            <div className="space-y-1 text-sm">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Total de la venta:</span>
+                <span className="font-medium">S/ {venta.total.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between text-green-600">
+                <span>Monto pagado:</span>
+                <span className="font-medium">S/ {(venta.monto_pagado || 0).toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between font-bold text-red-600 border-t border-yellow-300 pt-1 mt-1">
+                <span>Pendiente:</span>
+                <span>S/ {(venta.total - (venta.monto_pagado || 0)).toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Footer */}
         <p className="text-center text-xs text-gray-400 pt-2">
           ¡Gracias por su compra!

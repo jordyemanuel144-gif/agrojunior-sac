@@ -1,12 +1,14 @@
-import { UserCircle, Edit3 } from 'lucide-react'
+import { UserCircle, Edit3, Plus } from 'lucide-react'
 import type { Cliente } from '@/types/cliente.types'
 
 interface Props {
-  cliente: Cliente
+  cliente: Cliente | null
   onClick: () => void
 }
 
 export function SelectorCliente({ cliente, onClick }: Props) {
+  const nombreCliente = cliente?.nombre || 'Seleccionar cliente'
+
   return (
     <>
       <div className="hidden md:block bg-blue-50 border-b border-blue-100 px-6 py-3">
@@ -18,10 +20,10 @@ export function SelectorCliente({ cliente, onClick }: Props) {
             <UserCircle size={18} className="text-blue-600" />
           </div>
           <div className="text-left">
-            <p className="text-[10px] font-semibold text-blue-400 uppercase tracking-wider">Asociar cliente</p>
-            <p className="text-sm font-semibold text-gray-900">Cliente: {cliente.nombre}</p>
+            <p className="text-[10px] font-semibold text-blue-400 uppercase tracking-wider">Cliente</p>
+            <p className="text-sm font-semibold text-gray-900">{nombreCliente}</p>
           </div>
-          <Edit3 size={16} className="text-blue-400" />
+          <Plus size={16} className="text-blue-400" />
         </button>
       </div>
 
@@ -35,9 +37,9 @@ export function SelectorCliente({ cliente, onClick }: Props) {
           </div>
           <div className="flex-1 text-left min-w-0">
             <p className="text-[9px] font-semibold text-blue-400 uppercase">Cliente</p>
-            <p className="text-xs font-semibold text-gray-900 truncate">{cliente.nombre}</p>
+            <p className="text-xs font-semibold text-gray-900 truncate">{nombreCliente}</p>
           </div>
-          <Edit3 size={12} className="text-blue-400 flex-shrink-0" />
+          <Plus size={12} className="text-blue-400 flex-shrink-0" />
         </button>
       </div>
     </>

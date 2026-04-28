@@ -40,9 +40,9 @@ export function Hero() {
                     Hacer Pedido
                   </a>
                 </div>
+</div>
               </div>
-            </div>
-          </main>
+            </main>
         </div>
       </div>
       <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">

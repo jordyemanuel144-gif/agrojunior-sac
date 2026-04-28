@@ -1,9 +1,8 @@
-// useConfirmarPedido - Hook para la lógica de ConfirmarPedido
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { CartItem } from '@/types/venta.types'
 import type { MetodoPago, EstadoPago } from '@/types/venta.types'
 import type { Cliente } from '@/types/cliente.types'
-import { DESCUENTOS_MAYORISTA } from '@/datos-mock/descuentos.mock'
+import { configuracionService } from '@/services/configuracion.service'
 
 const MONTOS_RAPIDOS = [5, 10, 20, 50]
 
@@ -23,6 +22,12 @@ export function useConfirmarPedido({
   const [tipoPago, setTipoPago] = useState<'completo' | 'parcial' | 'cuenta'>('completo')
   const [montoRecibido, setMontoRecibido] = useState('')
   const [mostrarResumenPago, setMostrarResumenPago] = useState(false)
+  const [pctDescuento, setPctDescuento] = useState(0)
+
+  useEffect(() => {
+    const descuentos = configuracionService.getDescuentos()
+    setPctDescuento(descuentos[cliente.tipo] ?? 0)
+  }, [cliente.tipo])
 
   const esPublico = cliente.id === 'publico'
 
@@ -61,7 +66,7 @@ export function useConfirmarPedido({
       setEditando(rest)
       return
     }
-    num <= 0 ? onEliminar(productoId) : onActualizar(productoId, num)
+    if (num <= 0) { onEliminar(productoId) } else { onActualizar(productoId, num) }
     const { [productoId]: _, ...rest } = editando
     setEditando(rest)
   }
@@ -75,7 +80,6 @@ export function useConfirmarPedido({
     return item.subtotal
   }
 
-  const pctDescuento = DESCUENTOS_MAYORISTA[cliente.tipo] ?? 0
   const subtotalCalculado = items.reduce((acc, item) => acc + getSubtotalTemporal(item), 0)
   const montoDescuento = subtotalCalculado * pctDescuento
   const baseIgv = subtotalCalculado - montoDescuento
@@ -120,7 +124,7 @@ export function useConfirmarPedido({
     cargando, errorStock,
     mostrarResumenPago, setMostrarResumenPago,
     esPublico,
-    getSubtotalTemporal, subtotalCalculado, montoDescuento, igv, total,
+    getSubtotalTemporal, subtotalCalculado, montoDescuento, igv, total, pctDescuento,
     montoRecibidoNum, cambio, saldoPendiente,
     handleConfirmar, confirmarPago,
     handleEditStart, handleEditChange, handleEditConfirm, handleIncrement,

@@ -24,12 +24,16 @@ export function SeccionProductos() {
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {productos.map((producto) => (
               <div key={producto.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
-                <div className="relative h-48">
-                  <img
-                    className="w-full h-full object-cover"
-                    src={producto.imagen_url || 'https://images.unsplash.com/photo-1587593810167-a84920ea0781?w=400&q=80'}
-                    alt={producto.nombre}
-                  />
+                <div className="h-48 bg-blue-50 flex items-center justify-center">
+                  {producto.imagen_url ? (
+                    <img
+                      className="w-full h-full object-cover"
+                      src={producto.imagen_url}
+                      alt={producto.nombre}
+                    />
+                  ) : (
+                    <span className="text-6xl">🍗</span>
+                  )}
                   <div className="absolute top-3 left-3 flex gap-2">
                     {producto.destacado && (
                       <span className="px-3 py-1 text-xs font-bold text-white bg-green-600 rounded-full">

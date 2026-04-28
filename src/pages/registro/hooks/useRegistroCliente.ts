@@ -1,14 +1,15 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { clientesService } from '@/services/clientes.service'
-import { RUTAS } from '@/config/rutas'
-import { WHATSAPP } from '@/config/constantes'
+import { supabase } from '@/lib/supabase'
 
 interface FormData {
   nombre: string
   telefono: string
   direccion: string
   mensaje: string
+  email: string
+  password: string
+  confirmPassword: string
 }
 
 interface UseRegistroClienteReturn {
@@ -20,7 +21,6 @@ interface UseRegistroClienteReturn {
 }
 
 export function useRegistroCliente(): UseRegistroClienteReturn {
-  const navigate = useNavigate()
   const [enviando, setEnviando] = useState(false)
   const [enviado, setEnviado] = useState(false)
   const [formData, setFormData] = useState<FormData>({
@@ -28,6 +28,9 @@ export function useRegistroCliente(): UseRegistroClienteReturn {
     telefono: '',
     direccion: '',
     mensaje: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -39,19 +42,34 @@ export function useRegistroCliente(): UseRegistroClienteReturn {
     setEnviando(true)
 
     try {
-      await clientesService.crear({
+      // 1. Crear usuario en Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+      })
+
+      if (authError) throw authError
+      if (!authData.user) throw new Error('No se pudo crear la cuenta')
+
+      // 2. Crear cliente vinculado al usuario de Auth
+      const nuevoCliente = await clientesService.crear({
         nombre: formData.nombre,
         telefono: formData.telefono,
         tipo: 'minorista',
+        email: formData.email,
+        auth_user_id: authData.user.id,
+        activo: true,
       })
 
-      setEnviado(true)
+      // Si el cliente se creó sin auth_user_id (por el service), actualizarlo
+      if (!nuevoCliente.auth_user_id) {
+        await supabase
+          .from('clientes')
+          .update({ auth_user_id: authData.user.id })
+          .eq('id', nuevoCliente.id)
+      }
 
-      setTimeout(() => {
-        const mensaje = `Hola,%20quiero%20registrarme%20como%20cliente:%20${encodeURIComponent(formData.nombre)}%20-%20Tel:%20${encodeURIComponent(formData.telefono)}%20-%20Dirección:%20${encodeURIComponent(formData.direccion || 'No especificada')}`
-        window.open(`https://wa.me/${WHATSAPP}?text=${mensaje}`, '_blank')
-        navigate(RUTAS.PUBLICO.HOME)
-      }, 2000)
+      setEnviado(true)
     } catch (error) {
       console.error('Error al registrar:', error)
     } finally {

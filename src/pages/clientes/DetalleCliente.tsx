@@ -6,7 +6,12 @@ import { ModalConfirmarEliminar } from './components/ModalConfirmarEliminarClien
 import { TabsCliente } from './components/TabsCliente'
 import { HistorialVentasCliente } from './components/HistorialVentasCliente'
 import { clientesService } from '@/services/clientes.service'
+import { cuentaCorrienteService } from '@/services/cuenta-corriente.service'
+import { ventasService } from '@/services/ventas.service'
+import { descargarTexto, descargarImagen, descargarPdf } from '@/lib/deuda'
 import type { Cliente, NuevoCliente } from '@/types/cliente.types'
+import type { CuentaCorriente } from '@/types/cuenta-corriente.types'
+import { MessageCircle, Download } from 'lucide-react'
 
 export default function DetalleCliente() {
   const { id } = useParams<{ id: string }>()
@@ -16,12 +21,20 @@ export default function DetalleCliente() {
   const [mostrarEditar, setMostrarEditar] = useState(false)
   const [mostrarEliminar, setMostrarEliminar] = useState(false)
   const [tabActivo, setTabActivo] = useState<'datos' | 'ventas'>('datos')
+  const [cuenta, setCuenta] = useState<CuentaCorriente | null>(null)
+  const [showDescargar, setShowDescargar] = useState(false)
 
   useEffect(() => {
     if (id) {
       clientesService.obtenerPorId(id)
         .then(setCliente)
         .finally(() => setCargando(false))
+    }
+  }, [id])
+
+  useEffect(() => {
+    if (id) {
+      cuentaCorrienteService.obtenerPorCliente(id).then(setCuenta)
     }
   }, [id])
 
@@ -36,6 +49,80 @@ export default function DetalleCliente() {
     if (!id) return
     await clientesService.eliminar(id)
     navigate('/clientes')
+  }
+
+  const generarLinkWhatsApp = (telefono: string, mensaje: string): string => {
+    const telefonoLimpio = telefono.replace(/\D/g, '')
+    const mensajeEncoded = encodeURIComponent(mensaje)
+    return `https://wa.me/51${telefonoLimpio}?text=${mensajeEncoded}`
+  }
+
+  const abrirWhatsApp = async () => {
+    if (!id || !cuenta || !cliente) return
+    if (cuenta.saldo_pendiente <= 0) return
+
+    if (!cliente.telefono) {
+      alert('El cliente no tiene teléfono registrado. Usa el botón Descargar para guardar el número.')
+      return
+    }
+
+    const todasVentas = await ventasService.obtenerTodos()
+    const ventasPendientes = todasVentas.filter(
+      v => v.cliente_id === id && 
+      v.estado === 'completada' && 
+      v.estado_pago !== 'pagado'
+    )
+
+    const lineasVentas = ventasPendientes.map((venta) => {
+      const pendiente = venta.total - venta.monto_pagado
+      const items = venta.items.map(i => `│ • ${i.producto.nombre} x${i.cantidad} = S/ ${i.subtotal.toFixed(2)}`).join('\n')
+      const descuento = venta.descuento > 0 ? `\n│ Descuento: -S/ ${venta.descuento.toFixed(2)}` : ''
+      const yaPagado = venta.monto_pagado > 0 ? `\n│ (Ya pagaste: S/ ${venta.monto_pagado.toFixed(2)})` : ''
+      const fechaDia = venta.fecha.toLocaleDateString('es-PE', { weekday: 'short', day: '2-digit', month: 'short' })
+      const hora = venta.fecha.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' })
+      return `┌─ ${venta.ticket_numero.toUpperCase()} - ${fechaDia} ${hora} ─┐\n${items}${descuento}${yaPagado}\n└ 💰 Total: S/ ${venta.total.toFixed(2)} → Falta: S/ ${pendiente.toFixed(2)} ┘`
+    }).join('\n\n')
+
+    const mensaje = `RESUMEN DE CUENTA
+━━━━━━━━━━━━━━━━━━━━
+Hola ${cliente.nombre}, gracias por tu preferencia 👋
+
+📋 Pedidos pendientes: ${ventasPendientes.length}
+
+${lineasVentas}
+
+━━━━━━━━━━━━━━━━━━━━
+💰 TOTAL A PAGAR: S/${cuenta.saldo_pendiente.toFixed(2)}
+━━━━━━━━━━━━━━━━━━━━
+
+📱 Yape: 916794870
+🏦 Banco de Crédito
+Titular: Juan Pérez
+Cbta: 215-55555555
+
+Cuando puedes cancelar? Gracias 🙏`
+
+    const link = generarLinkWhatsApp(cliente.telefono, mensaje)
+    window.open(link, '_blank')
+  }
+
+  const handleDescargar = async (tipo: 'texto' | 'imagen' | 'pdf') => {
+    if (!cuenta || !id) return
+    const todasVentas = await ventasService.obtenerTodos()
+    const ventasPendientes = todasVentas.filter(
+      v => v.cliente_id === id && 
+      v.estado === 'completada' && 
+      v.estado_pago !== 'pagado'
+    )
+    
+    if (tipo === 'texto') {
+      descargarTexto(cuenta, ventasPendientes)
+    } else if (tipo === 'imagen') {
+      descargarImagen(cuenta, ventasPendientes)
+    } else {
+      descargarPdf(cuenta, ventasPendientes)
+    }
+    setShowDescargar(false)
   }
 
   if (cargando) {
@@ -58,7 +145,7 @@ export default function DetalleCliente() {
 
   return (
     <>
-      <HeaderDetalleCliente cliente={cliente} />
+      <HeaderDetalleCliente cliente={cliente} saldoPendiente={cuenta?.saldo_pendiente} />
 
       <div className="p-4 md:p-6 max-w-screen-xl mx-auto space-y-4">
         <TabsCliente activo={tabActivo} onChange={setTabActivo}>
@@ -69,9 +156,70 @@ export default function DetalleCliente() {
               </div>
 
               <div className="space-y-4">
+                {cuenta && cuenta.saldo_pendiente > 0 && (
+                  <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                    <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">
+                      Deuda pendiente
+                    </p>
+                    <p className="text-lg font-bold text-gray-900">
+                      S/ {cuenta.saldo_pendiente.toFixed(2)}
+                    </p>
+                    <p className="text-xs text-gray-400 mt-1">
+                      Envía por WhatsApp o descarga el detalle
+                    </p>
+                  </div>
+                )}
                 <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
                   <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Acciones</h3>
                   <div className="space-y-2">
+                    {cuenta && cuenta.saldo_pendiente > 0 && (
+                      <div className="relative">
+                        <button
+                          onClick={abrirWhatsApp}
+                          className={`w-full px-4 py-2.5 rounded-xl font-medium text-sm flex items-center justify-center gap-2 ${
+                            cliente?.telefono
+                              ? 'bg-green-500 text-white hover:bg-green-600'
+                              : 'bg-yellow-100 text-yellow-700 hover:bg-yellow-200'
+                          }`}
+                        >
+                          <MessageCircle className="w-4 h-4" />
+                          {cliente?.telefono ? 'WhatsApp' : 'Registrar'}
+                        </button>
+                      </div>
+                    )}
+                    {cuenta && cuenta.saldo_pendiente > 0 && (
+                      <div className="relative">
+                        <button
+                          onClick={() => setShowDescargar(!showDescargar)}
+                          className="w-full px-4 py-2.5 bg-gray-700 text-white rounded-xl font-medium text-sm flex items-center justify-center gap-2 hover:bg-gray-800"
+                        >
+                          <Download className="w-4 h-4" />
+                          Descargar
+                        </button>
+                        {showDescargar && (
+                          <div className="absolute left-0 right-0 mt-1 bg-white rounded-xl shadow-lg border border-gray-200 z-20 overflow-hidden">
+                            <button
+                              onClick={() => handleDescargar('texto')}
+                              className="w-full px-3 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                            >
+                              💬 Texto
+                            </button>
+                            <button
+                              onClick={() => handleDescargar('imagen')}
+                              className="w-full px-3 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                            >
+                              🖼️ Imagen
+                            </button>
+                            <button
+                              onClick={() => handleDescargar('pdf')}
+                              className="w-full px-3 py-2 text-left text-sm hover:bg-gray-50 flex items-center gap-2"
+                            >
+                              📄 PDF
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )}
                     <button
                       onClick={() => setMostrarEditar(true)}
                       className="w-full px-4 py-2.5 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition-colors font-medium text-sm"

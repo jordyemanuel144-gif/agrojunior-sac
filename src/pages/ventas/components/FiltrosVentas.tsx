@@ -56,7 +56,7 @@ export function FiltrosVentas({
           type="text"
           value={busqueda}
           onChange={e => onBusquedaChange(e.target.value)}
-          placeholder="Buscar por ticket o cliente..."
+          placeholder="Buscar por ticket, cliente..."
           className="w-full pl-10 pr-4 py-2.5 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all"
         />
       </div>

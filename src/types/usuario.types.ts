@@ -1,10 +1,14 @@
-export type RolUsuario = 'admin' | 'vendedor'
+import type { RolUsuario } from './supabase.types'
+
+export type { RolUsuario }
+
+export type RolCompleto = RolUsuario | 'cliente'
 
 export interface User {
   id: string
   email: string
   name: string
-  role: RolUsuario
+  role: RolCompleto
   active: boolean
   created_at: string
   updated_at: string

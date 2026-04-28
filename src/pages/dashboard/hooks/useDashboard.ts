@@ -65,17 +65,22 @@ export function useDashboard(): UseDashboardReturn {
 
   useEffect(() => {
     const cargarDatos = async () => {
-      const [dataVentas, dataCompras, dataClientes, dataProductos] = await Promise.all([
-        ventasService.obtenerTodos(),
-        comprasService.obtenerTodos(),
-        clientesService.obtenerTodos(),
-        productosService.obtenerTodos()
-      ])
-      setVentas(dataVentas)
-      setCompras(dataCompras)
-      setClientes(dataClientes)
-      setProductos(dataProductos)
-      setCargando(false)
+      try {
+        const [dataVentas, dataCompras, dataClientes, dataProductos] = await Promise.all([
+          ventasService.obtenerTodos(),
+          comprasService.obtenerTodos(),
+          clientesService.obtenerTodos(),
+          productosService.obtenerTodos()
+        ])
+        setVentas(dataVentas)
+        setCompras(dataCompras)
+        setClientes(dataClientes)
+        setProductos(dataProductos)
+      } catch (error) {
+        console.error('Error al cargar datos del dashboard:', error)
+      } finally {
+        setCargando(false)
+      }
     }
     cargarDatos()
   }, [])

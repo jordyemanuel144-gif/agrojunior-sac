@@ -1,217 +1,251 @@
-import type { ItemStock, MovimientoInventario, ConteoInventario, ItemConteo, EstadoConteo } from '@/types/inventario.types'
-import { MOVIMIENTOS_MOCK, CONTEOS_MOCK } from '@/datos-mock/inventario.mock'
-import { productosService } from './productos.service'
-import { generarId } from '@/lib/utils'
+/**
+ * Service de inventario.
+ * SUPABASE: Usa vista_stock para estado de stock, tablas para movimientos/conteos.
+ * El stock se actualiza automáticamente por triggers en ventas y compras.
+ * Los conteos usan RPC completar_conteo() para ajustes transaccionales.
+ */
+import { supabase, handleError } from '@/lib/supabase'
+import type {
+  ItemStock, MovimientoInventario,
+  ConteoInventario, ItemConteo, EstadoConteo,
+} from '@/types/inventario.types'
 
-let stockItems: ItemStock[] = []
-let movimientos: MovimientoInventario[] = [...MOVIMIENTOS_MOCK]
-let conteos: ConteoInventario[] = [...CONTEOS_MOCK]
-
-async function calcularStock(): Promise<ItemStock[]> {
-  const productos = await productosService.obtenerTodosIncluyendoInactivos()
-  
-  return productos.map(p => {
-    let estado: 'ok' | 'bajo' | 'agotado'
-    if (p.stock_actual === 0) {
-      estado = 'agotado'
-    } else if (p.stock_actual <= p.stock_minimo) {
-      estado = 'bajo'
-    } else {
-      estado = 'ok'
-    }
-
-    return {
-      id: p.id,
-      nombre: p.nombre,
-      codigo: p.codigo,
-      stock_actual: p.stock_actual,
-      stock_minimo: p.stock_minimo,
-      tipo_medida: p.tipo_medida,
-      categoria: productosService.getCategoria(p.categoria_id),
-      estado,
-    }
-  })
-}
-
-function generarNumeroConteo(): string {
-  const num = conteos.length + 1
-  return `INV-${num.toString().padStart(4, '0')}`
-}
-
-function calcularMovimientosDelProducto(productoId: string): MovimientoInventario[] {
-  return movimientos
-    .filter(m => m.producto_id === productoId)
-    .sort((a, b) => b.fecha.getTime() - a.fecha.getTime())
+function mapMovimiento(row: Record<string, unknown>): MovimientoInventario {
+  return {
+    ...row as Omit<MovimientoInventario, 'fecha' | 'producto_nombre'>,
+    producto_nombre: (row.producto as { nombre: string } | null)?.nombre ?? 'Desconocido',
+    fecha: new Date(row.fecha as string),
+  }
 }
 
 export const inventarioService = {
   obtenerStock: async (): Promise<ItemStock[]> => {
-    stockItems = await calcularStock()
-    return stockItems
+    const { data, error } = await supabase
+      .from('vista_stock' as 'productos')
+      .select('*')
+
+    handleError(error, 'Error al obtener stock')
+    return (data ?? []) as unknown as ItemStock[]
   },
 
   obtenerStockPorId: async (id: string): Promise<ItemStock | null> => {
-    if (stockItems.length === 0) {
-      stockItems = await calcularStock()
-    }
-    return stockItems.find(s => s.id === id) ?? null
+    const { data, error } = await supabase
+      .from('vista_stock' as 'productos')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+    if (error && error.code === 'PGRST116') return null
+    handleError(error, 'Error al obtener stock del producto')
+    return data as unknown as ItemStock
   },
 
   obtenerMovimientosPorProducto: async (productoId: string): Promise<MovimientoInventario[]> => {
-    return calcularMovimientosDelProducto(productoId)
+    const { data, error } = await supabase
+      .from('movimientos_inventario')
+      .select('*, producto:productos!producto_id(nombre)')
+      .eq('producto_id', productoId)
+      .order('fecha', { ascending: false })
+
+    handleError(error, 'Error al obtener movimientos')
+    return (data ?? []).map(mapMovimiento)
   },
 
   obtenerTodosLosMovimientos: async (): Promise<MovimientoInventario[]> => {
-    return [...movimientos].sort((a, b) => b.fecha.getTime() - a.fecha.getTime())
+    const { data, error } = await supabase
+      .from('movimientos_inventario')
+      .select('*, producto:productos!producto_id(nombre)')
+      .order('fecha', { ascending: false })
+      .limit(500)
+
+    handleError(error, 'Error al obtener movimientos')
+    return (data ?? []).map(mapMovimiento)
   },
 
   registrarMovimiento: async (datos: Omit<MovimientoInventario, 'id'>): Promise<MovimientoInventario> => {
-    const movimiento: MovimientoInventario = {
-      ...datos,
-      id: generarId(),
-    }
-    movimientos.push(movimiento)
+    const { data, error } = await supabase
+      .from('movimientos_inventario')
+      .insert({
+        producto_id: datos.producto_id,
+        tipo: datos.tipo,
+        cantidad: datos.cantidad,
+        motivo: datos.motivo,
+        notas: datos.notas,
+        usuario_id: datos.usuario_id,
+        documento_tipo: datos.documento_tipo,
+        documento_id: datos.documento_id,
+      })
+      .select('*, producto:productos!producto_id(nombre)')
+      .single()
 
-    const producto = await productosService.obtenerPorId(datos.producto_id)
-    if (producto) {
-      const nuevoStock = datos.tipo === 'entrada'
-        ? producto.stock_actual + datos.cantidad
-        : producto.stock_actual - datos.cantidad
-      
-      await productosService.actualizar(producto.id, { stock_actual: nuevoStock })
-      stockItems = await calcularStock()
-    }
-
-    return movimiento
+    handleError(error, 'Error al registrar movimiento')
+    return mapMovimiento(data!)
   },
 
+  // ─── Conteos de inventario ─────────────────────────────
+
   obtenerConteos: async (): Promise<ConteoInventario[]> => {
-    return [...conteos].sort((a, b) => b.fecha.localeCompare(a.fecha))
+    const { data, error } = await supabase
+      .from('conteos_inventario')
+      .select(`
+        *,
+        usuario:usuarios!usuario_id(name),
+        items:conteo_items(
+          producto_id, stock_sistema, stock_fisico, diferencia,
+          producto:productos!producto_id(nombre)
+        )
+      `)
+      .order('fecha', { ascending: false })
+
+    handleError(error, 'Error al obtener conteos')
+
+    return (data ?? []).map(row => ({
+      id: row.id,
+      numero: row.numero,
+      usuario_id: row.usuario_id,
+      usuario_nombre: (row.usuario as { name: string } | null)?.name,
+      items: ((row.items as Array<Record<string, unknown>>) ?? []).map(item => ({
+        producto_id: item.producto_id as string,
+        producto_nombre: (item.producto as { nombre: string } | null)?.nombre ?? 'Desconocido',
+        stock_sistema: item.stock_sistema as number,
+        stock_fisico: item.stock_fisico as number,
+        diferencia: item.diferencia as number,
+      })),
+      estado: row.estado as EstadoConteo,
+      notas: row.notas ?? undefined,
+      fecha: row.fecha,
+      created_at: row.created_at,
+    }))
   },
 
   obtenerConteoPorId: async (id: string): Promise<ConteoInventario | null> => {
-    return conteos.find(c => c.id === id) ?? null
+    const { data, error } = await supabase
+      .from('conteos_inventario')
+      .select(`
+        *,
+        usuario:usuarios!usuario_id(name),
+        items:conteo_items(
+          producto_id, stock_sistema, stock_fisico, diferencia,
+          producto:productos!producto_id(nombre)
+        )
+      `)
+      .eq('id', id)
+      .single()
+
+    if (error && error.code === 'PGRST116') return null
+    handleError(error, 'Error al obtener conteo')
+
+    return {
+      id: data!.id,
+      numero: data!.numero,
+      usuario_id: data!.usuario_id,
+      usuario_nombre: (data!.usuario as { name: string } | null)?.name,
+      items: ((data!.items as Array<Record<string, unknown>>) ?? []).map(item => ({
+        producto_id: item.producto_id as string,
+        producto_nombre: (item.producto as { nombre: string } | null)?.nombre ?? 'Desconocido',
+        stock_sistema: item.stock_sistema as number,
+        stock_fisico: item.stock_fisico as number,
+        diferencia: item.diferencia as number,
+      })),
+      estado: data!.estado as EstadoConteo,
+      notas: data!.notas ?? undefined,
+      fecha: data!.fecha,
+      created_at: data!.created_at,
+    }
   },
 
-  crearConteo: async (datos: { items: { producto_id: string; stock_fisico: number }[] }, usuarioId: string, usuarioNombre: string): Promise<ConteoInventario> => {
-    const productos = await productosService.obtenerTodosIncluyendoInactivos()
-    
-    const itemsConteo: ItemConteo[] = datos.items.map(item => {
-      const producto = productos.find(p => p.id === item.producto_id)
-      const stockSistema = producto?.stock_actual ?? 0
+  crearConteo: async (
+    datos: { items: { producto_id: string; stock_fisico: number }[] },
+    usuarioId: string,
+    _usuarioNombre: string
+  ): Promise<ConteoInventario> => {
+    // Obtener stock actual del sistema para cada producto
+    const productIds = datos.items.map(i => i.producto_id)
+    const { data: productos } = await supabase
+      .from('productos')
+      .select('id, nombre, stock_actual')
+      .in('id', productIds)
+
+    const productoMap = new Map(
+      (productos ?? []).map(p => [p.id, p])
+    )
+
+    // Crear conteo
+    const { data: conteo, error: conteoError } = await supabase
+      .from('conteos_inventario')
+      .insert({ usuario_id: usuarioId })
+      .select()
+      .single()
+
+    handleError(conteoError, 'Error al crear conteo')
+
+    // Crear items
+    const itemsInsert = datos.items.map(item => {
+      const prod = productoMap.get(item.producto_id)
       return {
+        conteo_id: conteo!.id,
         producto_id: item.producto_id,
-        producto_nombre: producto?.nombre ?? 'Desconocido',
-        stock_sistema: stockSistema,
+        stock_sistema: prod?.stock_actual ?? 0,
         stock_fisico: item.stock_fisico,
-        diferencia: item.stock_fisico - stockSistema,
       }
     })
 
-    const conteo: ConteoInventario = {
-      id: generarId(),
-      numero: generarNumeroConteo(),
-      usuario_id: usuarioId,
-      usuario_nombre: usuarioNombre,
-      items: itemsConteo,
-      estado: 'borrador',
-      fecha: new Date().toISOString(),
-      created_at: new Date().toISOString(),
-    }
+    const { error: itemsError } = await supabase
+      .from('conteo_items')
+      .insert(itemsInsert)
 
-    conteos.push(conteo)
+    handleError(itemsError, 'Error al crear items de conteo')
 
-    return conteo
+    const conteoCompleto = await inventarioService.obtenerConteoPorId(conteo!.id)
+    return conteoCompleto!
   },
 
   anConteo: async (id: string): Promise<ConteoInventario> => {
-    const index = conteos.findIndex(c => c.id === id)
-    if (index === -1) throw new Error('Conteo no encontrado')
-    conteos[index] = { ...conteos[index], estado: 'anulado' }
-    return conteos[index]
+    const { error } = await supabase
+      .from('conteos_inventario')
+      .update({ estado: 'anulado' })
+      .eq('id', id)
+
+    handleError(error, 'Error al anular conteo')
+
+    const conteo = await inventarioService.obtenerConteoPorId(id)
+    return conteo!
   },
 
   actualizarConteo: async (id: string, datos: Partial<ConteoInventario>): Promise<ConteoInventario> => {
-    const index = conteos.findIndex(c => c.id === id)
-    if (index === -1) throw new Error('Conteo no encontrado')
-    
-    const conteoActual = conteos[index]
-    if (conteoActual.estado !== 'borrador') {
-      throw new Error('Solo se pueden editar conteos en estado borrador')
-    }
+    const { error } = await supabase
+      .from('conteos_inventario')
+      .update({ notas: datos.notas })
+      .eq('id', id)
 
-    const conteoActualizado = { ...conteoActual, ...datos }
-    conteos[index] = conteoActualizado
-    return conteoActualizado
+    handleError(error, 'Error al actualizar conteo')
+
+    const conteo = await inventarioService.obtenerConteoPorId(id)
+    return conteo!
   },
 
   actualizarItemConteo: async (conteoId: string, productoId: string, stockFisico: number): Promise<ConteoInventario> => {
-    const index = conteos.findIndex(c => c.id === conteoId)
-    if (index === -1) throw new Error('Conteo no encontrado')
-    
-    const conteo = conteos[index]
-    if (conteo.estado !== 'borrador') {
-      throw new Error('Solo se pueden editar conteos en estado borrador')
-    }
+    const { error } = await supabase
+      .from('conteo_items')
+      .update({ stock_fisico: stockFisico })
+      .eq('conteo_id', conteoId)
+      .eq('producto_id', productoId)
 
-    const itemsActualizados = conteo.items.map(item => {
-      if (item.producto_id === productoId) {
-        return {
-          ...item,
-          stock_fisico: stockFisico,
-          diferencia: stockFisico - item.stock_sistema,
-        }
-      }
-      return item
-    })
+    handleError(error, 'Error al actualizar item de conteo')
 
-    conteos[index] = { ...conteo, items: itemsActualizados }
-    return conteos[index]
+    const conteo = await inventarioService.obtenerConteoPorId(conteoId)
+    return conteo!
   },
 
-  completarConteo: async (id: string, _usuarioId: string): Promise<ConteoInventario> => {
-    const index = conteos.findIndex(c => c.id === id)
-    if (index === -1) throw new Error('Conteo no encontrado')
-    
-    const conteo = conteos[index]
-    if (conteo.estado !== 'borrador') {
-      throw new Error('Solo se pueden completar conteos en estado borrador')
-    }
+  completarConteo: async (id: string, usuarioId: string): Promise<ConteoInventario> => {
+    const { error } = await supabase.rpc('completar_conteo', {
+      p_conteo_id: id,
+      p_usuario_id: usuarioId,
+    })
 
-    const conteoActualizado = { ...conteo, estado: 'completado' as EstadoConteo }
+    handleError(error, 'Error al completar conteo')
 
-    for (const item of conteo.items) {
-      if (item.diferencia !== 0) {
-        const tipo: 'entrada' | 'salida' = item.diferencia > 0 ? 'entrada' : 'salida'
-        
-        const producto = await productosService.obtenerPorId(item.producto_id)
-        if (producto) {
-          const nuevoStock = tipo === 'entrada' 
-            ? producto.stock_actual + Math.abs(item.diferencia)
-            : producto.stock_actual - Math.abs(item.diferencia)
-          
-          await productosService.actualizar(producto.id, { stock_actual: nuevoStock })
-
-          movimientos.push({
-            id: generarId(),
-            producto_id: item.producto_id,
-            producto_nombre: item.producto_nombre,
-            tipo,
-            cantidad: Math.abs(item.diferencia),
-            motivo: tipo === 'entrada' ? 'correccion' : 'merma',
-            notas: `Conteo ${conteo.numero}`,
-            fecha: new Date(),
-            usuario_id: _usuarioId || 'usr_default',
-            documento_tipo: 'conteo',
-            documento_id: conteo.id,
-          })
-        }
-      }
-    }
-
-    stockItems = await calcularStock()
-    conteos[index] = conteoActualizado
-    
-    return conteoActualizado
+    const conteo = await inventarioService.obtenerConteoPorId(id)
+    return conteo!
   },
 }

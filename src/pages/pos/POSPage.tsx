@@ -7,7 +7,7 @@ import { GridProductos } from './components/GridProductos'
 import { ClientePicker } from './components/ClientePicker'
 import { CarritoFlotante } from './components/CarritoFlotante'
 import { ConfirmarPedido } from './components/ConfirmarPedido'
-import { ModalTicket } from './components/ModalTicket'
+import { ToastVentaRegistrada } from './components/ToastVentaRegistrada'
 import { usePOS } from './hooks/usePOS'
 
 export function POSPage() {
@@ -18,7 +18,6 @@ export function POSPage() {
     categoriaActiva,
     clienteSeleccionado,
     clientes,
-    ventaConfirmada,
     showClientePicker,
     items,
     subtotal,
@@ -33,12 +32,13 @@ export function POSPage() {
     actualizarCantidad,
     eliminarItem,
     handleConfirmar,
-    handleNuevaVenta,
     handleCancelar,
     handleSeleccionarCliente,
     setVista,
     getPrecio,
     getCantidadEnCarrito,
+    comprobanteGenerado,
+    limpiarComprobanteGenerado,
   } = usePOS()
 
   // Mostrar error de stock como alerta flotante
@@ -61,34 +61,46 @@ export function POSPage() {
   }
 
   if (vista === 'confirmar') {
+    const clientePublico = {
+      id: 'publico',
+      nombre: 'Público General',
+      tipo: 'minorista' as const,
+      telefono: undefined,
+      direccion: undefined,
+      dni_ruc: undefined,
+      email: undefined,
+      activo: true,
+      created_at: new Date(),
+    }
+    const clienteActual = clienteSeleccionado || clientePublico
+    
     return (
-      <ConfirmarPedido
-        key={items.length + '-' + items.reduce((acc, i) => acc + i.cantidad, 0)}
-        items={items}
-        cliente={clienteSeleccionado!}
-        clientes={clientes}
-        stockInfo={stockInfo}
-        igvActivo={false}
-        showClientePicker={showClientePicker}
-        onVolver={() => setVista('pos')}
-        onConfirmar={handleConfirmar}
-        onActualizarCantidad={actualizarCantidad}
-        onEliminarItem={eliminarItem}
-        onCambiarCliente={handleSeleccionarCliente}
-        onAbrirClientePicker={() => setShowClientePicker(true)}
-        onCerrarClientePicker={() => setShowClientePicker(false)}
-      />
-    )
-  }
-
-  if (vista === 'ticket' && ventaConfirmada) {
-    return (
-      <ModalTicket
-        items={items}
-        cliente={clienteSeleccionado!}
-        venta={ventaConfirmada}
-        onNuevaVenta={handleNuevaVenta}
-      />
+      <>
+        <ConfirmarPedido
+          key={items.length + '-' + items.reduce((acc, i) => acc + i.cantidad, 0)}
+          items={items}
+          cliente={clienteActual}
+          clientes={clientes}
+          stockInfo={stockInfo}
+          igvActivo={false}
+          showClientePicker={showClientePicker}
+          onVolver={() => setVista('pos')}
+          onConfirmar={handleConfirmar}
+          onActualizarCantidad={actualizarCantidad}
+          onEliminarItem={eliminarItem}
+          onCambiarCliente={handleSeleccionarCliente}
+          onAbrirClientePicker={() => setShowClientePicker(true)}
+          onCerrarClientePicker={() => setShowClientePicker(false)}
+        />
+        {comprobanteGenerado && (
+          <ToastVentaRegistrada
+            comprobanteId={comprobanteGenerado.id}
+            ticketNumero={comprobanteGenerado.ticketNumero}
+            tipo={comprobanteGenerado.tipo}
+            onCerrar={limpiarComprobanteGenerado}
+          />
+        )}
+      </>
     )
   }
 
@@ -96,12 +108,10 @@ export function POSPage() {
     <div className="relative flex flex-col min-h-screen bg-gray-50">
         <HeaderPOS busqueda={busqueda} onBusquedaChange={setBusqueda} />
         
-        {clienteSeleccionado && (
-          <SelectorCliente 
-            cliente={clienteSeleccionado} 
-            onClick={() => setShowClientePicker(true)} 
-          />
-        )}
+        <SelectorCliente 
+          cliente={clienteSeleccionado} 
+          onClick={() => setShowClientePicker(true)} 
+        />
         
         {/* Alerta de error de stock */}
         {mostrarErrorStock && errorStock && (
@@ -139,6 +149,16 @@ export function POSPage() {
             subtotal={subtotal}
             onContinuar={() => setVista('confirmar')}
             onCancelar={handleCancelar}
+          />
+        )}
+
+        {/* Toast de venta registrada (mostrado en vista principal) */}
+        {comprobanteGenerado && (
+          <ToastVentaRegistrada
+            comprobanteId={comprobanteGenerado.id}
+            ticketNumero={comprobanteGenerado.ticketNumero}
+            tipo={comprobanteGenerado.tipo}
+            onCerrar={limpiarComprobanteGenerado}
           />
         )}
       </div>

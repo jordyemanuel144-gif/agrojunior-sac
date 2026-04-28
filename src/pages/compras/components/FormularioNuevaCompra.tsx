@@ -9,6 +9,7 @@ import { PasoProductos } from './PasoProductos'
 import { PasoConfirmar } from './PasoConfirmar'
 import { productosService } from '@/services/productos.service'
 import { proveedoresService } from '@/services/proveedores.service'
+import { comprasService } from '@/services/compras.service'
 import type { Producto } from '@/types/producto.types'
 import type { Proveedor } from '@/types/proveedor.types'
 
@@ -55,7 +56,6 @@ export function FormularioNuevaCompra({ onCerrar, onGuardar }: Props) {
   const handleConfirmar = async () => {
     setGuardando(true)
     try {
-      const { comprasService } = await import('@/services/compras.service')
       await comprasService.crear(
         {
           proveedor_id: proveedorId!,

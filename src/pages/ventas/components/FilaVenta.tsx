@@ -2,8 +2,8 @@
 import { useNavigate } from 'react-router-dom'
 import { ChevronRight, CheckCircle, XCircle, Clock } from 'lucide-react'
 import type { Venta } from '@/types/venta.types'
+import { clientesService } from '@/services/clientes.service'
 import { RUTAS } from '@/config/rutas'
-import { ventasService } from '@/services/ventas.service'
 import { METODO_ICONS, METODO_LABELS } from './MetodoPago'
 import { formatMoneda } from '@/lib/utils'
 
@@ -36,8 +36,9 @@ function BadgeEstadoPago({ estado, montoPagado, total }: { estado: Venta['estado
 
 export function FilaVenta({ venta }: Props) {
   const navigate = useNavigate()
-  const cliente = ventasService.getCliente(venta.cliente_id)
   const esCompletada = venta.estado === 'completada'
+  
+  const clienteNombre = clientesService.obtenerClienteSync(venta.cliente_id)?.nombre || 'Cliente no encontrado'
 
   const formatHora = (fecha: Date) => {
     return fecha.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' })
@@ -69,7 +70,7 @@ export function FilaVenta({ venta }: Props) {
             <BadgeEstadoPago estado={venta.estado_pago} montoPagado={venta.monto_pagado} total={venta.total} />
           )}
         </div>
-        <p className="text-sm text-gray-500 truncate">{cliente.nombre}</p>
+        <p className="text-sm text-gray-500 truncate">{clienteNombre}</p>
         <p className="text-xs text-gray-400">Vendedor: {venta.vendedor_nombre}</p>
       </div>
 

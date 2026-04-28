@@ -27,7 +27,7 @@ export function usePerfil(): UsePerfilReturn {
     setExito(null)
     
     try {
-      const emailExistente = usuariosService.getByEmail(datos.email)
+      const emailExistente = await usuariosService.getByEmail(datos.email)
       if (emailExistente && emailExistente.id !== user.id) {
         setError('El correo electrónico ya está en uso')
         setGuardando(false)

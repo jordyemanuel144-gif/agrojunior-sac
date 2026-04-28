@@ -28,9 +28,15 @@ export default function ListaClientes() {
 
   useEffect(() => {
     const init = async () => {
-      const data = await clientesService.obtenerTodos()
-      setClientes(data)
-      setCargando(false)
+      try {
+        setCargando(true)
+        const data = await clientesService.obtenerTodos()
+        setClientes(data)
+      } catch (error) {
+        console.error('Error al cargar clientes:', error)
+      } finally {
+        setCargando(false)
+      }
     }
     init()
   }, [])

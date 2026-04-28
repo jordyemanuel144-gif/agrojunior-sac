@@ -1,112 +1,139 @@
-// Servicio de configuración del sistema
-// Usa localStorage para persistencia (luego Supabase)
-import type { 
-  ConfiguracionCompleta, 
-  ConfigNegocio, 
-  ConfigImpuestos, 
-  ConfigDescuentos, 
-  ConfigSistema 
+/**
+ * Service de configuración del sistema.
+ * SUPABASE: Lee/escribe en tabla configuracion (clave-valor JSONB).
+ * Mantiene cache local para lecturas síncronas frecuentes.
+ */
+import { supabase, handleError } from '@/lib/supabase'
+import type {
+  ConfiguracionCompleta,
+  ConfigNegocio,
+  ConfigImpuestos,
+  ConfigDescuentos,
+  ConfigSistema,
 } from '@/types/configuracion.types'
-import { NOMBRE_NEGOCIO, IGV_PORCENTAJE, STOCK_MINIMO_ALERTA, TERMINAL_POS, CAJA_PRINCIPAL, RUC_NEGOCIO, DIRECCION_NEGOCIO, TELEFONO, WHATSAPP, HORARIO, DESCUENTO_MAYORISTA, DESCUENTO_ESPECIAL } from '@/config/constantes'
+import {
+  NOMBRE_NEGOCIO, IGV_PORCENTAJE, STOCK_MINIMO_ALERTA,
+  TERMINAL_POS, CAJA_PRINCIPAL, RUC_NEGOCIO, DIRECCION_NEGOCIO,
+  TELEFONO, WHATSAPP, HORARIO, DESCUENTO_MAYORISTA, DESCUENTO_ESPECIAL,
+  YAPE_DEFAULT, BANCO_NOMBRE_DEFAULT, BANCO_TITULAR_DEFAULT, BANCO_CUENTA_DEFAULT,
+} from '@/config/constantes'
 
-const STORAGE_KEY = 'samjose_configuracion'
-
+// Valores por defecto usados si Supabase no tiene datos aún
 const configDefault: ConfiguracionCompleta = {
   negocio: {
-    nombre: NOMBRE_NEGOCIO,
-    ruc: RUC_NEGOCIO,
-    direccion: DIRECCION_NEGOCIO,
-    telefono: TELEFONO,
-    whatsapp: WHATSAPP,
-    horario: { ...HORARIO },
+    nombre: NOMBRE_NEGOCIO, ruc: RUC_NEGOCIO, direccion: DIRECCION_NEGOCIO,
+    telefono: TELEFONO, whatsapp: WHATSAPP, horario: { ...HORARIO },
+    yape: YAPE_DEFAULT, banco_nombre: BANCO_NOMBRE_DEFAULT,
+    banco_titular: BANCO_TITULAR_DEFAULT, banco_cuenta: BANCO_CUENTA_DEFAULT,
   },
-  impuestos: {
-    igv_activo: false,
-    igv_porcentaje: IGV_PORCENTAJE,
-  },
-  descuentos: {
-    mayorista: DESCUENTO_MAYORISTA,
-    especial: DESCUENTO_ESPECIAL,
-  },
-  sistema: {
-    stock_minimo_alerta: STOCK_MINIMO_ALERTA,
-    terminal: TERMINAL_POS,
-    caja_principal: CAJA_PRINCIPAL,
-  },
+  impuestos: { igv_activo: false, igv_porcentaje: IGV_PORCENTAJE },
+  descuentos: { mayorista: DESCUENTO_MAYORISTA, especial: DESCUENTO_ESPECIAL },
+  sistema: { stock_minimo_alerta: STOCK_MINIMO_ALERTA, terminal: TERMINAL_POS, caja_principal: CAJA_PRINCIPAL },
 }
 
-function getStoredConfig(): ConfiguracionCompleta {
-  if (typeof window === 'undefined') return configDefault
-  
-  const stored = localStorage.getItem(STORAGE_KEY)
-  if (!stored) return configDefault
-  
-  try {
-    return { ...configDefault, ...JSON.parse(stored) }
-  } catch {
-    return configDefault
+// Cache en memoria para lecturas síncronas
+let cache: ConfiguracionCompleta = { ...configDefault }
+let cacheLoaded = false
+
+async function cargarDesdeSupabase(): Promise<ConfiguracionCompleta> {
+  const { data, error } = await supabase
+    .from('configuracion')
+    .select('clave, valor')
+
+  if (error || !data || data.length === 0) return { ...configDefault }
+
+  const config = { ...configDefault }
+  for (const row of data) {
+    const valor = row.valor as Record<string, unknown>
+    switch (row.clave) {
+      case 'negocio':
+        config.negocio = { ...config.negocio, ...valor } as ConfigNegocio
+        break
+      case 'impuestos':
+        config.impuestos = { ...config.impuestos, ...valor } as ConfigImpuestos
+        break
+      case 'descuentos':
+        config.descuentos = { ...config.descuentos, ...valor } as ConfigDescuentos
+        break
+      case 'sistema':
+        config.sistema = { ...config.sistema, ...valor } as ConfigSistema
+        break
+    }
   }
+  return config
 }
 
-function saveConfig(config: ConfiguracionCompleta): void {
-  if (typeof window === 'undefined') return
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(config))
+async function guardarSeccion(clave: string, valor: Record<string, unknown>): Promise<void> {
+  const { error } = await supabase
+    .from('configuracion')
+    .upsert({ clave, valor }, { onConflict: 'clave' })
+
+  handleError(error, `Error al guardar configuración: ${clave}`)
 }
+
+// Inicializar cache al importar (sin await para no bloquear)
+cargarDesdeSupabase().then(c => { 
+  cache = c
+  cacheLoaded = true 
+})
 
 export const configuracionService = {
   obtener: (): ConfiguracionCompleta => {
-    return getStoredConfig()
+    return cache
   },
 
-  actualizarNegocio: (datos: Partial<ConfigNegocio>): ConfiguracionCompleta => {
-    const config = getStoredConfig()
-    config.negocio = { ...config.negocio, ...datos }
-    saveConfig(config)
-    return config
+  obtenerAsync: async (): Promise<ConfiguracionCompleta> => {
+    cache = await cargarDesdeSupabase()
+    cacheLoaded = true
+    return cache
   },
 
-  actualizarImpuestos: (datos: Partial<ConfigImpuestos>): ConfiguracionCompleta => {
-    const config = getStoredConfig()
-    config.impuestos = { ...config.impuestos, ...datos }
-    saveConfig(config)
-    return config
+  actualizarNegocio: async (datos: Partial<ConfigNegocio>): Promise<ConfiguracionCompleta> => {
+    cache.negocio = { ...cache.negocio, ...datos }
+    await guardarSeccion('negocio', cache.negocio as unknown as Record<string, unknown>)
+    return cache
   },
 
-  actualizarDescuentos: (datos: Partial<ConfigDescuentos>): ConfiguracionCompleta => {
-    const config = getStoredConfig()
-    config.descuentos = { ...config.descuentos, ...datos }
-    saveConfig(config)
-    return config
+  actualizarImpuestos: async (datos: Partial<ConfigImpuestos>): Promise<ConfiguracionCompleta> => {
+    cache.impuestos = { ...cache.impuestos, ...datos }
+    await guardarSeccion('impuestos', cache.impuestos as unknown as Record<string, unknown>)
+    return cache
   },
 
-  actualizarSistema: (datos: Partial<ConfigSistema>): ConfiguracionCompleta => {
-    const config = getStoredConfig()
-    config.sistema = { ...config.sistema, ...datos }
-    saveConfig(config)
-    return config
+  actualizarDescuentos: async (datos: Partial<ConfigDescuentos>): Promise<ConfiguracionCompleta> => {
+    cache.descuentos = { ...cache.descuentos, ...datos }
+    await guardarSeccion('descuentos', cache.descuentos as unknown as Record<string, unknown>)
+    return cache
   },
 
-  // Helpers rápidos
+  actualizarSistema: async (datos: Partial<ConfigSistema>): Promise<ConfiguracionCompleta> => {
+    cache.sistema = { ...cache.sistema, ...datos }
+    await guardarSeccion('sistema', cache.sistema as unknown as Record<string, unknown>)
+    return cache
+  },
+
   getIGV: (): { activo: boolean; porcentaje: number } => {
-    const config = getStoredConfig()
-    return { activo: config.impuestos.igv_activo, porcentaje: config.impuestos.igv_porcentaje }
+    return { activo: cache.impuestos.igv_activo, porcentaje: cache.impuestos.igv_porcentaje }
   },
 
   getDescuentos: (): { mayorista: number; especial: number } => {
-    const config = getStoredConfig()
-    return config.descuentos
+    return cache.descuentos
   },
 
   getNegocio: (): ConfigNegocio => {
-    return getStoredConfig().negocio
+    return cache.negocio
   },
 
   getStockMinimo: (): number => {
-    return getStoredConfig().sistema.stock_minimo_alerta
+    return cache.sistema.stock_minimo_alerta
   },
 
-  resetear: (): ConfiguracionCompleta => {
-    localStorage.removeItem(STORAGE_KEY)
-    return configDefault
+  resetear: async (): Promise<ConfiguracionCompleta> => {
+    cache = { ...configDefault }
+    const secciones = ['negocio', 'impuestos', 'descuentos', 'sistema'] as const
+    for (const clave of secciones) {
+      await guardarSeccion(clave, cache[clave] as unknown as Record<string, unknown>)
+    }
+    return cache
   },
 }

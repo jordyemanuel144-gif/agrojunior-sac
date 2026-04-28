@@ -14,13 +14,24 @@ export default function DetalleProducto() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [producto, setProducto] = useState<Producto | null>(null)
+  const [categorias, setCategorias] = useState<Record<string, string>>({})
   const [cargando, setCargando] = useState(true)
   const [mostrarEditar, setMostrarEditar] = useState(false)
 
   useEffect(() => {
     if (id) {
-      productosService.obtenerPorId(id)
-        .then(setProducto)
+      Promise.all([
+        productosService.obtenerPorId(id),
+        productosService.obtenerCategorias()
+      ])
+        .then(([prod, cats]) => {
+          setProducto(prod)
+          const mapa: Record<string, string> = {}
+          for (const cat of cats) {
+            mapa[cat.id] = cat.nombre
+          }
+          setCategorias(mapa)
+        })
         .finally(() => setCargando(false))
     }
   }, [id])
@@ -56,7 +67,7 @@ export default function DetalleProducto() {
     )
   }
 
-  const categoria = productosService.getCategoria(producto.categoria_id)
+  const nombreCategoria = categorias[producto.categoria_id] ?? producto.categoria_id
   const tieneStock = producto.stock_actual > 0
   const stockBajo = producto.stock_actual > 0 && producto.stock_actual <= producto.stock_minimo
 
@@ -98,7 +109,7 @@ export default function DetalleProducto() {
               <h1 className="text-xl md:text-2xl font-bold text-gray-900 truncate">{producto.nombre}</h1>
               <div className="flex items-center gap-3 mt-1">
                 <span className="text-gray-500">Código: {producto.codigo}</span>
-                <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full text-sm">{categoria}</span>
+                <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full text-sm">{nombreCategoria}</span>
               </div>
             </div>
           </div>

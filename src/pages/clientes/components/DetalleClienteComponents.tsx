@@ -5,6 +5,7 @@ import type { Cliente, TipoCliente } from '@/types/cliente.types'
 
 interface Props {
   cliente: Cliente
+  saldoPendiente?: number
 }
 
 const TIPO_CONFIG: Record<TipoCliente, { label: string; bg: string; text: string }> = {
@@ -13,7 +14,7 @@ const TIPO_CONFIG: Record<TipoCliente, { label: string; bg: string; text: string
   especial: { label: 'Especial', bg: 'bg-purple-100', text: 'text-purple-700' },
 }
 
-export function HeaderDetalleCliente({ cliente }: Props) {
+export function HeaderDetalleCliente({ cliente, saldoPendiente }: Props) {
   const navigate = useNavigate()
   const tipo = TIPO_CONFIG[cliente.tipo]
 
@@ -44,6 +45,12 @@ export function HeaderDetalleCliente({ cliente }: Props) {
               {cliente.dni_ruc ? (cliente.tipo === 'minorista' ? 'DNI' : 'RUC') + ' ' + cliente.dni_ruc : 'Sin documento'}
             </p>
           </div>
+          {saldoPendiente !== undefined && saldoPendiente > 0 && (
+            <div className="text-right">
+              <p className="text-xs text-gray-400">Saldo pendiente</p>
+              <p className="text-lg font-bold text-red-600">S/ {saldoPendiente.toFixed(2)}</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

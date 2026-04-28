@@ -21,3 +21,8 @@ export const PRECIO_POR_TIPO_CLIENTE: Record<string, keyof import('@/types/produ
 
 export const DESCUENTO_MAYORISTA = 10
 export const DESCUENTO_ESPECIAL = 5
+
+export const YAPE_DEFAULT = '916794870'
+export const BANCO_NOMBRE_DEFAULT = 'Banco de Crédito'
+export const BANCO_TITULAR_DEFAULT = 'Juan Pérez'
+export const BANCO_CUENTA_DEFAULT = '215-55555555'

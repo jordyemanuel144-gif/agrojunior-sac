@@ -6,6 +6,8 @@ export const RUTAS = {
   },
   AUTH: {
     LOGIN: '/login',
+    LOGIN_CLIENTE: '/mi-cuenta/login',
+    CALLBACK: '/auth/callback',
   },
   ADMIN: {
     DASHBOARD: '/admin/dashboard',
@@ -22,5 +24,13 @@ export const RUTAS = {
     REPORTES: '/admin/reportes',
     CONFIGURACION: '/admin/configuracion',
     PERFIL: '/admin/perfil',
+  },
+  CLIENTE: {
+    LOGIN: '/mi-cuenta/login',
+    MI_CUENTA: '/mi-cuenta',
+    VENTAS: '/mi-cuenta/ventas',
+    COMPROBANTES: '/mi-cuenta/comprobantes',
+    DEUDAS: '/mi-cuenta/deudas',
+    EDITAR: '/mi-cuenta/editar',
   },
 }

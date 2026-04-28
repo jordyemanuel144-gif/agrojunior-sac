@@ -10,6 +10,7 @@ export interface CuentaCorriente {
   total_pagado: number
   saldo_pendiente: number
   cantidad_ventas_pendientes: number
+  total_ventas_sin_descuento: number
   ultima_venta_fecha?: Date
   ultima_venta_monto?: number
   estado: EstadoCuentaCorriente

@@ -1,11 +1,13 @@
-export type TipoComprobante = 'venta' | 'pago_cobranza'
-export type EstadoComprobante = 'activo' | 'anulado'
+import type { TipoComprobante, EstadoComprobante, TipoCliente } from './supabase.types'
+
+export type { TipoComprobante, EstadoComprobante }
 
 export interface ComprobanteBase {
   id: string
   numero: string
   tipo: TipoComprobante
-  fecha: Date
+  fecha: string
+  hora?: string | null
   estado: EstadoComprobante
   
   negocio_nombre: string
@@ -13,9 +15,11 @@ export interface ComprobanteBase {
   negocio_direccion: string
   negocio_telefono: string
   
-  cliente_id?: string
+  cliente_id?: string | null
   cliente_nombre: string
-  cliente_documento?: string
+  cliente_documento?: string | null
+  cliente_tipo?: TipoCliente
+  cliente_telefono?: string | null
   
   total: number
 }
@@ -33,15 +37,15 @@ export interface ComprobanteVenta extends ComprobanteBase {
   subtotal: number
   descuento: number
   igv: number
-  metodo_pago: string
+  metodo_pago?: string | null
   efectivo?: number
   vuelto?: number
-  vendedor_nombre: string
+  vendedor_nombre?: string | null
 }
 
 export interface VentaEnComprobante {
   ticket: string
-  fecha: Date
+  fecha: string
   items: ItemComprobante[]
   subtotal: number
   descuento: number
@@ -56,16 +60,17 @@ export interface VentaEnComprobante {
 export interface ComprobantePago extends ComprobanteBase {
   tipo: 'pago_cobranza'
   deuda_total_original: number
+  total_ventas_sin_descuento: number
   total_pagado_anterior: number
   deuda_actual: number
   monto_pagado: number
   nueva_deuda: number
-  metodo_pago: string
-  observaciones?: string
+  metodo_pago?: string | null
+  observaciones?: string | null
   ventas: VentaEnComprobante[]
   ventas_pagadas_count: number
   ventas_parciales_count: number
-  usuario_nombre: string
+  usuario_nombre?: string | null
 }
 
 export type Comprobante = ComprobanteVenta | ComprobantePago

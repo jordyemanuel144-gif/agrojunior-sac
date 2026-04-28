@@ -5,17 +5,16 @@
 import { useNavigate } from 'react-router-dom'
 import { ChevronRight, Package } from 'lucide-react'
 import type { Producto } from '@/types/producto.types'
-import { productosService } from '@/services/productos.service'
 import { RUTAS } from '@/config/rutas'
 
 interface Props {
   producto: Producto
+  nombreCategoria: string
 }
 
-export function FilaProducto({ producto }: Props) {
+export function FilaProducto({ producto, nombreCategoria }: Props) {
   const navigate = useNavigate()
 
-  const categoria = productosService.getCategoria(producto.categoria_id)
   const stockBajo = producto.stock_actual > 0 && producto.stock_actual <= producto.stock_minimo
   const stockAgotado = producto.stock_actual === 0
 
@@ -53,7 +52,7 @@ export function FilaProducto({ producto }: Props) {
         <div className="flex items-center gap-3 mt-1">
           <span className="text-xs text-gray-400">Código: {producto.codigo}</span>
           <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">
-            {categoria}
+            {nombreCategoria}
           </span>
         </div>
       </div>
@@ -80,9 +79,8 @@ export function FilaProducto({ producto }: Props) {
 
       {/* Badge estado y chevron */}
       <div className="flex items-center gap-2 flex-shrink-0">
-        <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
-          producto.activo ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'
-        }`}>
+        <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${producto.activo ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-600'
+          }`}>
           {producto.activo ? 'Activo' : 'Inactivo'}
         </span>
         <ChevronRight size={18} className="text-gray-400" />

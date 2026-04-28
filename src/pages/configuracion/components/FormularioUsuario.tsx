@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { X } from 'lucide-react'
-import type { User, NuevoUsuario } from '@/types/usuario.types'
+import type { User, NuevoUsuario, RolUsuario } from '@/types/usuario.types'
 
 interface FormularioUsuarioProps {
   usuario?: User | null
@@ -11,7 +11,7 @@ interface FormularioUsuarioProps {
 export function FormularioUsuario({ usuario, onCerrar, onGuardar }: FormularioUsuarioProps) {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
-  const [role, setRole] = useState<'admin' | 'vendedor'>('vendedor')
+  const [role, setRole] = useState<RolUsuario>('vendedor')
   const [active, setActive] = useState(true)
   const [password, setPassword] = useState('')
 
@@ -19,7 +19,11 @@ export function FormularioUsuario({ usuario, onCerrar, onGuardar }: FormularioUs
     if (usuario) {
       setName(usuario.name)
       setEmail(usuario.email)
-      setRole(usuario.role)
+      if (usuario.role === 'cliente') {
+        setRole('vendedor')
+      } else {
+        setRole(usuario.role)
+      }
       setActive(usuario.active)
     }
   }, [usuario])

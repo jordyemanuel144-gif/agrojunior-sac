@@ -91,6 +91,58 @@ export function FormularioNegocio({ config, onGuardar, guardando }: Props) {
         </div>
       </div>
 
+      <div className="border-t border-gray-200 pt-4 mt-4">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+            <Building2 className="text-green-600" size={16} />
+          </div>
+          <h4 className="font-semibold text-gray-900">Datos de Pago</h4>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-semibold text-gray-400 uppercase mb-1">Yape</label>
+            <input
+              type="text"
+              value={form.yape}
+              onChange={e => setForm({ ...form, yape: e.target.value })}
+              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+              placeholder="916794870"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-gray-400 uppercase mb-1">Banco</label>
+            <input
+              type="text"
+              value={form.banco_nombre}
+              onChange={e => setForm({ ...form, banco_nombre: e.target.value })}
+              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+              placeholder="Banco de Crédito"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-gray-400 uppercase mb-1">Titular</label>
+            <input
+              type="text"
+              value={form.banco_titular}
+              onChange={e => setForm({ ...form, banco_titular: e.target.value })}
+              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+              placeholder="Nombre del titular"
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold text-gray-400 uppercase mb-1">Cuenta</label>
+            <input
+              type="text"
+              value={form.banco_cuenta}
+              onChange={e => setForm({ ...form, banco_cuenta: e.target.value })}
+              className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+              placeholder="Número de cuenta"
+            />
+          </div>
+        </div>
+      </div>
+
       <button
         type="submit"
         disabled={guardando}

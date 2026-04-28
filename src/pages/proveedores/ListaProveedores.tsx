@@ -17,9 +17,15 @@ export default function ListaProveedores() {
 
   useEffect(() => {
     const init = async () => {
-      const data = await proveedoresService.obtenerTodos()
-      setProveedores(data)
-      setCargando(false)
+      try {
+        setCargando(true)
+        const data = await proveedoresService.obtenerTodos()
+        setProveedores(data)
+      } catch (error) {
+        console.error('Error al cargar proveedores:', error)
+      } finally {
+        setCargando(false)
+      }
     }
     init()
   }, [])

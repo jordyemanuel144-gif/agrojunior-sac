@@ -1,4 +1,6 @@
-export type TipoMedida = 'kg' | 'unidad'
+import type { TipoMedida } from './supabase.types'
+
+export type { TipoMedida }
 
 export interface Categoria {
   id: string
@@ -18,9 +20,9 @@ export interface Producto {
   stock_actual: number
   stock_minimo: number
   activo: boolean
-  imagen_url?: string
-  destacado?: boolean
-  tag?: 'oferta' | 'nuevo' | null
+  imagen_url?: string | null
+  created_at: string
+  updated_at: string
 }
 
-export type NuevoProducto = Omit<Producto, 'id' | 'created_at'>
+export type NuevoProducto = Omit<Producto, 'id' | 'created_at' | 'updated_at'>

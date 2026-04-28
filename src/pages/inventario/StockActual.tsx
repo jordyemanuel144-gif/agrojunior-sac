@@ -28,9 +28,15 @@ export default function StockActual() {
   // ============================================================
   useEffect(() => {
     const init = async () => {
-      const data = await inventarioService.obtenerStock()
-      setItems(data)
-      setCargando(false)
+      try {
+        setCargando(true)
+        const data = await inventarioService.obtenerStock()
+        setItems(data)
+      } catch (error) {
+        console.error('Error al cargar stock:', error)
+      } finally {
+        setCargando(false)
+      }
     }
     init()
   }, [])

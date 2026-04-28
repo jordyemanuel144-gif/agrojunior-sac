@@ -20,6 +20,21 @@ interface VentaConfirmada {
   descuento: number
   igv: number
   total: number
+  clienteInfo?: {
+    nombre: string
+    tipo: string
+  }
+  items?: Array<{
+    producto: { id: string; nombre: string; tipo_medida: string }
+    cantidad: number
+    precio_unitario: number
+    subtotal: number
+  }>
+}
+
+interface ResultadoConfirmacion {
+  ventaConfirmada: VentaConfirmada | null
+  comprobanteId?: string
 }
 
 export function usePOS() {
@@ -35,6 +50,7 @@ export function usePOS() {
   const [categoriaActiva, setCategoriaActiva] = useState('all')
   const [clienteSeleccionado, setClienteSeleccionado] = useState<Cliente | null>(null)
   const [ventaConfirmada, setVentaConfirmada] = useState<VentaConfirmada | null>(null)
+  const [comprobanteGenerado, setComprobanteGenerado] = useState<{ id: string; ticketNumero: string; tipo: 'venta' | 'cuenta' } | null>(null)
   const [showClientePicker, setShowClientePicker] = useState(false)
 
   // Cargar datos iniciales
@@ -46,9 +62,6 @@ export function usePOS() {
       .then(([productosData, clientesData]) => {
         setProductos(productosData)
         setClientes(clientesData)
-        if (clientesData.length > 0) {
-          setClienteSeleccionado(clientesData[0])
-        }
       })
       .finally(() => setCargando(false))
   }, [])
@@ -86,12 +99,12 @@ export function usePOS() {
   }, [productos, categoriaActiva, busqueda])
 
   // Confirmar venta
-  const handleConfirmar = useCallback(async (metodo: MetodoPago, descuento: number, igv: number, total: number, montoPagado: number, estadoPago: EstadoPago) => {
+  const handleConfirmar = useCallback(async (metodo: MetodoPago, descuento: number, igv: number, total: number, montoPagado: number, estadoPago: EstadoPago): Promise<ResultadoConfirmacion> => {
     console.log('handleConfirmar iniciado', { metodo, descuento, igv, total, montoPagado, estadoPago })
     
     if (!clienteSeleccionado) {
       console.error('No hay cliente seleccionado')
-      return
+      return { ventaConfirmada: null }
     }
 
     try {
@@ -116,18 +129,8 @@ export function usePOS() {
       })
       console.log('Venta creada:', nuevaVenta)
 
-      // Descontar stock
-      console.log('Descontando stock...')
-      for (const item of items) {
-        const productoActual = productos.find(p => p.id === item.producto.id)
-        if (productoActual) {
-          const nuevoStock = Math.max(0, productoActual.stock_actual - item.cantidad)
-          console.log(`Stock producto ${item.producto.id}: ${productoActual.stock_actual} -> ${nuevoStock}`)
-          await productosService.actualizar(item.producto.id, {
-            stock_actual: nuevoStock,
-          })
-        }
-      }
+      // El stock se descuenta automáticamente via trigger de Supabase (trg_venta_items_insert)
+      // No es necesario actualizar manualmente
 
       const ticket: VentaConfirmada = {
         ticketNumero: nuevaVenta.ticket_numero,
@@ -135,23 +138,65 @@ export function usePOS() {
         descuento,
         igv,
         total,
+        clienteInfo: {
+          nombre: clienteSeleccionado.nombre,
+          tipo: clienteSeleccionado.tipo,
+        },
+        items: items.map(item => ({
+          producto: {
+            id: item.producto.id,
+            nombre: item.producto.nombre,
+            tipo_medida: item.producto.tipo_medida,
+          },
+          cantidad: item.cantidad,
+          precio_unitario: item.precio_unitario,
+          subtotal: item.subtotal,
+        })),
       }
       console.log('Seteando ticket:', ticket)
 
-      // Guardar comprobante de venta
-      const ventaParaComprobante: Venta & { vendedor_nombre: string } = {
-        ...nuevaVenta,
-        vendedor_nombre: user?.name || 'Cajero',
-      }
-      comprobantesService.crearVenta(ventaParaComprobante)
+      let comprobanteId: string | undefined
 
-      console.log('Cambiando vista a ticket')
-      setVista('ticket')
+      // Generar comprobante solo si hay pago (pagado o parcial)
+      if (estadoPago === 'pagado' || estadoPago === 'parcial') {
+        console.log('Generando comprobante de venta...')
+        const ventaParaComprobante: Venta & { vendedor_nombre: string } = {
+          ...nuevaVenta,
+          vendedor_nombre: user?.name || 'Cajero',
+        }
+        const comprobante = await comprobantesService.crearVenta(ventaParaComprobante)
+        comprobanteId = comprobante.id
+        setComprobanteGenerado({ id: comprobante.id, ticketNumero: nuevaVenta.ticket_numero, tipo: 'venta' })
+        console.log('Comprobante generado:', comprobante.id)
+      } else {
+        console.log('Pago a cuenta - no se genera comprobante')
+        setComprobanteGenerado({ id: '', ticketNumero: nuevaVenta.ticket_numero, tipo: 'cuenta' })
+      }
+
+      // Limpiar cliente seleccionado (seudocliente)
+      console.log('Limpiando cliente seleccionado...')
+      setClienteSeleccionado(null)
+      // Limpiar el carrito
+      console.log('Limpiando carrito...')
+      limpiarCarrito()
+
+      // Siempre volver al POS (sin vista de ticket)
+      console.log('Volviendo al POS')
+      setVista('pos')
+      setVentaConfirmada(ticket)
       console.log('handleConfirmar completado')
+
+      return { ventaConfirmada: ticket, comprobanteId }
     } catch (error) {
       console.error('Error al registrar venta:', error)
+      // Limpiar en caso de error también
+      setClienteSeleccionado(null)
+      limpiarCarrito()
+      setVista('pos')
+      // Lanzar error para que el componente pueda manejarlo
+      throw error
     }
-  }, [clienteSeleccionado, items, subtotal, productos, user])
+  }, [clienteSeleccionado, items, subtotal, user, limpiarCarrito])
 
   // Nueva venta
   const handleNuevaVenta = useCallback(() => {
@@ -159,6 +204,7 @@ export function usePOS() {
     productosService.obtenerTodos().then(setProductos)
     limpiarCarrito()
     setVentaConfirmada(null)
+    setComprobanteGenerado(null)
     setVista('pos')
   }, [limpiarCarrito])
 
@@ -195,6 +241,8 @@ export function usePOS() {
     categoriaActiva,
     ventaConfirmada,
     showClientePicker,
+    comprobanteGenerado,
+    limpiarComprobanteGenerado: () => setComprobanteGenerado(null),
     
     // Carrito
     items,

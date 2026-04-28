@@ -1,13 +1,139 @@
 import { useState, useEffect } from 'react'
-import { FileText, Search, ChevronRight } from 'lucide-react'
+import { FileText, Search, MessageCircle, Download, FileTextIcon, ImageIcon, File, ChevronRight, CreditCard } from 'lucide-react'
 import { comprobantesService } from '@/services/comprobantes.service'
-import type { Comprobante } from '@/types/comprobante.types'
+import type { Comprobante, ComprobanteVenta, ComprobantePago } from '@/types/comprobante.types'
 import { formatMoneda, formatFecha } from '@/lib/utils'
 import { RUTAS } from '@/config/rutas'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { useNavigate } from 'react-router-dom'
+import { DropdownMenu } from '@/components/ui/DropdownMenu'
+import {
+  descargarTexto,
+  descargarImagen,
+  descargarPdf,
+  generarMensajeComprobanteVenta,
+  generarMensajeComprobantePago
+} from '@/lib/comprobante'
 
 type FiltroTipo = 'todos' | 'venta' | 'pago_cobranza'
+
+function TipoBadge({ tipo }: { tipo: Comprobante['tipo'] }) {
+  return (
+    <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+      tipo === 'venta' 
+        ? 'bg-blue-100 text-blue-700' 
+        : 'bg-green-100 text-green-700'
+    }`}>
+      {tipo === 'venta' ? 'Venta' : 'Pago'}
+    </span>
+  )
+}
+
+function EstadoBadge({ estado }: { estado: Comprobante['estado'] }) {
+  if (estado === 'anulado') {
+    return (
+      <span className="px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-600">
+        Anulado
+      </span>
+    )
+  }
+  return null
+}
+
+function FilaComprobante({ 
+  comprobante, 
+  onClickRow,
+  abrirWhatsApp,
+  onDescargar,
+}: { 
+  comprobante: Comprobante
+  onClickRow: () => void
+  abrirWhatsApp: (c: Comprobante) => void
+  onDescargar: (tipo: 'texto' | 'imagen' | 'pdf') => void
+}) {
+  const handleFilaClick = () => {
+    onClickRow()
+  }
+
+  return (
+    <div
+      className="grid md:grid-cols-6 gap-3 md:gap-4 px-4 py-3 items-center hover:bg-gray-50 transition-colors cursor-pointer border-b border-gray-100 last:border-0"
+      onClick={handleFilaClick}
+    >
+      <div className="md:col-span-1">
+        <p className="font-semibold text-gray-900 text-sm">{comprobante.numero}</p>
+        <p className="text-xs text-gray-400">{comprobante.hora}</p>
+      </div>
+
+      <div className="md:col-span-1">
+        <TipoBadge tipo={comprobante.tipo} />
+        {comprobante.estado === 'anulado' && <EstadoBadge estado={comprobante.estado} />}
+      </div>
+
+      <div className="md:col-span-1 min-w-0">
+        <p className="font-medium text-gray-900 truncate text-sm">{comprobante.cliente_nombre}</p>
+        {comprobante.cliente_documento && (
+          <p className="text-xs text-gray-400">{comprobante.cliente_documento}</p>
+        )}
+      </div>
+
+      <div className="md:col-span-1">
+        <p className="text-sm text-gray-700">{formatFecha(comprobante.fecha)}</p>
+      </div>
+
+      <div className="md:col-span-1">
+        <p className={`font-bold ${comprobante.estado === 'anulado' ? 'text-gray-400 line-through' : 'text-blue-600'}`}>
+          {formatMoneda(comprobante.total)}
+        </p>
+      </div>
+
+      <div className="md:col-span-1 flex items-center gap-1.5 justify-end" onClick={e => e.stopPropagation()}>
+        <button
+          onClick={(e) => { e.stopPropagation(); abrirWhatsApp(comprobante); }}
+          className="flex items-center gap-1.5 px-3 py-1.5 bg-green-500 text-white rounded-lg text-xs font-medium hover:bg-green-600 transition-colors"
+        >
+          <MessageCircle className="w-3.5 h-3.5" />
+          <span className="hidden sm:inline">WhatsApp</span>
+        </button>
+        
+        <DropdownMenu
+          align="right"
+          trigger={
+            <span className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-700 text-white rounded-lg text-xs font-medium hover:bg-gray-800 transition-colors cursor-pointer">
+              <Download className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Descargar</span>
+            </span>
+          }
+          options={[
+            { 
+              label: 'Texto (.txt)', 
+              icon: <FileTextIcon className="w-4 h-4" />,
+              onClick: () => onDescargar('texto')
+            },
+            { 
+              label: 'Imagen (.png)', 
+              icon: <ImageIcon className="w-4 h-4" />,
+              onClick: () => onDescargar('imagen')
+            },
+            { 
+              label: 'PDF (.pdf)', 
+              icon: <File className="w-4 h-4" />,
+              onClick: () => onDescargar('pdf')
+            },
+          ]}
+        />
+        
+        <button
+          onClick={(e) => { e.stopPropagation(); onClickRow(); }}
+          className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+          title="Ver detalle"
+        >
+          <ChevronRight className="w-4 h-4 text-gray-600" />
+        </button>
+      </div>
+    </div>
+  )
+}
 
 export default function ComprobantesPage() {
   const navigate = useNavigate()
@@ -17,9 +143,12 @@ export default function ComprobantesPage() {
   const [filtroTipo, setFiltroTipo] = useState<FiltroTipo>('todos')
 
   useEffect(() => {
-    const data = comprobantesService.obtenerTodos()
-    setComprobantes(data)
-    setCargando(false)
+    async function cargar() {
+      const data = await comprobantesService.obtenerTodos()
+      setComprobantes(data)
+      setCargando(false)
+    }
+    cargar()
   }, [])
 
   const comprobantesFiltrados = comprobantes.filter(c => {
@@ -32,6 +161,32 @@ export default function ComprobantesPage() {
 
   const ventasCount = comprobantes.filter(c => c.tipo === 'venta').length
   const pagosCount = comprobantes.filter(c => c.tipo === 'pago_cobranza').length
+
+  const generarLinkWhatsApp = (telefono: string, mensaje: string): string => {
+    const telefonoLimpio = telefono.replace(/\D/g, '')
+    const mensajeEncoded = encodeURIComponent(mensaje)
+    return `https://wa.me/51${telefonoLimpio}?text=${mensajeEncoded}`
+  }
+
+  const abrirWhatsApp = (comprobante: Comprobante) => {
+    const mensaje = comprobante.tipo === 'venta'
+      ? generarMensajeComprobanteVenta(comprobante as ComprobanteVenta)
+      : generarMensajeComprobantePago(comprobante as ComprobantePago)
+    
+    const telefono = comprobante.cliente_telefono || '51916794870'
+    const link = generarLinkWhatsApp(telefono, mensaje)
+    window.open(link, '_blank')
+  }
+
+  const handleDescargar = (comprobante: Comprobante, tipo: 'texto' | 'imagen' | 'pdf') => {
+    if (tipo === 'texto') {
+      descargarTexto(comprobante)
+    } else if (tipo === 'imagen') {
+      descargarImagen(comprobante)
+    } else {
+      descargarPdf(comprobante)
+    }
+  }
 
   if (cargando) {
     return (
@@ -84,55 +239,32 @@ export default function ComprobantesPage() {
 
         {comprobantesFiltrados.length === 0 ? (
           <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100 text-center">
-            <FileText size={48} className="mx-auto text-gray-300 mb-3" />
+            <CreditCard size={48} className="mx-auto text-gray-300 mb-3" />
             <p className="text-gray-500">No hay comprobantes</p>
-            <p className="text-sm text-gray-400 mt-1">Los comprobantes aparecerán aquí cuandorealices ventas o pagos</p>
+            <p className="text-sm text-gray-400 mt-1">Los comprobantes aparecerán aquí cuando realices ventas o pagos</p>
           </div>
         ) : (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-            <div className="hidden md:grid grid-cols-6 gap-4 p-4 bg-gray-50 border-b border-gray-200 text-xs font-medium text-gray-500 uppercase">
-              <div className="col-span-1">Número</div>
-              <div className="col-span-1">Tipo</div>
-              <div className="col-span-2">Cliente</div>
-              <div className="col-span-1">Fecha</div>
-              <div className="col-span-1 text-right">Total</div>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-visible">
+            <div className="hidden md:grid md:grid-cols-6 gap-4 px-4 py-3 bg-gray-50 border-b border-gray-100 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              <span>Número</span>
+              <span>Tipo</span>
+              <span>Cliente</span>
+              <span>Fecha</span>
+              <span>Total</span>
+              <span></span>
             </div>
 
-            {comprobantesFiltrados.map(comprobante => (
-              <div
-                key={comprobante.id}
-                className="flex items-center gap-3 p-4 border-b border-gray-100 last:border-0 hover:bg-gray-50 cursor-pointer"
-                onClick={() => navigate(`${RUTAS.ADMIN.COMPROBANTES}/${comprobante.id}`)}
-              >
-                <div className="flex-1 min-w-0 grid md:grid-cols-6 gap-2 items-center">
-                  <div className="col-span-1">
-                    <p className="font-semibold text-gray-900 text-sm">{comprobante.numero}</p>
-                  </div>
-                  <div className="col-span-1">
-                    <span className={`text-xs font-medium px-2 py-1 rounded-full ${
-                      comprobante.tipo === 'venta' 
-                        ? 'bg-blue-100 text-blue-700' 
-                        : 'bg-green-100 text-green-700'
-                    }`}>
-                      {comprobante.tipo === 'venta' ? 'Venta' : 'Pago'}
-                    </span>
-                  </div>
-                  <div className="col-span-2 min-w-0">
-                    <p className="font-medium text-gray-900 truncate text-sm">{comprobante.cliente_nombre}</p>
-                    {comprobante.cliente_documento && (
-                      <p className="text-xs text-gray-400">{comprobante.cliente_documento}</p>
-                    )}
-                  </div>
-                  <div className="col-span-1">
-                    <p className="text-sm text-gray-500">{formatFecha(comprobante.fecha)}</p>
-                  </div>
-                  <div className="col-span-1 text-right">
-                    <p className="font-bold text-gray-900">{formatMoneda(comprobante.total)}</p>
-                  </div>
-                </div>
-                <ChevronRight size={18} className="text-gray-400 flex-shrink-0" />
-              </div>
-            ))}
+            <div className="divide-y divide-gray-100">
+              {comprobantesFiltrados.map(comprobante => (
+                <FilaComprobante
+                  key={comprobante.id}
+                  comprobante={comprobante}
+                  onClickRow={() => navigate(`${RUTAS.ADMIN.COMPROBANTES}/${comprobante.id}`)}
+                  abrirWhatsApp={abrirWhatsApp}
+                  onDescargar={(tipo) => handleDescargar(comprobante, tipo)}
+                />
+              ))}
+            </div>
           </div>
         )}
       </div>

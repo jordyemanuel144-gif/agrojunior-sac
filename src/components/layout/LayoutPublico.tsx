@@ -41,6 +41,12 @@ export function LayoutPublico({ children }: LayoutPublicoProps) {
               >
                 Panel Admin
               </Link>
+              <Link
+                to={RUTAS.AUTH.LOGIN_CLIENTE}
+                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors"
+              >
+                Iniciar Sesión
+              </Link>
             </nav>
 
             <button 
@@ -73,9 +79,16 @@ export function LayoutPublico({ children }: LayoutPublicoProps) {
                 <Link
                   to={RUTAS.AUTH.LOGIN}
                   onClick={() => setMenuOpen(false)}
-                  className="block w-full px-4 py-3 text-center text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors"
+                  className="block w-full px-4 py-3 text-center text-sm font-medium text-gray-700 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors"
                 >
                   Panel Admin
+                </Link>
+                <Link
+                  to={RUTAS.AUTH.LOGIN_CLIENTE}
+                  onClick={() => setMenuOpen(false)}
+                  className="block w-full px-4 py-3 mt-2 text-center text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors"
+                >
+                  Iniciar Sesión
                 </Link>
               </div>
             </div>

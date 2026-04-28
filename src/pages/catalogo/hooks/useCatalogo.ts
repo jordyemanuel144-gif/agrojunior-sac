@@ -33,10 +33,16 @@ export function useCatalogo(): UseCatalogoReturn {
   })
 
   useEffect(() => {
-    productosService.obtenerTodos().then((data) => {
-      setProductos(data)
-      setCargando(false)
-    })
+    productosService.obtenerTodos()
+      .then((data) => {
+        setProductos(data)
+      })
+      .catch((error) => {
+        console.error('Error al cargar catálogo:', error)
+      })
+      .finally(() => {
+        setCargando(false)
+      })
   }, [])
 
   const setTipoCliente = (tipo: TipoCliente) => {

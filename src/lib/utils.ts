@@ -1,10 +1,14 @@
 import { MONEDA } from '@/config/constantes'
 
-export function formatMoneda(monto: number): string {
-  return `${MONEDA} ${monto.toFixed(2)}`
+export function formatMoneda(monto: number | undefined | null): string {
+  if (monto === undefined || monto === null || isNaN(monto)) {
+    return `${MONEDA} 0.00`
+  }
+  return `${MONEDA} ${Number(monto).toFixed(2)}`
 }
 
-export function formatFecha(fecha: Date | string): string {
+export function formatFecha(fecha: Date | string | undefined | null): string {
+  if (!fecha) return '-'
   const date = typeof fecha === 'string' ? new Date(fecha) : fecha
   return date.toLocaleDateString('es-PE', {
     day: '2-digit',
@@ -13,11 +17,26 @@ export function formatFecha(fecha: Date | string): string {
   })
 }
 
-export function formatHora(fecha: Date | string): string {
+export function formatHora(fecha: Date | string | undefined | null): string {
+  if (!fecha) return '-'
   const date = typeof fecha === 'string' ? new Date(fecha) : fecha
   return date.toLocaleTimeString('es-PE', {
     hour: '2-digit',
     minute: '2-digit',
+    hour12: true,
+  })
+}
+
+export function formatFechaHoraCorta(fecha: Date | string): string {
+  const date = typeof fecha === 'string' ? new Date(fecha) : fecha
+  return date.toLocaleDateString('es-PE', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+  }) + ' ' + date.toLocaleTimeString('es-PE', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
   })
 }
 
@@ -109,4 +128,18 @@ export function estaEnRango(fecha: Date | string, inicio: string, fin: string): 
   const fechaObj = typeof fecha === 'string' ? new Date(fecha) : fecha
   const fechaISO = getFechaISO(fechaObj)
   return fechaISO >= inicio && fechaISO <= fin
+}
+
+export function generarLinkWhatsApp(telefono: string, mensaje: string): string {
+  const telefonoLimpio = telefono.replace(/\D/g, '')
+  const mensajeEncoded = encodeURIComponent(mensaje)
+  return `https://wa.me/51${telefonoLimpio}?text=${mensajeEncoded}`
+}
+
+export function formatearFechaCorta(fecha: Date | string): string {
+  const date = typeof fecha === 'string' ? new Date(fecha) : fecha
+  return date.toLocaleDateString('es-PE', {
+    day: '2-digit',
+    month: 'short',
+  })
 }
