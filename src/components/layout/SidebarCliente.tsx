@@ -46,7 +46,7 @@ export function SidebarCliente({ isOpen, onClose }: SidebarClienteProps) {
         <div className="flex flex-col h-full">
           <div className="p-5 border-b border-gray-100">
             <Link to={RUTAS.CLIENTE.MI_CUENTA} onClick={onClose} className="flex items-center gap-3">
-              <img src="/logo.png" alt="Logo" className="w-10 h-10 rounded-xl object-cover" />
+              <img src="/logo.png" alt="Logo" className="w-12 h-12 rounded-xl object-cover" />
               <div>
                 <p className="text-base font-bold text-gray-900">{nombre}</p>
                 <p className="text-xs text-blue-600">Área de Cliente</p>
@@ -96,7 +96,7 @@ export function SidebarCliente({ isOpen, onClose }: SidebarClienteProps) {
         <div className="flex flex-col h-full">
           <div className="p-5 border-b border-gray-100">
             <Link to={RUTAS.CLIENTE.MI_CUENTA} className="flex items-center gap-3">
-              <img src="/logo.png" alt="Logo" className="w-10 h-10 rounded-xl object-cover" />
+              <img src="/logo.png" alt="Logo" className="w-12 h-12 rounded-xl object-cover" />
               <div>
                 <p className="text-base font-bold text-gray-900">{nombre}</p>
                 <p className="text-xs text-blue-600">Área de Cliente</p>
