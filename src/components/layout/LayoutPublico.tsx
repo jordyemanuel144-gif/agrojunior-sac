@@ -19,9 +19,7 @@ export function LayoutPublico({ children }: LayoutPublicoProps) {
         <div className="max-w-7xl mx-auto px-3 md:px-6">
           <div className="flex items-center justify-between h-14 md:h-16">
             <Link to={RUTAS.PUBLICO.HOME} className="flex items-center gap-2 md:gap-3">
-              <div className="w-8 h-8 md:w-10 md:h-10 bg-blue-600 rounded-lg md:rounded-xl flex items-center justify-center">
-                <span className="text-sm md:text-lg">🐔</span>
-              </div>
+              <img src="/logo.png" alt="Logo" className="w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl object-cover" />
               <div>
                 <h1 className="text-sm md:text-lg font-bold text-gray-900">{nombre}</h1>
                 <p className="text-[10px] md:text-xs text-gray-400 hidden md:block">{direccion}</p>

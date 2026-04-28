@@ -12,9 +12,7 @@ export function HeaderPOS({ busqueda, onBusquedaChange }: Props) {
   return (
     <div className="hidden md:flex bg-white px-6 py-3 items-center justify-between border-b border-gray-100 gap-4">
       <div className="flex items-center gap-3">
-        <div className="w-9 h-9 bg-blue-600 rounded-xl flex items-center justify-center">
-          <span className="text-lg">🐔</span>
-        </div>
+        <img src="/logo.png" alt="Logo" className="w-9 h-9 rounded-xl object-cover" />
         <div>
           <p className="text-base font-bold text-gray-900">{nombre}</p>
           <p className="text-xs text-gray-500">{TERMINAL_POS} · {CAJA_PRINCIPAL}</p>

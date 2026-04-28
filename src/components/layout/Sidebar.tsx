@@ -41,9 +41,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         <div className="flex flex-col h-full">
           <div className="p-5 border-b border-gray-100">
             <Link to={RUTAS.ADMIN.POS} onClick={onClose} className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
-                <span className="text-xl">🐔</span>
-              </div>
+              <img src="/logo.png" alt="Logo" className="w-10 h-10 rounded-xl object-cover" />
               <div>
                 <p className="text-base font-bold text-gray-900">{nombre}</p>
               </div>
@@ -92,9 +90,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         <div className="flex flex-col h-full">
           <div className="p-5 border-b border-gray-100">
             <Link to={RUTAS.ADMIN.POS} className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
-                <span className="text-xl">🐔</span>
-              </div>
+              <img src="/logo.png" alt="Logo" className="w-10 h-10 rounded-xl object-cover" />
               <div>
                 <p className="text-base font-bold text-gray-900">{nombre}</p>
               </div>

@@ -23,9 +23,7 @@ export function MobileHeader({ onMenuClick }: MobileHeaderProps) {
           <Menu size={22} className="text-gray-700" />
         </button>
         <Link to={RUTAS.ADMIN.POS} className="flex items-center gap-2 ml-2">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-            <span className="text-sm">🐔</span>
-          </div>
+          <img src="/logo.png" alt="Logo" className="w-8 h-8 rounded-lg object-cover" />
           <span className="font-bold text-gray-900 text-sm">Sam José</span>
         </Link>
       </div>

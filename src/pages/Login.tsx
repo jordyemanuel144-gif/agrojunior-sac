@@ -45,9 +45,7 @@ export default function Login() {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
           <div className="text-center mb-8">
             <Link to={RUTAS.PUBLICO.HOME} className="inline-block">
-              <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4 hover:bg-blue-700 transition">
-                <span className="text-3xl">🐔</span>
-              </div>
+              <img src="/logo.png" alt="Logo" className="w-16 h-16 rounded-2xl mx-auto mb-4 object-cover" />
               <h1 className="text-xl md:text-2xl font-bold text-gray-900">{nombre}</h1>
             </Link>
           </div>
