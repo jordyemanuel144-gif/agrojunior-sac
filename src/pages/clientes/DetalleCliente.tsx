@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { RUTAS } from '@/config/rutas'
 import { HeaderDetalleCliente, InfoClienteCards } from './components/DetalleClienteComponents'
 import { FormularioCliente } from './components/FormularioCliente'
 import { ModalConfirmarEliminar } from './components/ModalConfirmarEliminarCliente'
@@ -49,7 +50,7 @@ export default function DetalleCliente() {
   const handleEliminar = async () => {
     if (!id) return
     await clientesService.eliminar(id)
-    navigate('/clientes')
+    navigate(RUTAS.ADMIN.CLIENTES)
   }
 
   const generarLinkWhatsApp = (telefono: string, mensaje: string): string => {

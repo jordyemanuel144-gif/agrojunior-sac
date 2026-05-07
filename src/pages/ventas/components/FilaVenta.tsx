@@ -38,7 +38,7 @@ export function FilaVenta({ venta }: Props) {
   const navigate = useNavigate()
   const esCompletada = venta.estado === 'completada'
   
-  const clienteNombre = clientesService.obtenerClienteSync(venta.cliente_id)?.nombre || 'Cliente no encontrado'
+  const clienteNombre = clientesService.obtenerClienteDelCache(venta.cliente_id)?.nombre || 'Cliente no encontrado'
 
   const formatHora = (fecha: Date) => {
     return fecha.toLocaleTimeString('es-PE', { hour: '2-digit', minute: '2-digit' })

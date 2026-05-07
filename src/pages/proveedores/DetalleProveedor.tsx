@@ -6,6 +6,7 @@ import { ModalConfirmarEliminar } from './components/ModalConfirmarEliminarProve
 import { TabsProveedor } from './components/TabsProveedor'
 import { HistorialComprasProveedor } from './components/HistorialComprasProveedor'
 import { proveedoresService } from '@/services/proveedores.service'
+import { RUTAS } from '@/config/rutas'
 import type { Proveedor, NuevoProveedor } from '@/types/proveedor.types'
 
 export default function DetalleProveedor() {
@@ -35,7 +36,7 @@ export default function DetalleProveedor() {
   const handleEliminar = async () => {
     if (!id) return
     await proveedoresService.eliminar(id)
-    navigate('/proveedores')
+    navigate(RUTAS.ADMIN.PROVEEDORES)
   }
 
   if (cargando) {

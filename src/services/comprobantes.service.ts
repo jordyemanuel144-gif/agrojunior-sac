@@ -166,7 +166,7 @@ handleError(error, 'Error al obtener comprobantes')
     }) as Comprobante[]
   },
 
-  obtenerPorId: async (id: string): Promise<Comprobante | null> => {
+obtenerPorId: async (id: string): Promise<Comprobante | null> => {
     const { data, error } = await supabase
       .from('comprobantes')
       .select('*')
@@ -177,21 +177,72 @@ handleError(error, 'Error al obtener comprobantes')
     
     const fecha = data.fecha ? new Date(data.fecha) : undefined
     
+    const datosPago = (data.datos_pago || {}) as Record<string, unknown>
+    
+    const esVenta = data.tipo === 'venta'
+    
+    if (esVenta) {
+      const items = datosPago.items as ItemComprobante[] || []
+      return {
+        ...data,
+        fecha,
+        numero: data.numero ?? '',
+        tipo: data.tipo ?? 'venta',
+        estado: data.estado ?? 'activo',
+        cliente_nombre: data.cliente_nombre ?? '',
+        cliente_documento: data.cliente_documento ?? null,
+        cliente_tipo: data.cliente_tipo ?? null,
+        cliente_telefono: data.cliente_telefono ?? null,
+        total: data.total ?? 0,
+        negocio_nombre: NOMBRE_NEGOCIO, 
+        negocio_ruc: RUC_NEGOCIO,
+        negocio_direccion: DIRECCION_NEGOCIO, 
+        negocio_telefono: TELEFONO,
+        items,
+        subtotal: data.subtotal ?? 0,
+        descuento: data.descuento ?? 0,
+        igv: data.igv ?? 0,
+        metodo_pago: datosPago.metodo_pago as string ?? null,
+        efectivo: datosPago.efectivo as number ?? data.total,
+        vuelto: datosPago.vuelto as number ?? 0,
+        vendedor_nombre: data.vendedor_nombre ?? null,
+      } as ComprobanteVenta
+    }
+    
+    // Es pago_cobranza
+    const ventas = (datosPago.ventas as VentaEnComprobante[] || []).map(v => ({
+      ...v,
+      fecha: v.fecha ? new Date(v.fecha) : new Date(),
+    }))
+    
     return {
       ...data,
       fecha,
       numero: data.numero ?? '',
-      tipo: data.tipo ?? 'venta',
+      tipo: data.tipo ?? 'pago_cobranza',
       estado: data.estado ?? 'activo',
       cliente_nombre: data.cliente_nombre ?? '',
+      cliente_documento: data.cliente_documento ?? null,
       cliente_tipo: data.cliente_tipo ?? null,
+      cliente_telefono: data.cliente_telefono ?? null,
       total: data.total ?? 0,
       negocio_nombre: NOMBRE_NEGOCIO, 
       negocio_ruc: RUC_NEGOCIO,
       negocio_direccion: DIRECCION_NEGOCIO, 
       negocio_telefono: TELEFONO,
-      items: (data.datos_pago as Record<string, unknown>)?.items as ItemComprobante[] ?? [],
-    } as Comprobante
+      deuda_total_original: datosPago.deuda_total_original as number ?? 0,
+      total_ventas_sin_descuento: datosPago.total_ventas_sin_descuento as number ?? 0,
+      total_pagado_anterior: datosPago.total_pagado_anterior as number ?? 0,
+      deuda_actual: datosPago.deuda_actual as number ?? 0,
+      monto_pagado: datosPago.monto_pagado as number ?? data.total,
+      nueva_deuda: datosPago.nueva_deuda as number ?? 0,
+      metodo_pago: datosPago.metodo_pago as string ?? null,
+      observaciones: datosPago.observaciones as string ?? null,
+      ventas,
+      ventas_pagadas_count: datosPago.ventas_pagadas_count as number ?? 0,
+      ventas_parciales_count: datosPago.ventas_parciales_count as number ?? 0,
+      usuario_nombre: datosPago.usuario_nombre as string ?? null,
+    } as ComprobantePago
   },
 
   obtenerPorCliente: async (clienteId: string): Promise<Comprobante[]> => {

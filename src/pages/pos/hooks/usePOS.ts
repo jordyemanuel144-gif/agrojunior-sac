@@ -61,7 +61,9 @@ export function usePOS() {
     ])
       .then(([productosData, clientesData]) => {
         setProductos(productosData)
-        setClientes(clientesData)
+        // Filtrar solo clientes activos para el POS
+        const clientesActivos = clientesData.filter(c => c.activo)
+        setClientes(clientesActivos)
       })
       .finally(() => setCargando(false))
   }, [])

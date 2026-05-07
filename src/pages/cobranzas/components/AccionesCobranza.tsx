@@ -7,9 +7,10 @@ interface AccionesCobranzaProps {
   onPagar: () => void
   onWhatsApp: () => void
   onDescargar: (tipo: 'texto' | 'imagen' | 'pdf') => void
+  onEditarCliente: () => void
 }
 
-export function AccionesCobranza({ cuenta, onPagar, onWhatsApp, onDescargar }: AccionesCobranzaProps) {
+export function AccionesCobranza({ cuenta, onPagar, onWhatsApp, onDescargar, onEditarCliente }: AccionesCobranzaProps) {
   const [showDescargar, setShowDescargar] = useState(false)
   const tieneTelefono = Boolean(cuenta.cliente_telefono)
 
@@ -77,6 +78,7 @@ export function AccionesCobranza({ cuenta, onPagar, onWhatsApp, onDescargar }: A
         )}
 
         <button
+          onClick={onEditarCliente}
           className="flex items-center justify-center gap-2 py-3 bg-blue-50 text-blue-600 rounded-xl font-medium text-sm hover:bg-blue-100 transition-colors"
         >
           <Edit size={18} />

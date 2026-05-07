@@ -43,7 +43,10 @@ export function ConfirmarPedido({ items, cliente, clientes, stockInfo: _stockInf
   const [filtroTipo, setFiltroTipo] = useState<'todos' | 'minorista' | 'mayorista' | 'especial'>('todos')
   const [tipoPago, setTipoPago] = useState<EstadoPago>('pagado')
   const [montoPagadoInput, setMontoPagadoInput] = useState('')
-  const pctDescuento = configuracionService.getDescuentos()[cliente.tipo] ?? 0
+  const pctDescuento = (() => {
+    const d = configuracionService.getDescuentos()
+    return cliente.tipo === 'mayorista' ? d.mayorista : cliente.tipo === 'especial' ? d.especial : 0
+  })()
 
   const clientesFiltrados = useMemo(() => {
     if (!clientes || clientes.length === 0) return []
@@ -109,7 +112,7 @@ export function ConfirmarPedido({ items, cliente, clientes, stockInfo: _stockInf
   }
 
   const subtotalCalculado = items.reduce((acc, item) => acc + item.subtotal, 0)
-  const montoDescuento = subtotalCalculado * pctDescuento
+  const montoDescuento = subtotalCalculado * (pctDescuento / 100)
   const baseIgv = subtotalCalculado - montoDescuento
   const igv = igvActivo ? baseIgv * 0.18 : 0
   const total = baseIgv + igv
@@ -341,7 +344,7 @@ export function ConfirmarPedido({ items, cliente, clientes, stockInfo: _stockInf
         )}
         <div className="bg-white rounded-2xl p-4 shadow-sm space-y-2">
           <div className="flex justify-between text-sm text-gray-500"><span>Subtotal</span><span className="font-medium text-gray-900">S/ {subtotalCalculado.toFixed(2)}</span></div>
-          {pctDescuento > 0 && <div className="flex justify-between text-sm"><span className="text-green-600 font-medium">Descuento {tipoLabel[cliente.tipo]} (-{(pctDescuento * 100).toFixed(0)}%)</span><span className="text-green-600 font-semibold">-S/ {montoDescuento.toFixed(2)}</span></div>}
+          {pctDescuento > 0 && <div className="flex justify-between text-sm"><span className="text-green-600 font-medium">Descuento {tipoLabel[cliente.tipo]} (-{pctDescuento.toFixed(0)}%)</span><span className="text-green-600 font-semibold">-S/ {montoDescuento.toFixed(2)}</span></div>}
           {igvActivo && <div className="flex justify-between text-sm text-gray-500"><span>IGV (18%)</span><span className="font-medium text-gray-900">S/ {igv.toFixed(2)}</span></div>}
           <div className="border-t border-gray-100 pt-2 flex justify-between items-center"><span className="text-base font-bold text-gray-900">Total</span><span className="text-2xl font-bold text-blue-600">S/ {total.toFixed(2)}</span></div>
           {(tipoPago === 'parcial' || tipoPago === 'pendiente') && (

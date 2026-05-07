@@ -1,7 +1,8 @@
 // FormularioNuevaCompra - Flujo de 3 pasos para registrar una compra
 // Paso 1: Proveedor, Paso 2: Productos, Paso 3: Confirmar
 import { useState, useEffect } from 'react'
-import { X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight, CheckCircle } from 'lucide-react'
+import { useAuthContext } from '@/context/AuthContext'
 import { useCompra } from '../hooks/useCompra'
 import { IndicadorProgreso } from './IndicadorProgreso'
 import { PasoProveedor } from './PasoProveedor'
@@ -19,6 +20,7 @@ interface Props {
 }
 
 export function FormularioNuevaCompra({ onCerrar, onGuardar }: Props) {
+  const { user } = useAuthContext()
   const [productos, setProductos] = useState<Producto[]>([])
   const [proveedor, setProveedor] = useState<Proveedor | null>(null)
   const [guardando, setGuardando] = useState(false)
@@ -56,10 +58,11 @@ export function FormularioNuevaCompra({ onCerrar, onGuardar }: Props) {
   const handleConfirmar = async () => {
     setGuardando(true)
     try {
+      const usuarioId = user?.id || 'usr_001'
       await comprasService.crear(
         {
           proveedor_id: proveedorId!,
-          usuario_id: 'user1',
+          usuario_id: usuarioId,
           notas,
         },
         productosSeleccionados.map(item => ({
@@ -125,14 +128,43 @@ export function FormularioNuevaCompra({ onCerrar, onGuardar }: Props) {
         </div>
 
         <div className="p-4 border-t bg-gray-50 flex gap-3">
-          <button
-            onClick={puedeIrAtras ? irAAnterior : onCerrar}
-            className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-300 rounded-xl hover:bg-gray-100 transition-colors"
-          >
-            <ChevronLeft size={18} />
-            {puedeIrAtras ? 'Anterior' : 'Cancelar'}
-          </button>
-          {!esPasoFinal && (
+          {puedeIrAtras ? (
+            <button
+              onClick={irAAnterior}
+              className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-300 rounded-xl hover:bg-gray-100 transition-colors"
+            >
+              <ChevronLeft size={18} />
+              Anterior
+            </button>
+          ) : (
+            <button
+              onClick={onCerrar}
+              className="flex items-center justify-center gap-2 px-4 py-2.5 border border-gray-300 rounded-xl hover:bg-gray-100 transition-colors"
+            >
+              <ChevronLeft size={18} />
+              Cancelar
+            </button>
+          )}
+          
+          {esPasoFinal ? (
+            <button
+              onClick={handleConfirmar}
+              disabled={guardando}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors disabled:opacity-50"
+            >
+              {guardando ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Guardando...
+                </>
+              ) : (
+                <>
+                  <CheckCircle size={18} />
+                  Confirmar Compra
+                </>
+              )}
+            </button>
+          ) : (
             <button
               onClick={irASiguiente}
               disabled={!puedeIrAdelante}

@@ -20,10 +20,12 @@ export function AutocompleteProveedor({ proveedorId, onProveedorChange }: Props)
 
   useEffect(() => {
     proveedoresService.obtenerTodos().then(data => {
-      setProveedores(data)
+      // Filtrar solo proveedores activos
+      const activos = data.filter(p => p.activo)
+      setProveedores(activos)
       setCargando(false)
       if (proveedorId) {
-        const prov = data.find(p => p.id === proveedorId)
+        const prov = activos.find(p => p.id === proveedorId)
         if (prov) setBusqueda(prov.nombre)
       }
     })

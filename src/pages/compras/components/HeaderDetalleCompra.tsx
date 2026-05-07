@@ -3,7 +3,7 @@ import { ArrowLeft, CheckCircle, XCircle, Clock } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { RUTAS } from '@/config/rutas'
 import type { Compra } from '@/types/compra.types'
-import { comprasService } from '@/services/compras.service'
+import { proveedoresService } from '@/services/proveedores.service'
 
 interface Props {
   compra: Compra
@@ -11,7 +11,7 @@ interface Props {
 
 export function HeaderDetalleCompra({ compra }: Props) {
   const navigate = useNavigate()
-  const proveedor = comprasService.getProveedor(compra.proveedor_id)
+  const proveedor = proveedoresService.obtenerProveedorDelCache(compra.proveedor_id)
   const fecha = new Date(compra.fecha)
 
   const estadoConfig = {
@@ -47,7 +47,7 @@ export function HeaderDetalleCompra({ compra }: Props) {
           </div>
           <div className="flex-1 min-w-0">
             <h1 className="text-xl md:text-2xl font-bold text-gray-900">{compra.numero}</h1>
-            <p className="text-gray-500">{proveedor}</p>
+            <p className="text-gray-500">{proveedor?.nombre || 'Proveedor no encontrado'}</p>
           </div>
           <div className="text-right hidden sm:block">
             <p className={`text-2xl font-bold ${esAnulada ? 'text-gray-400 line-through' : 'text-gray-900'}`}>

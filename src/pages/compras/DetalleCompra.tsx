@@ -5,6 +5,7 @@ import { InfoProveedorCompra } from './components/InfoProveedorCompra'
 import { FilaItemCompra } from './components/FilaItemCompra'
 import { ModalAnularCompra, ConfirmarAnulacion } from './components/ModalAnularCompra'
 import { comprasService } from '@/services/compras.service'
+import { proveedoresService } from '@/services/proveedores.service'
 import type { Compra } from '@/types/compra.types'
 
 export default function DetalleCompra() {
@@ -17,8 +18,13 @@ export default function DetalleCompra() {
 
   useEffect(() => {
     if (id) {
-      comprasService.obtenerPorId(id)
-        .then(setCompra)
+      Promise.all([
+        comprasService.obtenerPorId(id),
+        proveedoresService.obtenerTodos()
+      ])
+        .then(([data]) => {
+          setCompra(data)
+        })
         .finally(() => setCargando(false))
     }
   }, [id])

@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
 import { X, Check, DollarSign, Zap, Settings } from 'lucide-react'
 import { useDetalleCobranza } from '../hooks/useCobranzas'
+import { useAuthContext } from '@/context/AuthContext'
 import { formatMoneda } from '@/lib/utils'
 import type { MetodoPago } from '@/types/venta.types'
 import type { Venta } from '@/types/venta.types'
@@ -33,6 +34,7 @@ function aplicarFIFO(ventas: Venta[], monto: number): string[] {
 }
 
 export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoProps) {
+  const { user } = useAuthContext()
   const { cuenta, ventas, recargar, registrarPago } = useDetalleCobranza(clienteId)
   const [monto, setMonto] = useState('')
   const [metodoPago, setMetodoPago] = useState<MetodoPago>('efectivo')
@@ -110,6 +112,8 @@ export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoPr
   const handlePagar = async () => {
     if (!puedePagar || !cuenta) return
 
+    const usuarioId = user?.id || 'usr_001'
+    
     setLoading(true)
     try {
       await registrarPago({
@@ -117,7 +121,7 @@ export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoPr
         monto: montoNum,
         metodo_pago: metodoPago,
         observaciones: observaciones || undefined,
-        usuario_id: 'usr_001',
+        usuario_id: usuarioId,
       })
 
       const ventasSeleccionadasObj = ventas.filter(v => ventasSeleccionadas.includes(v.id))

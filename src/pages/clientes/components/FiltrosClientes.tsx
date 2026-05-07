@@ -1,20 +1,24 @@
 // Filtros para la lista de clientes
-import { Search, Filter } from 'lucide-react'
+import { Search, Filter, EyeOff } from 'lucide-react'
 
 type FiltroTipo = 'todos' | 'minorista' | 'mayorista' | 'especial' | 'pendientes'
 
 interface Props {
   busqueda: string
   filtroTipo: FiltroTipo
+  verEliminados: boolean
   onBusquedaChange: (value: string) => void
   onTipoChange: (value: FiltroTipo) => void
+  onVerEliminadosChange: (value: boolean) => void
 }
 
 export function FiltrosClientes({
   busqueda,
   filtroTipo,
+  verEliminados,
   onBusquedaChange,
   onTipoChange,
+  onVerEliminadosChange,
 }: Props) {
   return (
     <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 mb-4">
@@ -45,6 +49,18 @@ export function FiltrosClientes({
           <option value="mayorista">Mayoristas</option>
           <option value="especial">Especiales</option>
         </select>
+
+        <button
+          onClick={() => onVerEliminadosChange(!verEliminados)}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm transition-all ${
+            verEliminados
+              ? 'bg-red-50 text-red-700 border border-red-200'
+              : 'bg-gray-50 text-gray-600 border border-gray-100 hover:bg-gray-100'
+          }`}
+        >
+          <EyeOff size={16} />
+          {verEliminados ? 'Ocultar eliminados' : 'Ver eliminados'}
+        </button>
       </div>
     </div>
   )

@@ -8,7 +8,7 @@ interface Props {
 }
 
 export function InfoProveedorCompra({ compra }: Props) {
-  const proveedor = proveedoresService.getProveedor(compra.proveedor_id)
+  const proveedor = proveedoresService.obtenerProveedorDelCache(compra.proveedor_id)
 
   if (!proveedor) {
     return (

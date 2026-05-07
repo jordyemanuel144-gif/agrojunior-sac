@@ -10,8 +10,11 @@ import { ResumenCuenta } from './components/ResumenCuenta'
 import { ListaVentasPendientes } from './components/ListaVentasPendientes'
 import { HistorialPagos } from './components/HistorialPagos'
 import { AccionesCobranza } from './components/AccionesCobranza'
-import { descargarTexto, descargarImagen, descargarPdf } from '@/lib/deuda'
+import { RUTAS } from '@/config/rutas'
 import { formatMoneda, formatFechaHoraCorta } from '@/lib/utils'
+import { descargarTexto, descargarImagen, descargarPdf } from '@/lib/deuda'
+import { FormularioCliente } from '@/pages/clientes/components/FormularioCliente'
+import type { NuevoCliente } from '@/types/cliente.types'
 import type { Cliente } from '@/types/cliente.types'
 import type { MovimientoCuentaCorriente } from '@/types/cuenta-corriente.types'
 
@@ -24,6 +27,7 @@ export default function DetalleCobranza() {
   const [movimientos, setMovimientos] = useState<MovimientoCuentaCorriente[]>([])
   const [modalPagoAbierto, setModalPagoAbierto] = useState(false)
   const [pagoRegistrado, setPagoRegistrado] = useState<{ comprobanteId: string } | null>(null)
+  const [mostrarEditarCliente, setMostrarEditarCliente] = useState(false)
 
   useEffect(() => {
     if (id) {
@@ -65,6 +69,17 @@ export default function DetalleCobranza() {
     const telefonoLimpio = telefono.replace(/\D/g, '')
     const mensajeEncoded = encodeURIComponent(mensaje)
     return `https://wa.me/51${telefonoLimpio}?text=${mensajeEncoded}`
+  }
+
+  const handleEditarCliente = () => {
+    setMostrarEditarCliente(true)
+  }
+
+  const handleGuardarCliente = async (datos: NuevoCliente) => {
+    if (!id) return
+    const actualizado = await clientesService.actualizar(id, datos)
+    setCliente(actualizado)
+    setMostrarEditarCliente(false)
   }
 
   const abrirWhatsApp = async () => {
@@ -157,6 +172,7 @@ Cuando puedes cancelar? Gracias 🙏`
           onPagar={handlePagar}
           onWhatsApp={abrirWhatsApp}
           onDescargar={handleDescargar}
+          onEditarCliente={handleEditarCliente}
         />
 
         <ListaVentasPendientes ventas={ventas} />
@@ -175,6 +191,14 @@ Cuando puedes cancelar? Gracias 🙏`
         <ToastPagoRegistrado
           comprobanteId={pagoRegistrado.comprobanteId}
           onCerrar={() => setPagoRegistrado(null)}
+        />
+      )}
+
+      {mostrarEditarCliente && (
+        <FormularioCliente
+          cliente={cliente}
+          onCerrar={() => setMostrarEditarCliente(false)}
+          onGuardar={handleGuardarCliente}
         />
       )}
     </>

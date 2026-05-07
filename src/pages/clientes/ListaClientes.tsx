@@ -17,6 +17,7 @@ export default function ListaClientes() {
   const [mostrarForm, setMostrarForm] = useState(false)
   const [clienteEditando, setClienteEditando] = useState<Cliente | null>(null)
   const [busqueda, setBusqueda] = useState('')
+  const [verEliminados, setVerEliminados] = useState(false)
   const [filtroTipo, setFiltroTipo] = useState<FiltroTipo>(() => {
     const filtro = searchParams.get('filtro')
     if (filtro === 'pendientes') return 'pendientes'
@@ -43,6 +44,8 @@ export default function ListaClientes() {
 
   const clientesFiltrados = useMemo(() => {
     return clientes.filter(c => {
+      const matchActivo = verEliminados || c.activo
+
       const matchBusqueda =
         busqueda === '' ||
         c.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
@@ -54,9 +57,9 @@ export default function ListaClientes() {
         (filtroTipo === 'pendientes' && c.pendiente_aprobacion) ||
         c.tipo === filtroTipo
 
-      return matchBusqueda && matchTipo
+      return matchActivo && matchBusqueda && matchTipo
     })
-  }, [clientes, busqueda, filtroTipo])
+  }, [clientes, busqueda, filtroTipo, verEliminados])
 
   const handleCrear = () => {
     setClienteEditando(null)
@@ -113,8 +116,10 @@ export default function ListaClientes() {
           <FiltrosClientes
             busqueda={busqueda}
             filtroTipo={filtroTipo}
+            verEliminados={verEliminados}
             onBusquedaChange={setBusqueda}
             onTipoChange={setFiltroTipo}
+            onVerEliminadosChange={setVerEliminados}
           />
 
           {clientesFiltrados.length === 0 ? (

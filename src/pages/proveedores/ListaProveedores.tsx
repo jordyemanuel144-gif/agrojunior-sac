@@ -13,7 +13,7 @@ export default function ListaProveedores() {
   const [mostrarForm, setMostrarForm] = useState(false)
   const [proveedorEditando, setProveedorEditando] = useState<Proveedor | null>(null)
   const [busqueda, setBusqueda] = useState('')
-  const [filtroEstado, setFiltroEstado] = useState<'todos' | 'activo' | 'inactivo'>('todos')
+  const [filtroEstado, setFiltroEstado] = useState<'todos' | 'activo' | 'inactivo'>('activo')
 
   useEffect(() => {
     const init = async () => {
@@ -39,7 +39,7 @@ export default function ListaProveedores() {
         (p.email?.toLowerCase().includes(busqueda.toLowerCase()) ?? false)
 
       const matchEstado =
-        filtroEstado === 'todos' ||
+        filtroEstado === 'todos' || 
         (filtroEstado === 'activo' && p.activo) ||
         (filtroEstado === 'inactivo' && !p.activo)
 

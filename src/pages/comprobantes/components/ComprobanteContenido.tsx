@@ -32,9 +32,9 @@ export function ComprobanteContenido({ comprobante, ventaInfo }: ComprobanteCont
   return (
     <div id="comprobante-detalle-content" className="print:shadow-none">
       <div className="bg-blue-600 text-white text-center py-6 px-4">
-        <p className="text-lg font-bold">{comprobante.negocio_nombre.toUpperCase()}</p>
-        <p className="text-blue-200 text-sm">RUC: {comprobante.negocio_ruc}</p>
-        <p className="text-blue-200 text-sm">{comprobante.negocio_direccion}</p>
+        <p className="text-lg font-bold">{(comprobante.negocio_nombre || 'MI NEGOCIO').toUpperCase()}</p>
+        <p className="text-blue-200 text-sm">RUC: {comprobante.negocio_ruc || '-'}</p>
+        <p className="text-blue-200 text-sm">{comprobante.negocio_direccion || '-'}</p>
       </div>
 
       <div className="p-6 space-y-6">
@@ -43,7 +43,7 @@ export function ComprobanteContenido({ comprobante, ventaInfo }: ComprobanteCont
             <div className="flex-1">
               <h3 className="text-sm font-semibold text-gray-500 uppercase mb-1">Cliente</h3>
               <div className="flex items-center gap-2">
-                <p className="font-medium text-gray-900">{comprobante.cliente_nombre}</p>
+                <p className="font-medium text-gray-900">{comprobante.cliente_nombre || 'Cliente'}</p>
                 {badge && (
                   <span className={`text-xs font-medium px-2 py-0.5 rounded ${badge.bg} ${badge.text}`}>
                     {badge.label}
@@ -84,7 +84,7 @@ function ContenidoVenta({ venta, ventaInfo }: { venta: ComprobanteVenta; ventaIn
       <div>
         <h3 className="text-sm font-semibold text-gray-500 uppercase mb-3">Productos</h3>
         <div className="space-y-2">
-          {venta.items.map((item, idx) => (
+          {(venta.items || []).map((item, idx) => (
             <div key={idx} className="flex justify-between">
               <div>
                 <p className="text-gray-900">{item.nombre}</p>
@@ -163,7 +163,7 @@ function ContenidoPago({ pago }: { pago: ComprobantePago }) {
           </div>
           <div className="flex justify-between">
             <span className="text-gray-500">Total descuentos</span>
-            <span className="text-green-600">-{formatMoneda(pago.ventas.reduce((sum, v) => sum + v.descuento, 0))}</span>
+            <span className="text-green-600">-{formatMoneda((pago.ventas || []).reduce((sum, v) => sum + v.descuento, 0))}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-gray-500">Lo que se había pagado antes</span>
@@ -192,7 +192,7 @@ function ContenidoPago({ pago }: { pago: ComprobantePago }) {
           Detalle de Ventas ({pago.ventas_pagadas_count} pagadas, {pago.ventas_parciales_count} parciales)
         </h3>
         <div className="space-y-4">
-          {pago.ventas.map((v, idx) => (
+          {(pago.ventas || []).map((v, idx) => (
             <div key={idx} className={`rounded-xl p-4 ${v.estado === 'pagado' ? 'bg-green-50' : 'bg-yellow-50'}`}>
               <div className="flex justify-between items-start mb-3">
                 <div>
@@ -209,7 +209,7 @@ function ContenidoPago({ pago }: { pago: ComprobantePago }) {
               <div className="border-t border-b border-black/10 py-3 mb-3">
                 <p className="text-xs font-medium text-gray-500 mb-2">Productos:</p>
                 <div className="space-y-1">
-                  {v.items.map((item, i) => (
+                  {(v.items || []).map((item, i) => (
                     <div key={i} className="flex justify-between text-sm">
                       <span className="text-gray-700 truncate flex-1">{item.nombre} x{item.cantidad}</span>
                       <span className="font-medium ml-3">{formatMoneda(item.subtotal)}</span>

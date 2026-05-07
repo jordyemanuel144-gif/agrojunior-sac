@@ -6,6 +6,7 @@ import { FiltrosCompras } from './components/FiltrosCompras'
 import { FilaCompra } from './components/FilaCompra'
 import { FormularioNuevaCompra } from './components/FormularioNuevaCompra'
 import { comprasService } from '@/services/compras.service'
+import { proveedoresService } from '@/services/proveedores.service'
 import type { Compra } from '@/types/compra.types'
 import { 
   type RangoFecha, 
@@ -29,26 +30,28 @@ export default function ListaCompras() {
   })
 
   useEffect(() => {
-    const init = async () => {
+    const cargar = async () => {
+      setCargando(true)
       try {
-        setCargando(true)
         const data = await comprasService.obtenerTodos()
         setCompras(data)
-      } catch (error) {
-        console.error('Error al cargar compras:', error)
+        await proveedoresService.obtenerTodos()
+      } catch (e) {
+        console.error('Error:', e)
       } finally {
         setCargando(false)
       }
     }
-    init()
+    cargar()
   }, [])
 
   const comprasFiltradas = useMemo(() => {
     return compras.filter(c => {
+      const nombreProveedor = proveedoresService.obtenerProveedorDelCache(c.proveedor_id)?.nombre || ''
       const matchBusqueda =
         busqueda === '' ||
         c.numero.toLowerCase().includes(busqueda.toLowerCase()) ||
-        comprasService.getProveedor(c.proveedor_id).toLowerCase().includes(busqueda.toLowerCase())
+        nombreProveedor.toLowerCase().includes(busqueda.toLowerCase())
 
       const matchEstado = filtroEstado === 'todos' || c.estado === filtroEstado
 

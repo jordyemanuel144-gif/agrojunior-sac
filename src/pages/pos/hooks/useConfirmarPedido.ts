@@ -26,7 +26,8 @@ export function useConfirmarPedido({
 
   useEffect(() => {
     const descuentos = configuracionService.getDescuentos()
-    setPctDescuento(descuentos[cliente.tipo] ?? 0)
+    const pct = cliente.tipo === 'mayorista' ? descuentos.mayorista : cliente.tipo === 'especial' ? descuentos.especial : 0
+    setPctDescuento(pct)
   }, [cliente.tipo])
 
   const esPublico = cliente.id === 'publico'
@@ -81,7 +82,7 @@ export function useConfirmarPedido({
   }
 
   const subtotalCalculado = items.reduce((acc, item) => acc + getSubtotalTemporal(item), 0)
-  const montoDescuento = subtotalCalculado * pctDescuento
+  const montoDescuento = subtotalCalculado * (pctDescuento / 100)
   const baseIgv = subtotalCalculado - montoDescuento
   const igv = igvActivo ? baseIgv * 0.18 : 0
   const total = baseIgv + igv

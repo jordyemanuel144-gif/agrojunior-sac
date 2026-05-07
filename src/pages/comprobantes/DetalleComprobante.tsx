@@ -21,12 +21,14 @@ export default function DetalleComprobante() {
 
   useEffect(() => {
     if (!id) return
-    const data = comprobantesService.obtenerPorId(id)
-    ventasService.obtenerTodos().then(dataVentas => {
+    setCargando(true)
+    Promise.all([
+      comprobantesService.obtenerPorId(id),
+      ventasService.obtenerTodos()
+    ]).then(([data, dataVentas]) => {
       setComprobante(data)
       setVentas(dataVentas)
-      setCargando(false)
-    })
+    }).finally(() => setCargando(false))
   }, [id])
 
   const getVentaInfo = (clienteId?: string) => {

@@ -5,16 +5,20 @@
 import { supabase, handleError } from '@/lib/supabase'
 import type { Proveedor, NuevoProveedor } from '@/types/proveedor.types'
 
+let cacheProveedores: Proveedor[] = []
+let cacheCargado = false
+
 export const proveedoresService = {
   obtenerTodos: async (): Promise<Proveedor[]> => {
     const { data, error } = await supabase
       .from('proveedores')
       .select('*')
-      .eq('activo', true)
       .order('nombre')
 
     handleError(error, 'Error al obtener proveedores')
-    return data ?? []
+    cacheProveedores = data ?? []
+    cacheCargado = true
+    return cacheProveedores
   },
 
   obtenerPorId: async (id: string): Promise<Proveedor | null> => {
@@ -61,10 +65,19 @@ export const proveedoresService = {
     handleError(error, 'Error al desactivar proveedor')
   },
 
+  obtenerProveedorSync: (_id: string): Proveedor | undefined => {
+    return cacheProveedores.find(p => p.id === _id)
+  },
+
+  obtenerProveedorActivoSync: (_id: string): Proveedor | undefined => {
+    return cacheProveedores.find(p => p.id === _id && p.activo)
+  },
+
+  obtenerProveedorDelCache: (_id: string): Proveedor | undefined => {
+    return cacheProveedores.find(p => p.id === _id)
+  },
+
   getProveedor: (_id: string): undefined => {
-    // Helper síncrono: necesita cache local.
-    // Se usa en compras.service para obtener nombre rápido.
-    // En Supabase, preferir obtenerPorId (async).
-    return undefined
+    return cacheProveedores.find(p => p.id === _id)
   },
 }

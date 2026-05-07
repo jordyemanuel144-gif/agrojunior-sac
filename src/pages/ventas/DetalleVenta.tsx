@@ -40,8 +40,11 @@ export default function DetalleVenta() {
             setVenta(null)
           } else {
             setVenta(v)
-            // Cargar info del cliente
-            const cli = await clientesService.obtenerPorId(v.cliente_id)
+            // Cargar info del cliente (busca en cache primero activo, luego inactivo para histórica)
+            let cli = clientesService.obtenerClienteActivoSync(v.cliente_id)
+            if (!cli) {
+              cli = clientesService.obtenerClienteDelCache(v.cliente_id)
+            }
             if (cli) {
               setClienteInfo({
                 nombre: cli.nombre,

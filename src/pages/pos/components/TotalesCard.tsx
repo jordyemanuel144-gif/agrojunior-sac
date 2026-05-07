@@ -11,7 +11,10 @@ interface Props {
 }
 
 export function TotalesCard({ subtotal, descuento, igv, total, cliente, igvActivo }: Props) {
-  const pctDescuento = cliente.tipo !== 'minorista' ? (cliente.tipo === 'mayorista' ? 10 : 5) : 0
+  const pctDescuento = (() => {
+    const d = configuracionService.getDescuentos()
+    return cliente.tipo === 'mayorista' ? d.mayorista : cliente.tipo === 'especial' ? d.especial : 0
+  })()
   const tipoLabel = { minorista: 'Minorista', mayorista: 'Mayorista', especial: 'Especial' }
   
   return (

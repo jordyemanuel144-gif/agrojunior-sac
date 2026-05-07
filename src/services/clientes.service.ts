@@ -113,6 +113,14 @@ export const clientesService = {
     return cacheClientes.find(c => c.id === _id)
   },
 
+  obtenerClienteActivoSync: (_id: string): Cliente | undefined => {
+    return cacheClientes.find(c => c.id === _id && c.activo)
+  },
+
+  obtenerClienteDelCache: (_id: string): Cliente | undefined => {
+    return cacheClientes.find(c => c.id === _id)
+  },
+
   login: async (email: string, password: string): Promise<Cliente | null> => {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
 

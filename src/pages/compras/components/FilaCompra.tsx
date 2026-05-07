@@ -5,7 +5,7 @@
 import { useNavigate } from 'react-router-dom'
 import { ChevronRight, CheckCircle, XCircle, Clock } from 'lucide-react'
 import type { Compra } from '@/types/compra.types'
-import { comprasService } from '@/services/compras.service'
+import { proveedoresService } from '@/services/proveedores.service'
 import { RUTAS } from '@/config/rutas'
 
 // Props: recibe la compra a mostrar
@@ -16,8 +16,8 @@ interface Props {
 export function FilaCompra({ compra }: Props) {
   const navigate = useNavigate()
 
-  // Obtiene nombre del proveedor
-  const proveedor = comprasService.getProveedor(compra.proveedor_id)
+  //Obtiene nombre del proveedor desde cache
+  const proveedor = proveedoresService.obtenerProveedorDelCache(compra.proveedor_id)?.nombre || 'Proveedor no encontrado'
   const fecha = new Date(compra.fecha)
 
   // Configuración de estilos por estado
