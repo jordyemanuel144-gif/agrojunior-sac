@@ -100,6 +100,18 @@ export const clientesService = {
     handleError(error, 'Error al desactivar cliente')
   },
 
+  reactivar: async (id: string): Promise<Cliente> => {
+    const { data, error } = await supabase
+      .from('clientes')
+      .update({ activo: true })
+      .eq('id', id)
+      .select()
+      .single()
+
+    handleError(error, 'Error al reactivar cliente')
+    return data!
+  },
+
   actualizarTelefono: async (id: string, telefono: string): Promise<Cliente> => {
     return clientesService.actualizar(id, { telefono })
   },

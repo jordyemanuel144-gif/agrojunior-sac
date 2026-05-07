@@ -56,6 +56,7 @@ export const cuentaCorrienteService = {
     const { data, error } = await supabase
       .from('vista_cuentas_corrientes' as 'configuracion')
       .select('*')
+      .order('ultima_venta_fecha', { ascending: false })
 
     handleError(error, 'Error al obtener cuentas corrientes')
     return (data ?? []).map(r => mapCuenta(r as unknown as Record<string, unknown>))

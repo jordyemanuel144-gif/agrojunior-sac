@@ -1,17 +1,20 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { cuentaCorrienteService } from '@/services/cuenta-corriente.service'
 import type { CuentaCorriente, ResumenCuentasPorCobrar } from '@/types/cuenta-corriente.types'
 import type { Venta } from '@/types/venta.types'
 import type { NuevoVentaPago } from '@/types/venta-pago.types'
 
+type FiltroOrden = 'fecha' | 'deuda' | 'nombre' | 'antiguo'
+
 interface Filtros {
   busqueda: string
+  orden: FiltroOrden
 }
 
 export function useCobranzas() {
   const [cuentas, setCuentas] = useState<CuentaCorriente[]>([])
   const [resumen, setResumen] = useState<ResumenCuentasPorCobrar | null>(null)
-  const [filtros, setFiltros] = useState<Filtros>({ busqueda: '' })
+  const [filtros, setFiltros] = useState<Filtros>({ busqueda: '', orden: 'fecha' })
   const [cargando, setCargando] = useState(true)
 
   const cargarDatos = useCallback(async () => {
@@ -32,16 +35,44 @@ export function useCobranzas() {
     cargarDatos()
   }, [cargarDatos])
 
-  const cuentasFiltradas = cuentas.filter(cuenta => {
-    if (cuenta.saldo_pendiente <= 0) return false
-    if (!filtros.busqueda) return true
-    const busq = filtros.busqueda.toLowerCase()
-    return (
-      cuenta.cliente_nombre.toLowerCase().includes(busq) ||
-      cuenta.cliente_dni_ruc?.toLowerCase().includes(busq) ||
-      cuenta.cliente_telefono?.includes(busq)
-    )
-  })
+  const cuentasFiltradas = useMemo(() => {
+    let result = cuentas.filter(c => c.saldo_pendiente > 0)
+    
+    if (filtros.busqueda) {
+      const busq = filtros.busqueda.toLowerCase()
+      result = result.filter(c =>
+        c.cliente_nombre.toLowerCase().includes(busq) ||
+        c.cliente_dni_ruc?.toLowerCase().includes(busq) ||
+        c.cliente_telefono?.includes(busq)
+      )
+    }
+
+    // Ordenar según selección
+    switch (filtros.orden) {
+      case 'deuda':
+        result.sort((a, b) => b.saldo_pendiente - a.saldo_pendiente)
+        break
+      case 'nombre':
+        result.sort((a, b) => a.cliente_nombre.localeCompare(b.cliente_nombre))
+        break
+      case 'antiguo':
+        result.sort((a, b) => {
+          const fechaA = a.ultima_venta_fecha?.getTime() || 0
+          const fechaB = b.ultima_venta_fecha?.getTime() || 0
+          return fechaA - fechaB
+        })
+        break
+      case 'fecha':
+      default:
+        result.sort((a, b) => {
+          const fechaA = a.ultima_venta_fecha?.getTime() || 0
+          const fechaB = b.ultima_venta_fecha?.getTime() || 0
+          return fechaB - fechaA
+        })
+    }
+
+    return result
+  }, [cuentas, filtros.busqueda, filtros.orden])
 
   return {
     cuentas: cuentasFiltradas,

@@ -53,6 +53,20 @@ export default function DetalleCliente() {
     navigate(RUTAS.ADMIN.CLIENTES)
   }
 
+  const handleReactivar = async () => {
+    if (!id) return
+    if (!confirm('¿Reactivar este cliente? Podrá volver a realizar compras.')) return
+    try {
+      console.log('Reactivando cliente:', id)
+      const actualizado = await clientesService.reactivar(id)
+      console.log('Resultado:', actualizado)
+      setCliente(actualizado)
+    } catch (e) {
+      console.error('Error:', e)
+      alert('Error al reactivAR: ' + e)
+    }
+  }
+
   const generarLinkWhatsApp = (telefono: string, mensaje: string): string => {
     const telefonoLimpio = telefono.replace(/\D/g, '')
     const mensajeEncoded = encodeURIComponent(mensaje)
@@ -228,12 +242,21 @@ Cuando puedes cancelar? Gracias 🙏`
                     >
                       Editar Cliente
                     </button>
-                    <button
-                      onClick={() => setMostrarEliminar(true)}
-                      className="w-full px-4 py-2.5 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors font-medium text-sm"
-                    >
-                      Eliminar Cliente
-                    </button>
+                    {!cliente?.activo ? (
+                      <button
+                        onClick={handleReactivar}
+                        className="w-full px-4 py-2.5 bg-green-50 text-green-600 rounded-xl hover:bg-green-100 transition-colors font-medium text-sm"
+                      >
+                        Reactivar Cliente
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => setMostrarEliminar(true)}
+                        className="w-full px-4 py-2.5 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-colors font-medium text-sm"
+                      >
+                        Eliminar Cliente
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
