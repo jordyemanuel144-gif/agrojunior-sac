@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { RUTAS } from '@/config/rutas'
 import { AuthProvider } from '@/context/AuthContext'
+import { ChatWidget } from '@/components/chat/ChatWidget'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import { Layout } from '@/components/layout/Layout'
 import { LayoutCliente } from '@/components/layout/LayoutCliente'
@@ -124,6 +125,7 @@ export default function App() {
             <Route path="*" element={<Navigate to={RUTAS.PUBLICO.HOME} replace />} />
           </Routes>
         </Suspense>
+        <ChatWidget />
       </BrowserRouter>
     </AuthProvider>
   )

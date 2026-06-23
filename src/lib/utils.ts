@@ -1,5 +1,7 @@
 import { MONEDA } from '@/config/constantes'
 
+export { generarLinkWhatsApp } from './whatsapp'
+
 export function formatMoneda(monto: number | undefined | null): string {
   if (monto === undefined || monto === null || isNaN(monto)) {
     return `${MONEDA} 0.00`
@@ -128,12 +130,6 @@ export function estaEnRango(fecha: Date | string, inicio: string, fin: string): 
   const fechaObj = typeof fecha === 'string' ? new Date(fecha) : fecha
   const fechaISO = getFechaISO(fechaObj)
   return fechaISO >= inicio && fechaISO <= fin
-}
-
-export function generarLinkWhatsApp(telefono: string, mensaje: string): string {
-  const telefonoLimpio = telefono.replace(/\D/g, '')
-  const mensajeEncoded = encodeURIComponent(mensaje)
-  return `https://wa.me/51${telefonoLimpio}?text=${mensajeEncoded}`
 }
 
 export function formatearFechaCorta(fecha: Date | string): string {

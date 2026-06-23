@@ -6,7 +6,8 @@ import { ListaCuentasCorrientes } from './components/ListaCuentasCorrientes'
 import { ModalRegistrarPago } from './components/ModalRegistrarPago'
 import { ToastPagoRegistrado } from './components/ToastPagoRegistrado'
 import { descargarTexto, descargarImagen, descargarPdf } from '@/lib/deuda'
-import { formatMoneda, formatFechaHoraCorta } from '@/lib/utils'
+import { formatMoneda } from '@/lib/utils'
+import { generarLinkWhatsApp, generarMensajeDeuda } from '@/lib/whatsapp'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ventasService } from '@/services/ventas.service'
@@ -49,12 +50,6 @@ export default function CobranzasPage() {
     navigate(`/admin/cobranzas/${clienteId}`)
   }
 
-  const generarLinkWhatsApp = (telefono: string, mensaje: string): string => {
-    const telefonoLimpio = telefono.replace(/\D/g, '')
-    const mensajeEncoded = encodeURIComponent(mensaje)
-    return `https://wa.me/51${telefonoLimpio}?text=${mensajeEncoded}`
-  }
-
   const abrirWhatsApp = async (clienteId: string) => {
     const cuenta = cuentas.find(c => c.cliente_id === clienteId)
     if (!cuenta) return
@@ -71,35 +66,7 @@ export default function CobranzasPage() {
       v.estado_pago !== 'pagado'
     )
 
-    const lineasVentas = ventasPendientes.map((venta) => {
-      const pendiente = venta.total - venta.monto_pagado
-      const items = venta.items.map(i => `│ • ${i.producto.nombre} x${i.cantidad} = ${formatMoneda(i.subtotal)}`).join('\n')
-      const descuento = venta.descuento > 0 ? `\n│ Descuento: -${formatMoneda(venta.descuento)}` : ''
-      const totalSinDesc = venta.descuento > 0 ? `\n│ Total sin descu.: ${formatMoneda(venta.subtotal)}` : ''
-      const yaPagado = venta.monto_pagado > 0 ? `\n│ Ya pagaste: ${formatMoneda(venta.monto_pagado)}` : ''
-      const falta = `\n\n│ FALTA: ${formatMoneda(pendiente)}`
-      const fechaCorta = formatFechaHoraCorta(venta.fecha)
-      return `┌─ ${venta.ticket_numero.toUpperCase()} - ${fechaCorta} ┐\n│ Estado: ⏳ PENDIENTE\n│\n│ PRODUCTOS:\n│${items}${descuento}${totalSinDesc}${yaPagado}\n│ TOTAL: ${formatMoneda(venta.total)}${falta}\n└─────────────────────────┘`
-    }).join('\n\n')
-
-    const mensaje = `RESUMEN DE CUENTA
-━━━━━━━━━━━━━━━━━━━━
-Hola ${cuenta.cliente_nombre}, gracias por tu preferencia 👋
-
-📋 Pedidos pendientes: ${ventasPendientes.length}
-
-${lineasVentas}
-
-━━━━━━━━━━━━━━━━━━━━
-💰 TOTAL A PAGAR: ${formatMoneda(cuenta.saldo_pendiente)}
-━━━━━━━━━━━━━━━━━━━━
-
-📱 Yape: 916794870
-🏦 Banco de Crédito
-Titular: Juan Pérez
-Cbta: 215-55555555
-
-Cuando puedes cancelar? Gracias 🙏`
+    const mensaje = generarMensajeDeuda(cuenta.cliente_nombre, cuenta.saldo_pendiente, ventasPendientes)
 
     const link = generarLinkWhatsApp(cuenta.cliente_telefono, mensaje)
     window.open(link, '_blank')
