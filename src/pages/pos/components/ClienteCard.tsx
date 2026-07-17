@@ -11,10 +11,10 @@ export function ClienteCard({ cliente, onCambiar }: Props) {
   return (
     <button 
       onClick={onCambiar}
-      className={`relative w-full bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex items-center gap-3 text-left hover:border-blue-300 transition-colors ${cliente.tipo !== 'minorista' ? 'pr-14' : ''}`}
+      className={`relative w-full bg-white rounded-2xl shadow-sm border border-gray-100 p-4 flex items-center gap-3 text-left hover:border-primary transition-colors ${cliente.tipo !== 'minorista' ? 'pr-14' : ''}`}
     >
-      <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${cliente.tipo === 'mayorista' ? 'bg-green-100' : cliente.tipo === 'especial' ? 'bg-purple-100' : 'bg-blue-100'}`}>
-        <UserCircle size={20} className={`${cliente.tipo === 'mayorista' ? 'text-green-600' : cliente.tipo === 'especial' ? 'text-purple-600' : 'text-blue-600'}`} />
+      <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${cliente.tipo === 'mayorista' ? 'bg-green-100' : cliente.tipo === 'especial' ? 'bg-purple-100' : 'bg-primary-light'}`}>
+        <UserCircle size={20} className={`${cliente.tipo === 'mayorista' ? 'text-green-600' : cliente.tipo === 'especial' ? 'text-purple-600' : 'text-primary'}`} />
       </div>
       <div className={`flex-1 min-w-0 ${cliente.tipo !== 'minorista' ? '' : 'pr-3'}`}>
         <p className={`text-[11px] font-semibold ${cliente.tipo === 'mayorista' ? 'text-green-600' : cliente.tipo === 'especial' ? 'text-purple-600' : 'text-gray-400'}`}>

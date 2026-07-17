@@ -9,7 +9,7 @@ interface GraficoCircularProps {
 const COLORES: Record<string, string> = {
   efectivo: '#059669',
   yape: '#7c3aed',
-  transferencia: '#2563eb',
+  transferencia: '#D4A017',
 }
 
 const METODO_LABELS: Record<string, string> = {

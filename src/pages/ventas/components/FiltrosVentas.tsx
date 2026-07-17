@@ -57,7 +57,7 @@ export function FiltrosVentas({
           value={busqueda}
           onChange={e => onBusquedaChange(e.target.value)}
           placeholder="Buscar por ticket, cliente..."
-          className="w-full pl-10 pr-4 py-2.5 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all"
+          className="w-full pl-10 pr-4 py-2.5 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-light transition-all"
         />
       </div>
 
@@ -78,7 +78,7 @@ export function FiltrosVentas({
               }}
               className={`px-3 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${
                 filtroFecha === btn.value
-                  ? 'bg-blue-600 text-white shadow-md'
+                  ? 'bg-primary text-white shadow-md'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
@@ -101,14 +101,14 @@ export function FiltrosVentas({
               type="date"
               value={rangoPersonalizado.inicio}
               onChange={e => onRangoChange({ ...rangoPersonalizado, inicio: e.target.value })}
-              className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-200"
+              className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-medium focus:outline-none focus:ring-2 focus:ring-primary-light"
             />
             <span className="text-gray-400 text-xs">-</span>
             <input
               type="date"
               value={rangoPersonalizado.fin}
               onChange={e => onRangoChange({ ...rangoPersonalizado, fin: e.target.value })}
-              className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-200"
+              className="px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-xs font-medium focus:outline-none focus:ring-2 focus:ring-primary-light"
             />
           </div>
         )}
@@ -117,7 +117,7 @@ export function FiltrosVentas({
         <select
           value={filtroEstado}
           onChange={e => onEstadoChange(e.target.value as typeof filtroEstado)}
-          className="px-4 py-2 bg-gray-50 rounded-lg text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all"
+          className="px-4 py-2 bg-gray-50 rounded-lg text-xs font-medium focus:outline-none focus:ring-2 focus:ring-primary-light transition-all"
         >
           <option value="todos">Todos los estados</option>
           <option value="completada">Completadas</option>
@@ -128,7 +128,7 @@ export function FiltrosVentas({
         <select
           value={filtroPago}
           onChange={e => onPagoChange(e.target.value as typeof filtroPago)}
-          className="px-4 py-2 bg-gray-50 rounded-lg text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all"
+          className="px-4 py-2 bg-gray-50 rounded-lg text-xs font-medium focus:outline-none focus:ring-2 focus:ring-primary-light transition-all"
         >
           <option value="todos">Todos los pagos</option>
           <option value="pagado">Pagado</option>
@@ -141,7 +141,7 @@ export function FiltrosVentas({
           <select
             value={filtroVendedor}
             onChange={e => onVendedorChange?.(e.target.value)}
-            className="px-4 py-2 bg-gray-50 rounded-lg text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all"
+            className="px-4 py-2 bg-gray-50 rounded-lg text-xs font-medium focus:outline-none focus:ring-2 focus:ring-primary-light transition-all"
           >
             <option value="todos">Todos los vendedores</option>
             {vendedores.map(v => (
@@ -157,7 +157,7 @@ export function FiltrosVentas({
           <div className="flex items-center gap-2 text-xs text-gray-500">
             <Filter size={12} />
             <span>
-              Filtrando: <strong className="text-blue-600">
+              Filtrando: <strong className="text-primary">
                 {filtroFecha === 'hoy' && 'Hoy'}
                 {filtroFecha === 'semana' && 'Esta semana'}
                 {filtroFecha === 'mes' && 'Este mes'}
@@ -172,7 +172,7 @@ export function FiltrosVentas({
                 onEstadoChange('todos')
                 setMostrarRango(false)
               }}
-              className="ml-auto text-blue-600 hover:text-blue-700 font-medium"
+              className="ml-auto text-primary hover:text-primary-hover font-medium"
             >
               Limpiar
             </button>

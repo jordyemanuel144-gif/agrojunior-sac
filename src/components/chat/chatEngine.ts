@@ -83,7 +83,7 @@ const RULES: ClassificationRule[] = [
     intent: 'precios',
     scope: 'public',
     priority: 60,
-    keywords: ['precio', 'precios', 'cuesta', 'cuestan', 'costo', 'costos', 'vale', 'valen', 'lista', 'tarifa', 'tarifas', 'comprar', 'compro', 'llevar', 'pedir', 'pollo', 'cerdo', 'chancho', 'pavo', 'embutido', 'embutidos', 'salchicha', 'jamón', 'jamon', 'chorizo', 'huevo', 'huevos', 'gallina', 'kilo', 'kilos', 'docena', 'mayorista', 'minorista'],
+    keywords: ['precio', 'precios', 'cuesta', 'cuestan', 'costo', 'costos', 'vale', 'valen', 'lista', 'tarifa', 'tarifas', 'comprar', 'compro', 'llevar', 'pedir', 'cotizar', 'cotización', 'cotizacion', 'carne', 'res', 'vacuno', 'toro', 'angus', 'holstein', 'corte', 'cortes', 'lomo', 'bife', 'asado', 'marmoleo', 'magra', 'menudencia', 'víscera', 'viscera', 'vísceras', 'visceras', 'lote', 'lotes', 'mayoreo', 'establo', 'camal', 'kilo', 'kilos', 'mayorista', 'minorista'],
   },
   // ── Público: horarios ───────────────────────────────────────────────
   {
@@ -175,11 +175,10 @@ const ACTIONS = {
   direccion: { label: '📍 Dirección', intent: 'direccion' },
   yape: { label: '📱 Yape / Pagos', intent: 'yape' },
   telefono: { label: '📞 Contacto', intent: 'telefono' },
-  pollo: { label: '🐔 Pollo', intent: 'precios-pollo' },
-  cerdo: { label: '🐷 Cerdo', intent: 'precios-cerdo' },
-  pavo: { label: '🦃 Pavo', intent: 'precios-pavo' },
-  embutidos: { label: '🥩 Embutidos', intent: 'precios-embutidos' },
-  huevos: { label: '🥚 Huevos', intent: 'precios-huevos' },
+  angus: { label: '🐂 Cortes Angus', intent: 'precios-angus' },
+  holstein: { label: '🐄 Cortes Holstein', intent: 'precios-holstein' },
+  menudencia: { label: '🍖 Menudencia', intent: 'precios-menudencia' },
+  lote: { label: '📦 Lote al por mayor', intent: 'precios-lote' },
   stock: { label: '📦 Stock', intent: 'stock' },
   stockBajo: { label: '⚠️ Stock bajo', intent: 'stock-bajo' },
   ventas: { label: '📊 Ventas hoy', intent: 'ventas-hoy' },
@@ -191,13 +190,13 @@ const ACTIONS = {
 
 const PUBLIC_MENU: QuickAction[] = [ACTIONS.precios, ACTIONS.horarios, ACTIONS.direccion, ACTIONS.telefono]
 const ADMIN_MENU: QuickAction[] = [ACTIONS.stock, ACTIONS.ventas, ACTIONS.deuda, ACTIONS.clientes]
-const CATEGORIA_MENU: QuickAction[] = [ACTIONS.pollo, ACTIONS.cerdo, ACTIONS.pavo, ACTIONS.embutidos, ACTIONS.huevos]
+const CATEGORIA_MENU: QuickAction[] = [ACTIONS.angus, ACTIONS.holstein, ACTIONS.menudencia, ACTIONS.lote]
 
 type ResponseBuilder = (mode: ChatMode) => ChatResponse
 
 const RESPONSES: Partial<Record<IntentType, ResponseBuilder>> = {
   precios: () => ({
-    text: '📋 ¿De qué producto querés los precios? Elegí una categoría o escribime, por ejemplo: "precios del pollo al por mayor".',
+    text: '📋 ¿De qué carne querés los precios? Elegí una categoría o escribime, por ejemplo: "precio por kilo de Angus" o "lote al por mayor".',
     quickActions: CATEGORIA_MENU,
   }),
 
@@ -285,7 +284,7 @@ export function getWelcomeMessage(mode: ChatMode): ChatMessage {
   return {
     id: generarId(),
     sender: 'bot',
-    text: `🐔 ¡Bienvenido a **${BUSINESS_INFO.nombre}**! Soy tu asistente. Preguntame lo que quieras sobre precios, horarios, pagos o cualquier consulta.`,
+    text: `🐂 ¡Bienvenido a **${BUSINESS_INFO.nombre}**! Carne premium de Majes al gancho. Preguntame por precios por kilo de Angus y Holstein, disponibilidad de lotes, ubicación o cualquier consulta.`,
     timestamp: new Date(),
     quickActions: PUBLIC_MENU,
   }

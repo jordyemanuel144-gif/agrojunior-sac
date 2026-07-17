@@ -108,7 +108,7 @@ export function ModalMovimiento({ producto, onCerrar, onRegistrado }: Props) {
               min="0"
               value={cantidad}
               onChange={e => setCantidad(e.target.value)}
-              className="w-full text-base font-medium text-gray-900 outline-none bg-transparent border-b-2 border-gray-200 focus:border-blue-500 py-2"
+              className="w-full text-base font-medium text-gray-900 outline-none bg-transparent border-b-2 border-gray-200 focus:border-primary py-2"
               placeholder="0.0"
               autoFocus
             />
@@ -121,7 +121,7 @@ export function ModalMovimiento({ producto, onCerrar, onRegistrado }: Props) {
             <select
               value={motivo}
               onChange={e => setMotivo(e.target.value as MotivoMovimiento)}
-              className="w-full text-base font-medium text-gray-900 outline-none bg-transparent border-b-2 border-gray-200 focus:border-blue-500 py-2"
+              className="w-full text-base font-medium text-gray-900 outline-none bg-transparent border-b-2 border-gray-200 focus:border-primary py-2"
             >
               {motivosPorTipo[tipo].map(m => (
                 <option key={m} value={m}>
@@ -138,7 +138,7 @@ export function ModalMovimiento({ producto, onCerrar, onRegistrado }: Props) {
             <textarea
               value={notas}
               onChange={e => setNotas(e.target.value)}
-              className="w-full text-base font-medium text-gray-900 outline-none bg-transparent border-b-2 border-gray-200 focus:border-blue-500 py-2 resize-none"
+              className="w-full text-base font-medium text-gray-900 outline-none bg-transparent border-b-2 border-gray-200 focus:border-primary py-2 resize-none"
               rows={2}
               placeholder="Agregar una nota..."
             />
@@ -147,7 +147,7 @@ export function ModalMovimiento({ producto, onCerrar, onRegistrado }: Props) {
           <button
             type="submit"
             disabled={guardando || !cantidad || parseFloat(cantidad) <= 0}
-            className="w-full py-3 bg-blue-600 text-white rounded-xl font-bold text-sm hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full py-3 bg-primary text-white rounded-xl font-bold text-sm hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {guardando ? 'Guardando...' : 'Registrar Movimiento'}
           </button>

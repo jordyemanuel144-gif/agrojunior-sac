@@ -45,8 +45,8 @@ export function ClientePicker({ clientes, clienteSeleccionado, onSeleccionar, on
         {/* Header */}
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-              <UserCircle size={16} className="text-blue-600" />
+            <div className="w-8 h-8 bg-primary-light rounded-full flex items-center justify-center">
+              <UserCircle size={16} className="text-primary" />
             </div>
             <h3 className="font-bold text-gray-900">Seleccionar Cliente</h3>
           </div>
@@ -66,7 +66,7 @@ export function ClientePicker({ clientes, clienteSeleccionado, onSeleccionar, on
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
             placeholder="Buscar por nombre, DNI/RUC o teléfono..."
-            className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           />
         </div>
 
@@ -79,7 +79,7 @@ export function ClientePicker({ clientes, clienteSeleccionado, onSeleccionar, on
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
                 filtroTipo === tipo.value
                   ? tipo.value === 'todos'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-primary text-white'
                     : tipo.value === 'mayorista'
                     ? 'bg-green-600 text-white'
                     : tipo.value === 'especial'
@@ -108,12 +108,12 @@ export function ClientePicker({ clientes, clienteSeleccionado, onSeleccionar, on
                 onClick={() => onSeleccionar(cliente)}
                 className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all ${
                   clienteSeleccionado?.id === cliente.id
-                    ? 'bg-blue-50 border-2 border-blue-200'
+                    ? 'bg-primary-light border-2 border-primary-light'
                     : 'bg-gray-50 hover:bg-gray-100'
                 }`}
               >
-                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <UserCircle size={20} className="text-blue-600" />
+                <div className="w-10 h-10 bg-primary-light rounded-full flex items-center justify-center flex-shrink-0">
+                  <UserCircle size={20} className="text-primary" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-gray-900 truncate">{cliente.nombre}</p>

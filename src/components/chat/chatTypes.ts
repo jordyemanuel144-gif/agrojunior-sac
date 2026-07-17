@@ -24,11 +24,10 @@ export interface ChatState {
 export type IntentType =
   // Public intents
   | 'precios'
-  | 'precios-pollo'
-  | 'precios-cerdo'
-  | 'precios-pavo'
-  | 'precios-embutidos'
-  | 'precios-huevos'
+  | 'precios-angus'
+  | 'precios-holstein'
+  | 'precios-menudencia'
+  | 'precios-lote'
   | 'horarios'
   | 'direccion'
   | 'yape'

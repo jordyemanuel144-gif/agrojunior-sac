@@ -38,11 +38,10 @@ const QA = {
 }
 
 const CATEGORIA_MENU = [
-  { label: '🐔 Pollo', intent: 'precios-pollo' },
-  { label: '🐷 Cerdo', intent: 'precios-cerdo' },
-  { label: '🦃 Pavo', intent: 'precios-pavo' },
-  { label: '🥩 Embutidos', intent: 'precios-embutidos' },
-  { label: '🥚 Huevos', intent: 'precios-huevos' },
+  { label: '🐂 Cortes Angus', intent: 'precios-angus' },
+  { label: '🐄 Cortes Holstein', intent: 'precios-holstein' },
+  { label: '🍖 Menudencia', intent: 'precios-menudencia' },
+  { label: '📦 Lote al por mayor', intent: 'precios-lote' },
 ]
 
 // ===========================================================================
@@ -52,19 +51,17 @@ const CATEGORIA_MENU = [
 type PrecioTier = 'minorista' | 'mayorista' | 'especial'
 
 const CATEGORIA_KEYWORDS: Record<string, string[]> = {
-  pollo: ['pollo'],
-  cerdo: ['cerdo', 'chancho'],
-  pavo: ['pavo'],
-  embutido: ['embutido', 'salchicha', 'jamón', 'jamon', 'chorizo'],
-  huevo: ['huevo'],
+  angus: ['angus'],
+  holstein: ['holstein'],
+  menudencia: ['menudencia', 'víscera', 'viscera', 'hígado', 'higado', 'mondongo', 'panza', 'lengua', 'corazón', 'corazon', 'menudo'],
+  lote: ['lote', 'mayoreo', 'establo', 'camal', 'mayor'],
 }
 
 const INTENT_A_CATEGORIA: Record<string, string> = {
-  'precios-pollo': 'pollo',
-  'precios-cerdo': 'cerdo',
-  'precios-pavo': 'pavo',
-  'precios-embutidos': 'embutido',
-  'precios-huevos': 'huevo',
+  'precios-angus': 'angus',
+  'precios-holstein': 'holstein',
+  'precios-menudencia': 'menudencia',
+  'precios-lote': 'lote',
 }
 
 /** Detecta la categoría de producto que el usuario menciona, o null. */
@@ -259,11 +256,10 @@ export const intentResolvers: Record<IntentType, IntentResolver> = {
 
   // Precios (BD real)
   precios: (c) => resolverPrecios('precios', c.text, c.mode),
-  'precios-pollo': (c) => resolverPrecios('precios-pollo', c.text, c.mode),
-  'precios-cerdo': (c) => resolverPrecios('precios-cerdo', c.text, c.mode),
-  'precios-pavo': (c) => resolverPrecios('precios-pavo', c.text, c.mode),
-  'precios-embutidos': (c) => resolverPrecios('precios-embutidos', c.text, c.mode),
-  'precios-huevos': (c) => resolverPrecios('precios-huevos', c.text, c.mode),
+  'precios-angus': (c) => resolverPrecios('precios-angus', c.text, c.mode),
+  'precios-holstein': (c) => resolverPrecios('precios-holstein', c.text, c.mode),
+  'precios-menudencia': (c) => resolverPrecios('precios-menudencia', c.text, c.mode),
+  'precios-lote': (c) => resolverPrecios('precios-lote', c.text, c.mode),
 
   // Admin (services en vivo)
   stock: () => resolverStock(),

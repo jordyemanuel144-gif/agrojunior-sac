@@ -1,73 +1,43 @@
-# React + TypeScript + Vite
+# AGROJUNIOR SAC — Sistema de Atención Inteligente
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Plataforma web de gestión comercial y **chatbot con IA** para **AGROJUNIOR SAC**, productora y comercializadora de **carne de ganado vacuno premium** (Toro Angus y Holstein) ubicada en **Majes, Arequipa – Perú**.
 
-Currently, two official plugins are available:
+> Carne Premium de Majes al Gancho — venta por mayor y menor, directo del productor, sin intermediarios.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Características
 
-## React Compiler
+- **Chatbot inteligente** (motor de reglas + Gemini IA) para atención 24/7: precios por kilo de Angus/Holstein, disponibilidad de lotes, ubicación y coordinación de pedidos.
+- **Catálogo público** de cortes y lotes con precios minorista / mayorista / especial.
+- **Panel administrativo**: inventario, ventas (POS), clientes, cobranzas, compras, proveedores, comprobantes y reportes.
+- **Integración WhatsApp** para envío de cotizaciones, comprobantes y recordatorios de cobranza.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Negocio
 
-## Expanding the ESLint configuration
+- **Empresa:** AGROJUNIOR SAC
+- **Propietario:** Darly Junior Sanchez Cutipa
+- **Ubicación:** Parcela 316, Los Molles, Sección A — Majes, Arequipa, Perú
+- **WhatsApp:** +51 970 995 140
+- **Facebook:** Darly Sanchez Cutipa · **TikTok:** @darlysanchez85
+- **Razas:** Toro Angus (marmoleo superior, cortes premium) y Toro Holstein (carne magra)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- React 19 + TypeScript + Vite
+- Tailwind CSS v4 (tema negro / dorado `#D4A017` / blanco)
+- Supabase (PostgreSQL) como backend
+- Gemini API (chatbot conversacional)
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Desarrollo
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install        # instalar dependencias
+npm run dev        # servidor de desarrollo
+npm run build      # build de producción
+npm test           # tests (vitest)
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Requiere Node `^20.19 || ^22.12 || >=24`. Copia `.env.example` a `.env` y completa las variables (Supabase y `VITE_GEMINI_API_KEY`).
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Base de datos
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Los scripts SQL de esquema, funciones, vistas y datos semilla están en `database/`. Ejecutarlos en orden en el proyecto de Supabase.

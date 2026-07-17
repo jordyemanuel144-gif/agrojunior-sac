@@ -30,8 +30,8 @@ export function HeaderDetalleProveedor({ proveedor }: Props) {
         </div>
 
         <div className="flex items-center gap-4 px-4 pb-4">
-          <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center flex-shrink-0">
-            <Building2 size={32} className="text-blue-600" />
+          <div className="w-16 h-16 bg-primary-light rounded-2xl flex items-center justify-center flex-shrink-0">
+            <Building2 size={32} className="text-primary" />
           </div>
           <div className="flex-1 min-w-0">
             <h1 className="text-xl md:text-2xl font-bold text-gray-900 truncate">{proveedor.nombre}</h1>

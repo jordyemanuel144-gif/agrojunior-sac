@@ -15,7 +15,7 @@ export function TabsProveedor({ activo, onChange, children }: TabsProveedorProps
           onClick={() => onChange('datos')}
           className={`flex-1 py-3 text-sm font-semibold transition-colors ${
             activo === 'datos'
-              ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50'
+              ? 'text-primary border-b-2 border-primary bg-primary-light/50'
               : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
           }`}
         >
@@ -25,7 +25,7 @@ export function TabsProveedor({ activo, onChange, children }: TabsProveedorProps
           onClick={() => onChange('compras')}
           className={`flex-1 py-3 text-sm font-semibold transition-colors ${
             activo === 'compras'
-              ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50'
+              ? 'text-primary border-b-2 border-primary bg-primary-light/50'
               : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
           }`}
         >

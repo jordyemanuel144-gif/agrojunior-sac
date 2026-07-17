@@ -48,7 +48,7 @@ export function GridProductos({
               onClick={() => onCategoriaChange(cat.id)}
               className={`text-sm font-semibold pb-2 border-b-2 transition-all ${
                 categoriaActiva === cat.id
-                  ? 'text-blue-600 border-blue-600'
+                  ? 'text-primary border-primary'
                   : 'text-gray-400 border-transparent hover:text-gray-600'
               }`}
             >
@@ -66,7 +66,7 @@ export function GridProductos({
             value={busqueda}
             onChange={e => onBusquedaChange(e.target.value)}
             placeholder="Buscar productos..."
-            className="w-full pl-8 pr-3 py-2 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 text-gray-900 placeholder-gray-400"
+            className="w-full pl-8 pr-3 py-2 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-light text-gray-900 placeholder-gray-400"
           />
         </div>
         <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide -mx-3 px-3">
@@ -76,7 +76,7 @@ export function GridProductos({
               onClick={() => onCategoriaChange(cat.id)}
               className={`text-xs font-semibold whitespace-nowrap px-2 py-1 rounded-lg transition-all flex-shrink-0 ${
                 categoriaActiva === cat.id
-                  ? 'text-blue-600 bg-blue-50'
+                  ? 'text-primary bg-primary-light'
                   : 'text-gray-500 bg-gray-100'
               }`}
             >

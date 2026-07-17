@@ -55,7 +55,7 @@ export default function Reportes() {
             </div>
             <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
               <h2 className="text-base font-bold text-gray-900 mb-4">Productos Más Vendidos</h2>
-              <GraficoBarras datos={ventasPorProducto} titulo="" color="#2563eb" />
+              <GraficoBarras datos={ventasPorProducto} titulo="" color="#D4A017" />
             </div>
           </div>
 

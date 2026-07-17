@@ -35,7 +35,7 @@ export function FiltrosInventario({
             value={busqueda}
             onChange={e => onBusquedaChange(e.target.value)}
             placeholder="Buscar por producto..."
-            className="w-full pl-10 pr-4 py-2.5 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all"
+            className="w-full pl-10 pr-4 py-2.5 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-light transition-all"
           />
         </div>
 
@@ -43,7 +43,7 @@ export function FiltrosInventario({
         <select
           value={filtroEstado}
           onChange={e => onEstadoChange(e.target.value as typeof filtroEstado)}
-          className="px-4 py-2.5 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all min-w-[150px]"
+          className="px-4 py-2.5 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-light transition-all min-w-[150px]"
         >
           <option value="todos">Todos</option>
           <option value="ok">Normal</option>

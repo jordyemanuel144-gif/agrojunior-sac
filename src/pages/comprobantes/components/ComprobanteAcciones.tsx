@@ -28,7 +28,7 @@ export function ComprobanteAcciones({ comprobante, enviandoImagen, onEnviandoIma
 
   const handleWhatsappTexto = () => {
     const mensaje = getMensajeParaWhatsApp()
-    const telefono = comprobante.cliente_telefono || '51916794870'
+    const telefono = comprobante.cliente_telefono || '51970995140'
     const telLimpio = telefono.replace(/\D/g, '')
     const encoded = encodeURIComponent(mensaje)
     window.open(`https://wa.me/51${telLimpio}?text=${encoded}`, '_blank')
@@ -39,7 +39,7 @@ export function ComprobanteAcciones({ comprobante, enviandoImagen, onEnviandoIma
     try {
       await descargarImagen(comprobante)
       const mensaje = getMensajeParaWhatsApp()
-      const telefono = comprobante.cliente_telefono || '51916794870'
+      const telefono = comprobante.cliente_telefono || '51970995140'
       const telLimpio = telefono.replace(/\D/g, '')
       const encoded = encodeURIComponent(mensaje)
       window.open(`https://wa.me/51${telLimpio}?text=${encoded}`, '_blank')
@@ -56,7 +56,7 @@ export function ComprobanteAcciones({ comprobante, enviandoImagen, onEnviandoIma
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <button 
           onClick={() => window.print()} 
-          className="flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700 transition-colors"
+          className="flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-xl text-sm font-bold hover:bg-primary-hover transition-colors"
         >
           <Printer size={18} />
           <span className="hidden sm:inline">Imprimir</span>

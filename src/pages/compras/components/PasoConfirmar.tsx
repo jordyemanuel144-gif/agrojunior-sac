@@ -53,7 +53,7 @@ export function PasoConfirmar({
       <div className="bg-white rounded-lg border border-gray-100">
         <div className="px-3 py-2 border-b border-gray-100 flex justify-between items-center">
           <span className="text-sm font-medium text-gray-700">Productos ({productosSeleccionados.length})</span>
-          <span className="text-lg font-bold text-blue-600">{MONEDA} {totalCompra.toFixed(2)}</span>
+          <span className="text-lg font-bold text-primary">{MONEDA} {totalCompra.toFixed(2)}</span>
         </div>
         <div className="max-h-32 overflow-y-auto">
           {productosSeleccionados.map(item => (

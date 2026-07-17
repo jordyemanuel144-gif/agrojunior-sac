@@ -31,7 +31,7 @@ export function HistorialVentasCliente({ clienteId }: HistorialVentasClienteProp
   if (cargando) {
     return (
       <div className="flex items-center justify-center h-32">
-        <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
       </div>
     )
   }
@@ -56,7 +56,7 @@ export function HistorialVentasCliente({ clienteId }: HistorialVentasClienteProp
         </div>
         <div className="bg-gray-50 rounded-xl p-3 text-center">
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total</p>
-          <p className="text-xl font-bold text-blue-600 mt-1">{formatMoneda(totalGastado)}</p>
+          <p className="text-xl font-bold text-primary mt-1">{formatMoneda(totalGastado)}</p>
         </div>
         <div className="bg-gray-50 rounded-xl p-3 text-center">
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Última</p>
@@ -88,7 +88,7 @@ export function HistorialVentasCliente({ clienteId }: HistorialVentasClienteProp
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <span className="font-bold text-blue-600">{formatMoneda(venta.total)}</span>
+                <span className="font-bold text-primary">{formatMoneda(venta.total)}</span>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
               </div>
             </button>
@@ -118,7 +118,7 @@ export function HistorialVentasCliente({ clienteId }: HistorialVentasClienteProp
                   <td className="py-3 text-sm text-gray-700">{formatFecha(venta.fecha)}</td>
                   <td className="py-3 text-sm font-medium text-gray-900">{venta.ticket_numero}</td>
                   <td className="py-3 text-sm text-gray-500">{venta.items.length} items</td>
-                  <td className="py-3 text-sm font-bold text-blue-600 text-right">{formatMoneda(venta.total)}</td>
+                  <td className="py-3 text-sm font-bold text-primary text-right">{formatMoneda(venta.total)}</td>
                   <td className="py-3 text-center">
                     <span className={`inline-flex px-2 py-0.5 rounded-full text-xs font-medium ${
                       venta.estado === 'completada'

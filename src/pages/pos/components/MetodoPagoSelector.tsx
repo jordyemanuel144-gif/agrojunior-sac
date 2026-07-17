@@ -23,11 +23,11 @@ export function MetodoPagoSelector({ metodo, setMetodo }: Props) {
             key={m.id} 
             onClick={() => setMetodo(m.id)}
             className={`flex flex-col items-center gap-2 py-4 rounded-2xl border-2 ${
-              metodo === m.id ? 'border-blue-600 bg-blue-50' : 'border-gray-200 bg-white'
+              metodo === m.id ? 'border-primary bg-primary-light' : 'border-gray-200 bg-white'
             }`}
           >
-            <span className={metodo === m.id ? 'text-blue-600' : 'text-gray-400'}>{m.icon}</span>
-            <span className={`text-xs font-semibold ${metodo === m.id ? 'text-blue-600' : 'text-gray-500'}`}>{m.label}</span>
+            <span className={metodo === m.id ? 'text-primary' : 'text-gray-400'}>{m.icon}</span>
+            <span className={`text-xs font-semibold ${metodo === m.id ? 'text-primary' : 'text-gray-500'}`}>{m.label}</span>
           </button>
         ))}
       </div>

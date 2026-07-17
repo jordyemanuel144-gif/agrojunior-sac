@@ -91,7 +91,7 @@ export function TarjetaProducto({ producto, precio, stockDisponible, cantidadEnC
         {producto.imagen_url ? (
           <img src={producto.imagen_url} alt={producto.nombre} className="w-full h-full object-cover" />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-4xl">🐔</div>
+          <div className="w-full h-full flex items-center justify-center text-4xl">🥩</div>
         )}
         
 
@@ -103,7 +103,7 @@ export function TarjetaProducto({ producto, precio, stockDisponible, cantidadEnC
         )}
 
         {cantidadEnCarrito > 0 && (
-          <div className="absolute bottom-1.5 right-1.5 flex items-center gap-1 bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-md">
+          <div className="absolute bottom-1.5 right-1.5 flex items-center gap-1 bg-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-md">
             <ShoppingCart size={9} />
             {esKg ? cantidadEnCarrito.toFixed(1) : cantidadEnCarrito}
           </div>
@@ -114,7 +114,7 @@ export function TarjetaProducto({ producto, precio, stockDisponible, cantidadEnC
         <p className="text-sm font-medium text-gray-900 line-clamp-2 leading-snug">{producto.nombre}</p>
         
         <div className="flex items-center justify-between">
-          <p className="text-blue-600 font-bold text-base">
+          <p className="text-primary font-bold text-base">
             {precio.toFixed(2)}
             <span className="text-gray-400 font-medium text-xs ml-0.5">/{producto.tipo_medida}</span>
           </p>
@@ -146,7 +146,7 @@ export function TarjetaProducto({ producto, precio, stockDisponible, cantidadEnC
                 onClick={() => agregarCantidadRapida(1)}
                 disabled={sinStock || stockMaximo < 1}
                 className={`flex-1 py-1.5 rounded-md text-[10px] font-semibold transition-all
-                  ${sinStock || stockMaximo < 1 ? 'bg-gray-100 text-gray-400' : 'bg-blue-600 text-white hover:bg-blue-700'}`}>
+                  ${sinStock || stockMaximo < 1 ? 'bg-gray-100 text-gray-400' : 'bg-primary text-white hover:bg-primary-hover'}`}>
                 +1 kg
               </button>
               <button
@@ -166,7 +166,7 @@ export function TarjetaProducto({ producto, precio, stockDisponible, cantidadEnC
                   onChange={handleInputChange}
                   onKeyDown={e => e.key === 'Enter' && handleInputConfirmar()}
                   placeholder={cantidadEnCarrito > 0 ? `${cantidadEnCarrito}` : 'otro'}
-                  className="w-full border border-gray-200 rounded-md px-2 py-1.5 text-xs font-medium text-gray-900 focus:outline-none focus:border-blue-400 text-center"
+                  className="w-full border border-gray-200 rounded-md px-2 py-1.5 text-xs font-medium text-gray-900 focus:outline-none focus:border-primary text-center"
                   step="0.1" min="0.1"
                 />
                 <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] text-gray-400">kg</span>
@@ -187,7 +187,7 @@ export function TarjetaProducto({ producto, precio, stockDisponible, cantidadEnC
                 onClick={() => agregarCantidadRapida(1)}
                 disabled={sinStock}
                 className={`flex-1 py-1.5 rounded-md text-[10px] font-medium transition-all
-                  ${sinStock ? 'bg-gray-100 text-gray-400' : 'bg-blue-600 text-white hover:bg-blue-700'}`}>
+                  ${sinStock ? 'bg-gray-100 text-gray-400' : 'bg-primary text-white hover:bg-primary-hover'}`}>
                 +1
               </button>
               <button
@@ -207,7 +207,7 @@ export function TarjetaProducto({ producto, precio, stockDisponible, cantidadEnC
                   onChange={handleInputChange}
                   onKeyDown={e => e.key === 'Enter' && handleInputConfirmar()}
                   placeholder={cantidadEnCarrito > 0 ? `${cantidadEnCarrito}` : 'otro'}
-                  className="w-full border border-gray-200 rounded-md px-2 py-1.5 text-xs font-medium text-gray-900 focus:outline-none focus:border-blue-400 text-center"
+                  className="w-full border border-gray-200 rounded-md px-2 py-1.5 text-xs font-medium text-gray-900 focus:outline-none focus:border-primary text-center"
                   min="1"
                 />
                 <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] text-gray-400">uds</span>

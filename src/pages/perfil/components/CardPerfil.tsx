@@ -8,8 +8,8 @@ export function CardPerfil({ usuario }: CardPerfilProps) {
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 sticky top-6">
       <div className="text-center">
-        <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <span className="text-4xl font-bold text-blue-600">
+        <div className="w-24 h-24 bg-primary-light rounded-full flex items-center justify-center mx-auto mb-4">
+          <span className="text-4xl font-bold text-primary">
             {usuario.name.charAt(0).toUpperCase()}
           </span>
         </div>
@@ -18,7 +18,7 @@ export function CardPerfil({ usuario }: CardPerfilProps) {
         <span className={`inline-block mt-3 text-xs font-medium px-3 py-1 rounded-full ${
           usuario.role === 'admin' 
             ? 'bg-purple-100 text-purple-700' 
-            : 'bg-blue-100 text-blue-700'
+            : 'bg-primary-light text-primary-hover'
         }`}>
           {usuario.role === 'admin' ? 'Administrador' : 'Vendedor'}
         </span>

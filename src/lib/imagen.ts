@@ -46,15 +46,15 @@ export async function generarImagenDesdeElemento(
   }
   
   // Obtener total
-  const totalElement = element.querySelector('.text-blue-600, .text-lg.font-bold')
+  const totalElement = element.querySelector('.text-primary, .text-lg.font-bold')
   const total = totalElement?.textContent || ''
   
   // Construir HTML limpio sin clases de Tailwind
   container.innerHTML = `
-    <div style="background: #2563eb; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
-      <div style="font-size: 18px; font-weight: bold;">SAM JOSÉ AVÍCOLA</div>
-      <div style="font-size: 12px; opacity: 0.8;">RUC: 20601234567</div>
-      <div style="font-size: 12px; opacity: 0.8;">Av. Principal 123, Arequipa</div>
+    <div style="background: #111111; color: #D4A017; padding: 20px; text-align: center; border-radius: 8px 8px 0 0;">
+      <div style="font-size: 18px; font-weight: bold;">AGROJUNIOR SAC</div>
+      <div style="font-size: 12px; opacity: 0.85;">Carne Premium de Majes al Gancho</div>
+      <div style="font-size: 12px; opacity: 0.85;">Parcela 316, Los Molles, Sección A — Majes, Arequipa</div>
     </div>
     <div style="padding: 20px; border: 1px solid #e5e7eb;">
       <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 12px; color: #6b7280;">
@@ -74,7 +74,7 @@ export async function generarImagenDesdeElemento(
       <div style="border-top: 1px solid #e5e7eb; padding-top: 15px; margin-top: 15px;">
         <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 18px;">
           <span>TOTAL</span>
-          <span style="color: #2563eb;">${total}</span>
+          <span style="color: #D4A017;">${total}</span>
         </div>
       </div>
       <div style="text-align: center; color: #9ca3af; font-size: 12px; margin-top: 20px;">

@@ -17,7 +17,7 @@ export function DetalleVentaCollapse({ venta, seleccionado, onToggle, modo = 'vi
   return (
     <div className={`rounded-xl border transition-colors ${
       seleccionado
-        ? 'border-blue-300 bg-blue-50'
+        ? 'border-primary bg-primary-light'
         : 'border-gray-200 hover:border-gray-300'
     }`}>
       <div 
@@ -30,7 +30,7 @@ export function DetalleVentaCollapse({ venta, seleccionado, onToggle, modo = 'vi
               type="checkbox"
               checked={seleccionado}
               onChange={e => onToggle?.(e.target.checked)}
-              className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
             />
           </div>
         )}
@@ -41,7 +41,7 @@ export function DetalleVentaCollapse({ venta, seleccionado, onToggle, modo = 'vi
               <Receipt className="w-4 h-4 text-gray-400" />
               <span className="text-sm font-medium text-gray-900">{venta.ticket_numero}</span>
             </div>
-            <span className="text-sm font-bold text-blue-600">{formatMoneda(saldo)}</span>
+            <span className="text-sm font-bold text-primary">{formatMoneda(saldo)}</span>
           </div>
           <div className="flex items-center justify-between mt-1">
             <span className="text-xs text-gray-400">{formatFecha(venta.fecha)}</span>

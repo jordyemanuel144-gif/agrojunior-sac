@@ -24,7 +24,7 @@ function TarjetaKPI({
   sublabel?: string
 }) {
   const colores = {
-    blue: 'bg-blue-50 text-blue-600',
+    blue: 'bg-primary-light text-primary',
     green: 'bg-green-50 text-green-600',
     purple: 'bg-purple-50 text-purple-600',
     yellow: 'bg-yellow-50 text-yellow-600',
@@ -33,7 +33,7 @@ function TarjetaKPI({
   }
 
   const bordes = {
-    blue: 'border-blue-100',
+    blue: 'border-primary-light',
     green: 'border-green-100',
     purple: 'border-purple-100',
     yellow: 'border-yellow-100',
@@ -68,7 +68,7 @@ function SeccionUltimasVentas({ ventas }: { ventas: any[] }) {
     return (
       <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
         <h3 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
-          <Receipt size={16} className="text-blue-600" />
+          <Receipt size={16} className="text-primary" />
           Últimas Ventas
         </h3>
         <p className="text-gray-400 text-sm text-center py-4">No hay ventas hoy</p>
@@ -80,10 +80,10 @@ function SeccionUltimasVentas({ ventas }: { ventas: any[] }) {
     <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
-          <Receipt size={16} className="text-blue-600" />
+          <Receipt size={16} className="text-primary" />
           Últimas Ventas
         </h3>
-        <Link to={RUTAS.ADMIN.VENTAS} className="text-xs text-blue-600 hover:underline flex items-center gap-1">
+        <Link to={RUTAS.ADMIN.VENTAS} className="text-xs text-primary hover:underline flex items-center gap-1">
           Ver todas <ArrowRight size={12} />
         </Link>
       </div>
@@ -91,8 +91,8 @@ function SeccionUltimasVentas({ ventas }: { ventas: any[] }) {
         {ventas.map((venta) => (
           <div key={venta.id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-blue-50 rounded-lg flex items-center justify-center">
-                <span className="text-xs font-bold text-blue-600">{venta.numero_ticket?.slice(-3) || '---'}</span>
+              <div className="w-8 h-8 bg-primary-light rounded-lg flex items-center justify-center">
+                <span className="text-xs font-bold text-primary">{venta.numero_ticket?.slice(-3) || '---'}</span>
               </div>
               <div>
                 <p className="text-sm font-medium text-gray-900">{formatMoneda(venta.total)}</p>
@@ -220,7 +220,7 @@ function SeccionUltimasCompras({ compras }: { compras: any[] }) {
           <ShoppingCart size={16} className="text-purple-600" />
           Últimas Compras
         </h3>
-        <Link to={RUTAS.ADMIN.COMPRAS} className="text-xs text-blue-600 hover:underline flex items-center gap-1">
+        <Link to={RUTAS.ADMIN.COMPRAS} className="text-xs text-primary hover:underline flex items-center gap-1">
           Ver todas <ArrowRight size={12} />
         </Link>
       </div>
@@ -294,7 +294,7 @@ export default function Dashboard() {
         </div>
         <Link 
           to={RUTAS.ADMIN.POS} 
-          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors"
+          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-white font-bold rounded-xl hover:bg-primary-hover transition-colors"
         >
           <DollarSign size={18} />
           <span>Nueva Venta</span>

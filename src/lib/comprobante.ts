@@ -94,7 +94,7 @@ export function generarHtmlComprobanteVenta(comprobante: ComprobanteVenta): stri
 
   return `
 <div style="width: 420px; font-family: Arial, sans-serif; font-size: 13px; color: #1f2937; background: white; padding: 0;">
-  <div style="background: #2563eb; color: white; padding: 20px; text-align: center;">
+  <div style="background: #111111; color: white; padding: 20px; text-align: center;">
     <div style="font-size: 18px; font-weight: bold;">COMPROBANTE</div>
     <div style="font-size: 14px; font-weight: 600;">${negocio.nombre.toUpperCase()}</div>
     <div style="font-size: 11px; opacity: 0.9;">RUC: ${negocio.ruc}</div>
@@ -142,7 +142,7 @@ export function generarHtmlComprobanteVenta(comprobante: ComprobanteVenta): stri
     ` : ''}
     <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 16px; border-top: 1px solid #e5e7eb; padding-top: 8px;">
       <span>TOTAL</span>
-      <span style="color: #2563eb;">${formatMoneda(comprobante.total)}</span>
+      <span style="color: #D4A017;">${formatMoneda(comprobante.total)}</span>
     </div>
   </div>
   
@@ -268,12 +268,12 @@ export function generarHtmlComprobantePago(comprobante: ComprobantePago): string
   
   <div style="padding: 16px; background: #dbeafe; border-bottom: 1px dashed #93c5fd;">
     <div style="display: flex; justify-content: space-between; align-items: center;">
-      <span style="font-weight: bold; color: #1e40af;">PAGO REALIZADO AHORA</span>
-      <span style="font-weight: bold; font-size: 20px; color: #2563eb;">${formatMoneda(comprobante.monto_pagado)}</span>
+      <span style="font-weight: bold; color: #8A6D0B;">PAGO REALIZADO AHORA</span>
+      <span style="font-weight: bold; font-size: 20px; color: #D4A017;">${formatMoneda(comprobante.monto_pagado)}</span>
     </div>
     <div style="display: flex; justify-content: space-between; border-top: 1px solid #93c5fd; margin-top: 8px; padding-top: 8px;">
-      <span style="color: #1e40af; font-weight: 600;">Nueva deuda</span>
-      <span style="font-weight: bold; color: #1e40af;">${formatMoneda(comprobante.nueva_deuda)}</span>
+      <span style="color: #8A6D0B; font-weight: 600;">Nueva deuda</span>
+      <span style="font-weight: bold; color: #8A6D0B;">${formatMoneda(comprobante.nueva_deuda)}</span>
     </div>
   </div>
   

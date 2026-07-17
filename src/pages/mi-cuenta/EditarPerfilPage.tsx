@@ -109,14 +109,14 @@ export default function EditarPerfilPage() {
 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-            <svg className="w-8 h-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="w-16 h-16 bg-primary-light rounded-full flex items-center justify-center">
+            <svg className="w-8 h-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
           </div>
           <div>
             <h2 className="text-lg font-bold text-gray-900">{clienteData?.nombre || 'Cliente'}</h2>
-            <p className="text-sm text-blue-600 font-medium">Cliente {getTipoLabel(clienteData?.tipo)}</p>
+            <p className="text-sm text-primary font-medium">Cliente {getTipoLabel(clienteData?.tipo)}</p>
             {clienteData?.email && <p className="text-xs text-gray-500 mt-0.5">{clienteData.email}</p>}
           </div>
         </div>

@@ -30,7 +30,7 @@ export function IndicadorProgreso({ pasoActual }: Props) {
                   esCompletado
                     ? 'bg-green-500 text-white'
                     : esActual
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-primary text-white'
                     : 'bg-gray-200 text-gray-500'
                 }`}
               >
@@ -38,7 +38,7 @@ export function IndicadorProgreso({ pasoActual }: Props) {
               </div>
               <span
                 className={`text-xs mt-1 font-medium hidden sm:block ${
-                  esActual ? 'text-blue-600' : 'text-gray-500'
+                  esActual ? 'text-primary' : 'text-gray-500'
                 }`}
               >
                 {paso.label}

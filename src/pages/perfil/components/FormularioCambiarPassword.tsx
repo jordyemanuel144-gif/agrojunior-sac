@@ -59,7 +59,7 @@ export function FormularioCambiarPassword({ guardando, onCambiarPassword, error 
               value={passwordActual}
               onChange={(e) => setPasswordActual(e.target.value)}
               placeholder="••••••••"
-              className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-300"
+              className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary"
               required
             />
             <button type="button" onClick={() => setMostrarPasswords(!mostrarPasswords)} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
@@ -75,7 +75,7 @@ export function FormularioCambiarPassword({ guardando, onCambiarPassword, error 
             value={passwordNueva}
             onChange={(e) => setPasswordNueva(e.target.value)}
             placeholder="••••••••"
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-300"
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary"
             required
           />
           <p className="text-xs text-gray-500 mt-1">Mínimo 6 caracteres</p>
@@ -88,7 +88,7 @@ export function FormularioCambiarPassword({ guardando, onCambiarPassword, error 
             value={confirmarPassword}
             onChange={(e) => setConfirmarPassword(e.target.value)}
             placeholder="••••••••"
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-300"
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary"
             required
           />
         </div>

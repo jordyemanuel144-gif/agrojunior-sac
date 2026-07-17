@@ -7,9 +7,9 @@ interface GraficoBarrasProps {
   color?: string
 }
 
-const COLORES = ['#2563eb', '#7c3aed', '#059669', '#d97706', '#dc2626', '#0891b2', '#c026d3', '#4f46e5', '#65a30d', '#ea580c']
+const COLORES = ['#D4A017', '#7c3aed', '#059669', '#d97706', '#dc2626', '#0891b2', '#c026d3', '#4f46e5', '#65a30d', '#ea580c']
 
-export function GraficoBarras({ datos, titulo, color = '#2563eb' }: GraficoBarrasProps) {
+export function GraficoBarras({ datos, titulo, color = '#D4A017' }: GraficoBarrasProps) {
   if (datos.length === 0) {
     return (
       <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm min-h-[300px]">

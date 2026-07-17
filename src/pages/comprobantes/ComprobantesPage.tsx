@@ -21,7 +21,7 @@ function TipoBadge({ tipo }: { tipo: Comprobante['tipo'] }) {
   return (
     <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
       tipo === 'venta' 
-        ? 'bg-blue-100 text-blue-700' 
+        ? 'bg-primary-light text-primary-hover' 
         : 'bg-green-100 text-green-700'
     }`}>
       {tipo === 'venta' ? 'Venta' : 'Pago'}
@@ -82,7 +82,7 @@ function FilaComprobante({
       </div>
 
       <div className="md:col-span-1">
-        <p className={`font-bold ${comprobante.estado === 'anulado' ? 'text-gray-400 line-through' : 'text-blue-600'}`}>
+        <p className={`font-bold ${comprobante.estado === 'anulado' ? 'text-gray-400 line-through' : 'text-primary'}`}>
           {formatMoneda(comprobante.total)}
         </p>
       </div>
@@ -173,7 +173,7 @@ export default function ComprobantesPage() {
       ? generarMensajeComprobanteVenta(comprobante as ComprobanteVenta)
       : generarMensajeComprobantePago(comprobante as ComprobantePago)
     
-    const telefono = comprobante.cliente_telefono || '51916794870'
+    const telefono = comprobante.cliente_telefono || '51970995140'
     const link = generarLinkWhatsApp(telefono, mensaje)
     window.open(link, '_blank')
   }
@@ -191,7 +191,7 @@ export default function ComprobantesPage() {
   if (cargando) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
       </div>
     )
   }
@@ -217,7 +217,7 @@ export default function ComprobantesPage() {
               placeholder="Buscar por número o cliente..."
               value={busqueda}
               onChange={e => setBusqueda(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 text-base bg-white rounded-xl border border-gray-200 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 outline-none"
+              className="w-full pl-10 pr-4 py-3 text-base bg-white rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary-light outline-none"
             />
           </div>
           <div className="flex gap-2">
@@ -227,7 +227,7 @@ export default function ComprobantesPage() {
                 onClick={() => setFiltroTipo(tipo)}
                 className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
                   filtroTipo === tipo
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-primary text-white'
                     : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
                 }`}
               >

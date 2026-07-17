@@ -22,8 +22,8 @@ export function InfoClienteVenta({ cliente, vendedor }: Props) {
   return (
     <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100 space-y-3">
       <div className="flex items-center gap-3">
-        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-          <User size={24} className="text-blue-600" />
+        <div className="w-12 h-12 bg-primary-light rounded-full flex items-center justify-center">
+          <User size={24} className="text-primary" />
         </div>
         <div className="flex-1">
           <p className="text-xs text-gray-400 uppercase tracking-wide">Cliente</p>

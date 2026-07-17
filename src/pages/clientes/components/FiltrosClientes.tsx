@@ -34,14 +34,14 @@ export function FiltrosClientes({
             value={busqueda}
             onChange={e => onBusquedaChange(e.target.value)}
             placeholder="Buscar por nombre, DNI/RUC o teléfono..."
-            className="w-full pl-10 pr-4 py-2.5 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all"
+            className="w-full pl-10 pr-4 py-2.5 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-light transition-all"
           />
         </div>
 
         <select
           value={filtroTipo}
           onChange={e => onTipoChange(e.target.value as FiltroTipo)}
-          className="px-4 py-2.5 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 transition-all min-w-[180px]"
+          className="px-4 py-2.5 bg-gray-50 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-light transition-all min-w-[180px]"
         >
           <option value="todos">Todos los clientes</option>
           <option value="pendientes">⏳ Pendientes de revisión</option>

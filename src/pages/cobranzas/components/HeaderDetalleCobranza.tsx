@@ -7,7 +7,7 @@ interface HeaderDetalleCobranzaProps {
 }
 
 const TIPO_CONFIG: Record<TipoCliente, { label: string; bg: string; text: string }> = {
-  minorista: { label: 'Minorista', bg: 'bg-blue-100', text: 'text-blue-700' },
+  minorista: { label: 'Minorista', bg: 'bg-primary-light', text: 'text-primary-hover' },
   mayorista: { label: 'Mayorista', bg: 'bg-green-100', text: 'text-green-700' },
   especial: { label: 'Especial', bg: 'bg-purple-100', text: 'text-purple-700' },
 }
@@ -65,7 +65,7 @@ export function HeaderDetalleCobranza({ cliente, onVolver }: HeaderDetalleCobran
         {cliente.telefono && (
           <div className="flex items-center gap-2 px-4 pb-4">
             <Phone size={16} className="text-gray-400" />
-            <a href={`tel:${cliente.telefono}`} className="text-sm text-blue-600 hover:underline">
+            <a href={`tel:${cliente.telefono}`} className="text-sm text-primary hover:underline">
               {cliente.telefono}
             </a>
           </div>

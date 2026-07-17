@@ -1,5 +1,5 @@
 ═══════════════════════════════════════════════════════════
-PROMPT MAESTRO — SAM JOSÉ AVÍCOLA
+PROMPT MAESTRO — AGROJUNIOR SAC
 Guía de desarrollo para IAs y colaboradores
 ═══════════════════════════════════════════════════════════
 
@@ -12,7 +12,7 @@ este proyecto.
 ───────────────────────────────────────────────────────────
 
 Sistema de Punto de Venta y Gestión para una tienda
-avícola llamada "Sam José Avícola" ubicada en Arequipa,
+avícola llamada "AGROJUNIOR SAC" ubicada en Arequipa,
 Perú. Maneja venta de pollos y derivados por kg y por
 unidad.
 

@@ -95,7 +95,7 @@ function FilaCuenta(props: {
       </div>
 
       <div className="md:col-span-1">
-        <p className="font-bold text-blue-600">{formatMoneda(cuenta.saldo_pendiente)}</p>
+        <p className="font-bold text-primary">{formatMoneda(cuenta.saldo_pendiente)}</p>
         {cuenta.saldo_pendiente > 0 && (
           <EstadoBadge saldo={cuenta.saldo_pendiente} />
         )}
@@ -106,7 +106,7 @@ function FilaCuenta(props: {
           <>
             <button
               onClick={(e) => { e.stopPropagation(); onPagar(cuenta.cliente_id) }}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white rounded-lg text-xs font-medium hover:bg-primary-hover transition-colors"
             >
               <Wallet className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Pagar</span>
@@ -163,7 +163,7 @@ export function ListaCuentasCorrientes({ cuentas, cargando, onPagar, onVerDetall
     return (
       <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
         <div className="flex items-center justify-center h-32">
-          <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
         </div>
       </div>
     )

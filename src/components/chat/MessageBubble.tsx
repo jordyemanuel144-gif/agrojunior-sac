@@ -52,7 +52,7 @@ function renderText(text: string): React.ReactNode[] {
             href={url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-600 underline break-all"
+            className="text-primary underline break-all"
           >
             {match[3]}
           </a>,
@@ -83,8 +83,8 @@ export function MessageBubble({ message }: Props) {
     <div className={`flex gap-2 ${isUser ? 'flex-row-reverse' : 'flex-row'} items-end`}>
       {!isUser && (
         <div className="flex items-center justify-center w-7 h-7 rounded-full bg-amber-100 shrink-0 mb-1">
-          <span className="text-sm leading-none" role="img" aria-label="pollo">
-            🐔
+          <span className="text-sm leading-none" role="img" aria-label="carne">
+            🥩
           </span>
         </div>
       )}
@@ -95,7 +95,7 @@ export function MessageBubble({ message }: Props) {
             px-3.5 py-2.5 text-sm leading-relaxed break-words
             ${
               isUser
-                ? 'bg-blue-100 text-blue-900 rounded-2xl rounded-br-sm'
+                ? 'bg-primary-light text-neutral-900 rounded-2xl rounded-br-sm'
                 : 'bg-gray-100 text-gray-800 rounded-2xl rounded-bl-sm'
             }
           `}

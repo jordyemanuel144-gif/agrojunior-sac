@@ -9,7 +9,7 @@ const colores: Record<VarianteBadge, string> = {
   exito: 'bg-emerald-100 text-emerald-800',
   advertencia: 'bg-amber-100 text-amber-800',
   peligro: 'bg-red-100 text-red-800',
-  info: 'bg-blue-100 text-blue-800',
+  info: 'bg-primary-light text-primary-dark',
   neutral: 'bg-gray-100 text-gray-800',
 }
 

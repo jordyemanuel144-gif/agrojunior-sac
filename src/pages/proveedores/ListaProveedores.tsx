@@ -68,7 +68,7 @@ export default function ListaProveedores() {
   if (cargando) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
       </div>
     )
   }
@@ -89,7 +89,7 @@ export default function ListaProveedores() {
         <div className="max-w-screen-xl mx-auto">
           <button
             onClick={handleCrear}
-            className="w-full md:w-auto flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors mb-4"
+            className="w-full md:w-auto flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-xl hover:bg-primary-hover transition-colors mb-4"
           >
             <Plus size={20} />
             <span className="font-medium">Nuevo Proveedor</span>
@@ -112,7 +112,7 @@ export default function ListaProveedores() {
               {(busqueda || filtroEstado !== 'todos') && (
                 <button
                   onClick={() => { setBusqueda(''); setFiltroEstado('todos') }}
-                  className="mt-4 text-blue-600 hover:underline"
+                  className="mt-4 text-primary hover:underline"
                 >
                   Limpiar filtros
                 </button>

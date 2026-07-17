@@ -27,10 +27,10 @@ export function LayoutPublico({ children }: LayoutPublicoProps) {
             </Link>
 
             <nav className="hidden md:flex items-center gap-6">
-              <Link to={RUTAS.PUBLICO.CATALOGO} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
+              <Link to={RUTAS.PUBLICO.CATALOGO} className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">
                 Catálogo
               </Link>
-              <Link to={RUTAS.PUBLICO.REGISTRO} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
+              <Link to={RUTAS.PUBLICO.REGISTRO} className="text-sm font-medium text-gray-600 hover:text-primary transition-colors">
                 Registrarse
               </Link>
               <Link
@@ -41,7 +41,7 @@ export function LayoutPublico({ children }: LayoutPublicoProps) {
               </Link>
               <Link
                 to={RUTAS.AUTH.LOGIN_CLIENTE}
-                className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors"
+                className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-xl hover:bg-primary-hover transition-colors"
               >
                 Iniciar Sesión
               </Link>
@@ -62,14 +62,14 @@ export function LayoutPublico({ children }: LayoutPublicoProps) {
               <Link 
                 to={RUTAS.PUBLICO.CATALOGO} 
                 onClick={() => setMenuOpen(false)}
-                className="block py-2 text-base font-medium text-gray-700 hover:text-blue-600"
+                className="block py-2 text-base font-medium text-gray-700 hover:text-primary"
               >
                 Catálogo
               </Link>
               <Link 
                 to={RUTAS.PUBLICO.REGISTRO} 
                 onClick={() => setMenuOpen(false)}
-                className="block py-2 text-base font-medium text-gray-700 hover:text-blue-600"
+                className="block py-2 text-base font-medium text-gray-700 hover:text-primary"
               >
                 Registrarse
               </Link>
@@ -84,7 +84,7 @@ export function LayoutPublico({ children }: LayoutPublicoProps) {
                 <Link
                   to={RUTAS.AUTH.LOGIN_CLIENTE}
                   onClick={() => setMenuOpen(false)}
-                  className="block w-full px-4 py-3 mt-2 text-center text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors"
+                  className="block w-full px-4 py-3 mt-2 text-center text-sm font-medium text-white bg-primary rounded-xl hover:bg-primary-hover transition-colors"
                 >
                   Iniciar Sesión
                 </Link>
@@ -101,7 +101,7 @@ export function LayoutPublico({ children }: LayoutPublicoProps) {
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-xs md:text-sm text-gray-500">© {new Date().getFullYear()} {nombre}.</p>
             <div className="flex items-center gap-4">
-              <a href={`tel:${telefono}`} className="flex items-center gap-1 text-xs md:text-sm text-gray-500 hover:text-blue-600">
+              <a href={`tel:${telefono}`} className="flex items-center gap-1 text-xs md:text-sm text-gray-500 hover:text-primary">
                 <Phone size={14} />
                 <span>Teléfono</span>
               </a>

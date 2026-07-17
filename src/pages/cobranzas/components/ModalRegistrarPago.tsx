@@ -147,7 +147,7 @@ export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoPr
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
         <div className="bg-white rounded-2xl p-6 w-full max-w-lg">
           <div className="flex items-center justify-center h-32">
-            <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
           </div>
         </div>
       </div>
@@ -170,7 +170,7 @@ export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoPr
         </div>
 
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          <div className="bg-blue-50 rounded-xl p-3">
+          <div className="bg-primary-light rounded-xl p-3">
             <p className="text-sm font-medium text-gray-900">{cuenta.cliente_nombre}</p>
             <p className="text-xs text-gray-500">Saldo pendiente: {formatMoneda(cuenta.saldo_pendiente)}</p>
           </div>
@@ -180,7 +180,7 @@ export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoPr
               onClick={handlePagoRapido}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                 modoPago === 'rapido'
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-primary text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
@@ -191,7 +191,7 @@ export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoPr
               onClick={handlePagoAvanzado}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                 modoPago === 'avanzado'
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-primary text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
@@ -215,7 +215,7 @@ export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoPr
                   step="0.01"
                   min="0"
                   max={totalPendiente}
-                  className="w-full pl-10 pr-4 py-3 text-base font-medium text-gray-900 outline-none bg-white border border-gray-200 rounded-xl focus:border-blue-300"
+                  className="w-full pl-10 pr-4 py-3 text-base font-medium text-gray-900 outline-none bg-white border border-gray-200 rounded-xl focus:border-primary"
                 />
               </div>
               <div className="flex justify-between mt-2">
@@ -227,7 +227,7 @@ export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoPr
                     const seleccionadas = aplicarFIFO(ventas, totalPendiente)
                     setVentasSeleccionadas(seleccionadas)
                   }}
-                  className="text-xs text-blue-600 hover:underline"
+                  className="text-xs text-primary hover:underline"
                 >
                   Usar todo
                 </button>
@@ -246,7 +246,7 @@ export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoPr
                   onClick={() => setMetodoPago(metodo)}
                   className={`px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                     metodoPago === metodo
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-primary text-white'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
@@ -277,7 +277,7 @@ export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoPr
                     <button
                       type="button"
                       onClick={() => setVentasSeleccionadas(ventas.map(v => v.id))}
-                      className="px-3 py-1.5 bg-blue-50 text-blue-600 text-xs font-semibold rounded-lg hover:bg-blue-100 transition-colors"
+                      className="px-3 py-1.5 bg-primary-light text-primary text-xs font-semibold rounded-lg hover:bg-primary-light transition-colors"
                     >
                       Pagar todo
                     </button>
@@ -320,7 +320,7 @@ export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoPr
             <div className="bg-gray-50 rounded-xl p-3">
               <div className="flex justify-between items-center">
                 <span className="text-sm text-gray-500">Total a pagar:</span>
-                <span className="text-lg font-bold text-blue-600">{formatMoneda(totalSeleccionado)}</span>
+                <span className="text-lg font-bold text-primary">{formatMoneda(totalSeleccionado)}</span>
               </div>
             </div>
           )}
@@ -334,7 +334,7 @@ export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoPr
               onChange={e => setObservaciones(e.target.value)}
               placeholder="Agregar una nota..."
               rows={2}
-              className="w-full px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 outline-none bg-white border border-gray-200 rounded-xl focus:border-blue-300 resize-none"
+              className="w-full px-4 py-2.5 text-sm text-gray-900 placeholder-gray-400 outline-none bg-white border border-gray-200 rounded-xl focus:border-primary resize-none"
             />
           </div>
         </div>
@@ -345,7 +345,7 @@ export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoPr
             disabled={!puedePagar || loading}
             className={`w-full py-3.5 rounded-xl font-bold text-sm transition-colors flex items-center justify-center gap-2 ${
               puedePagar
-                ? 'bg-blue-600 text-white hover:bg-blue-700'
+                ? 'bg-primary text-white hover:bg-primary-hover'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'
             }`}
           >

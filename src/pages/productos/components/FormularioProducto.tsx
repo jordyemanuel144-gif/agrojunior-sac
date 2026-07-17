@@ -17,7 +17,7 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
   const [form, setForm] = useState<NuevoProducto>({
     codigo: '',
     nombre: '',
-    categoria_id: 'pollo',
+    categoria_id: 'angus',
     tipo_medida: 'kg',
     precio_costo: 0,
     precio_minorista: 0,
@@ -96,7 +96,7 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
                 type="text"
                 value={form.codigo}
                 onChange={e => actualizarCampo('codigo', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
                 placeholder="P001"
                 required
               />
@@ -107,8 +107,8 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
                 type="text"
                 value={form.nombre}
                 onChange={e => actualizarCampo('nombre', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Pollo Entero"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                placeholder="Lomo Fino Angus"
                 required
               />
             </div>
@@ -121,7 +121,7 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
               <select
                 value={form.categoria_id}
                 onChange={e => actualizarCampo('categoria_id', e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
               >
                 {categorias.map(cat => (
                   <option key={cat.id} value={cat.id}>{cat.nombre}</option>
@@ -133,7 +133,7 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
               <select
                 value={form.tipo_medida}
                 onChange={e => actualizarCampo('tipo_medida', e.target.value as TipoMedida)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
               >
                 <option value="kg">Kilogramo (kg)</option>
                 <option value="unidad">Unidad</option>
@@ -156,7 +156,7 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
                   onChange={e => actualizarCampo('precio_minorista', Number(e.target.value))}
                   step="0.01"
                   min={0}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
                   placeholder="0.00"
                   required
                 />
@@ -182,7 +182,7 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
                 onChange={e => actualizarCampo('precio_costo', Number(e.target.value))}
                 step="0.01"
                 min={0}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
                 placeholder="0.00"
               />
             </div>
@@ -198,7 +198,7 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
                 onChange={e => actualizarCampo('stock_actual', Number(e.target.value))}
                 step={form.tipo_medida === 'kg' ? '0.1' : '1'}
                 min={0}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
               />
             </div>
             <div>
@@ -209,7 +209,7 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
                 onChange={e => actualizarCampo('stock_minimo', Number(e.target.value))}
                 step={form.tipo_medida === 'kg' ? '0.1' : '1'}
                 min={0}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
               />
             </div>
           </div>
@@ -221,7 +221,7 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
               type="url"
               value={form.imagen_url}
               onChange={e => actualizarCampo('imagen_url', e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
               placeholder="https://..."
             />
           </div>
@@ -233,7 +233,7 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
               <select
                 value={form.tag ?? ''}
                 onChange={e => actualizarCampo('tag', e.target.value === '' ? null : e.target.value as 'oferta' | 'nuevo')}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
               >
                 <option value="">Ninguna</option>
                 <option value="oferta">Oferta</option>
@@ -246,7 +246,7 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
                   type="checkbox"
                   checked={form.destacado}
                   onChange={e => actualizarCampo('destacado', e.target.checked)}
-                  className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                  className="w-5 h-5 text-primary border-gray-300 rounded focus:ring-primary focus:ring-2"
                 />
                 <span className="text-sm font-medium text-gray-700">Producto destacado</span>
               </label>
@@ -265,7 +265,7 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
             <button
               type="submit"
               disabled={guardando}
-              className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium disabled:opacity-50"
+              className="flex-1 px-4 py-2.5 bg-primary text-white rounded-xl hover:bg-primary-hover transition-colors font-medium disabled:opacity-50"
             >
               {guardando ? 'Guardando...' : 'Guardar'}
             </button>

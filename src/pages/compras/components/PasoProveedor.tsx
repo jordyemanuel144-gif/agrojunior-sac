@@ -34,21 +34,21 @@ export function PasoProveedor({
       {/* Fecha */}
       <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
         <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-          <Calendar size={18} className="text-blue-600" />
+          <Calendar size={18} className="text-primary" />
           Fecha de compra
         </label>
         <input
           type="date"
           value={fecha}
           onChange={e => onFechaChange(e.target.value)}
-          className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
         />
       </div>
 
       {/* Notas */}
       <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
         <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-          <FileText size={18} className="text-blue-600" />
+          <FileText size={18} className="text-primary" />
           Notas (opcional)
         </label>
         <textarea
@@ -56,7 +56,7 @@ export function PasoProveedor({
           onChange={e => onNotasChange(e.target.value)}
           placeholder="Ej: Pagado al contado, entregar en almacén..."
           rows={3}
-          className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+          className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary resize-none"
         />
       </div>
     </div>

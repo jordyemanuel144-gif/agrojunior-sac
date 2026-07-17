@@ -88,10 +88,10 @@ export function ModalTicket({ items, cliente, venta, onNuevaVenta }: Props) {
       </div>
       <div className="flex-1 overflow-y-auto px-4 py-4">
         <div id="ticket-content" className="bg-white rounded-2xl shadow-sm overflow-hidden print:shadow-none">
-          <div className="bg-blue-600 text-white text-center py-5 px-4">
+          <div className="bg-primary text-white text-center py-5 px-4">
             <p className="text-lg font-bold tracking-wide">{nombre.toUpperCase()}</p>
-            <p className="text-blue-200 text-xs mt-0.5">RUC: {ruc}</p>
-            <p className="text-blue-200 text-xs">{direccion}</p>
+            <p className="text-primary-light text-xs mt-0.5">RUC: {ruc}</p>
+            <p className="text-primary-light text-xs">{direccion}</p>
           </div>
           <div className="px-4 py-4 space-y-3 text-sm">
             <div className="flex justify-between text-gray-500 text-xs">
@@ -121,7 +121,7 @@ export function ModalTicket({ items, cliente, venta, onNuevaVenta }: Props) {
               {venta.igv > 0 && <div className="flex justify-between text-gray-500"><span>IGV (18%)</span><span>S/ {venta.igv.toFixed(2)}</span></div>}
               <div className="flex justify-between font-bold text-base border-t border-gray-200 pt-2 mt-1">
                 <span>TOTAL</span>
-                <span className="text-blue-600 text-lg">S/ {venta.total.toFixed(2)}</span>
+                <span className="text-primary text-lg">S/ {venta.total.toFixed(2)}</span>
               </div>
             </div>
             <p className="text-center text-xs text-gray-400 pt-2">¡Gracias por su compra!</p>
@@ -130,7 +130,7 @@ export function ModalTicket({ items, cliente, venta, onNuevaVenta }: Props) {
       </div>
       <div className="bg-white px-4 py-4 border-t border-gray-100 space-y-3">
         <div className="grid grid-cols-2 gap-3">
-          <button onClick={handleImprimir} className="flex items-center justify-center gap-2 bg-blue-600 text-white py-3.5 rounded-2xl font-bold text-sm">
+          <button onClick={handleImprimir} className="flex items-center justify-center gap-2 bg-primary text-white py-3.5 rounded-2xl font-bold text-sm">
             <Printer size={18} />Ticket
           </button>
           <button 

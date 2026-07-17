@@ -78,12 +78,12 @@ export function AutocompleteProveedor({ proveedorId, onProveedorChange }: Props)
   return (
     <div ref={containerRef} className="relative">
       <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-        <Building2 size={18} className="text-blue-600" />
+        <Building2 size={18} className="text-primary" />
         Proveedor <span className="text-red-500">*</span>
       </label>
       
       <div className={`relative rounded-xl border-2 transition-all ${
-        mostrarDropdown ? 'border-blue-300 ring-2 ring-blue-100' : 'border-gray-200'
+        mostrarDropdown ? 'border-primary ring-2 ring-primary-light' : 'border-gray-200'
       }`}>
         <div className="flex items-center bg-white rounded-xl">
           <div className="pl-3 text-gray-400">
@@ -119,7 +119,7 @@ export function AutocompleteProveedor({ proveedorId, onProveedorChange }: Props)
                 key={proveedor.id}
                 onClick={() => seleccionarProveedor(proveedor)}
                 className={`w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-50 transition-colors ${
-                  proveedorId === proveedor.id ? 'bg-blue-50' : ''
+                  proveedorId === proveedor.id ? 'bg-primary-light' : ''
                 }`}
               >
                 <div className="flex-1 min-w-0">
@@ -127,7 +127,7 @@ export function AutocompleteProveedor({ proveedorId, onProveedorChange }: Props)
                   <p className="text-xs text-gray-500">RUC: {proveedor.ruc}</p>
                 </div>
                 {proveedorId === proveedor.id && (
-                  <Check size={18} className="text-blue-600 flex-shrink-0 ml-2" />
+                  <Check size={18} className="text-primary flex-shrink-0 ml-2" />
                 )}
               </button>
             ))}

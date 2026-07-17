@@ -63,9 +63,9 @@ ${lineasVentas}
 💰 TOTAL A PAGAR: ${formatMoneda(saldoPendiente)}
 ━━━━━━━━━━━━━━━━━━━━
 
-📱 Yape: 916794870
+📱 Yape: 970995140
 🏦 Banco de Crédito
-Titular: Juan Pérez
+Titular: Darly Sanchez Cutipa
 Cbta: 215-55555555
 
 Cuando puedes cancelar? Gracias 🙏`

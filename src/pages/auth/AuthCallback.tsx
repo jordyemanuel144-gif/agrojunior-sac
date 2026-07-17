@@ -106,7 +106,7 @@ export default function AuthCallback() {
             <p className="mt-2 text-gray-500">{error}</p>
             <a
               href={RUTAS.CLIENTE.LOGIN}
-              className="mt-6 inline-block px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors"
+              className="mt-6 inline-block px-6 py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary-hover transition-colors"
             >
               Volver al login
             </a>
@@ -120,7 +120,7 @@ export default function AuthCallback() {
     <LayoutPublico>
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
         <div className="max-w-md w-full text-center">
-          <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <h2 className="text-xl font-bold text-gray-900">Completando autenticación...</h2>
           <p className="mt-2 text-gray-500">Por favor espera</p>
         </div>

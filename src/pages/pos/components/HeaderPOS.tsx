@@ -26,7 +26,7 @@ export function HeaderPOS({ busqueda, onBusquedaChange }: Props) {
             value={busqueda}
             onChange={e => onBusquedaChange(e.target.value)}
             placeholder="Buscar productos..."
-            className="pl-9 pr-3 py-2 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200 text-gray-900 placeholder-gray-400 w-56"
+            className="pl-9 pr-3 py-2 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-light text-gray-900 placeholder-gray-400 w-56"
           />
         </div>
         <button className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">

@@ -49,7 +49,7 @@ export function SidebarCliente({ isOpen, onClose }: SidebarClienteProps) {
               <img src="/logo.png" alt="Logo" className="w-14 h-14 rounded-xl object-cover" />
               <div>
                 <p className="text-base font-bold text-gray-900">{nombre}</p>
-                <p className="text-xs text-blue-600">Área de Cliente</p>
+                <p className="text-xs text-primary">Área de Cliente</p>
               </div>
             </Link>
           </div>
@@ -62,7 +62,7 @@ export function SidebarCliente({ isOpen, onClose }: SidebarClienteProps) {
                   to={item.ruta}
                   onClick={onClose}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive(item.ruta)
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-primary text-white'
                       : 'text-gray-600 hover:bg-gray-100'
                     }`}
                 >
@@ -76,8 +76,8 @@ export function SidebarCliente({ isOpen, onClose }: SidebarClienteProps) {
           <div className="p-4 border-t border-gray-100">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 bg-blue-100 rounded-full flex items-center justify-center">
-                  <span className="text-sm font-bold text-blue-600">{user?.name?.charAt(0).toUpperCase()}</span>
+                <div className="w-9 h-9 bg-primary-light rounded-full flex items-center justify-center">
+                  <span className="text-sm font-bold text-primary">{user?.name?.charAt(0).toUpperCase()}</span>
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-gray-900">{user?.name || 'Cliente'}</p>
@@ -99,7 +99,7 @@ export function SidebarCliente({ isOpen, onClose }: SidebarClienteProps) {
               <img src="/logo.png" alt="Logo" className="w-14 h-14 rounded-xl object-cover" />
               <div>
                 <p className="text-base font-bold text-gray-900">{nombre}</p>
-                <p className="text-xs text-blue-600">Área de Cliente</p>
+                <p className="text-xs text-primary">Área de Cliente</p>
               </div>
             </Link>
           </div>
@@ -111,7 +111,7 @@ export function SidebarCliente({ isOpen, onClose }: SidebarClienteProps) {
                   key={item.ruta}
                   to={item.ruta}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive(item.ruta)
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-primary text-white'
                       : 'text-gray-600 hover:bg-gray-100'
                     }`}
                 >
@@ -125,8 +125,8 @@ export function SidebarCliente({ isOpen, onClose }: SidebarClienteProps) {
           <div className="p-4 border-t border-gray-100 bg-gray-50">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 bg-blue-100 rounded-full flex items-center justify-center">
-                  <span className="text-sm font-bold text-blue-600">{user?.name?.charAt(0).toUpperCase()}</span>
+                <div className="w-9 h-9 bg-primary-light rounded-full flex items-center justify-center">
+                  <span className="text-sm font-bold text-primary">{user?.name?.charAt(0).toUpperCase()}</span>
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-gray-900">{user?.name || 'Cliente'}</p>

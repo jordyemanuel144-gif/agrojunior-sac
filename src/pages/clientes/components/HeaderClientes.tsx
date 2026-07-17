@@ -15,8 +15,8 @@ export function HeaderClientes({ clientes }: Props) {
     <div className="mb-4 md:mb-6 max-w-screen-xl mx-auto">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-9 md:w-12 bg-blue-100 rounded-xl md:rounded-2xl flex items-center justify-center">
-            <Users size={18} className="text-blue-600 md:w-6" />
+          <div className="w-9 md:w-12 bg-primary-light rounded-xl md:rounded-2xl flex items-center justify-center">
+            <Users size={18} className="text-primary md:w-6" />
           </div>
           <div>
             <h1 className="text-lg md:text-2xl md:text-3xl font-bold text-gray-900">Clientes</h1>
@@ -42,7 +42,7 @@ export function HeaderClientes({ clientes }: Props) {
 function Badge({ label, value, color = 'gray' }: { label: string; value: number; color?: 'gray' | 'blue' | 'green' | 'purple' }) {
   const styles = {
     gray: 'bg-gray-100 text-gray-700',
-    blue: 'bg-blue-100 text-blue-700',
+    blue: 'bg-primary-light text-primary-hover',
     green: 'bg-green-100 text-green-700',
     purple: 'bg-purple-100 text-purple-700',
   }

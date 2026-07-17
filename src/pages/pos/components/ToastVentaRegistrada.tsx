@@ -37,10 +37,10 @@ export function ToastVentaRegistrada({ comprobanteId, ticketNumero, tipo, onCerr
   if (!visible) return null
 
   const isCuenta = tipo === 'cuenta'
-  const bgColor = isCuenta ? 'bg-blue-600' : 'bg-green-600'
-  const textColor = isCuenta ? 'text-blue-100' : 'text-green-100'
-  const buttonColor = isCuenta ? 'text-blue-700 hover:bg-blue-50' : 'text-green-700 hover:bg-green-50'
-  const iconBg = isCuenta ? 'bg-blue-100' : 'bg-white/20'
+  const bgColor = isCuenta ? 'bg-primary' : 'bg-green-600'
+  const textColor = isCuenta ? 'text-primary-light' : 'text-green-100'
+  const buttonColor = isCuenta ? 'text-primary-hover hover:bg-primary-light' : 'text-green-700 hover:bg-green-50'
+  const iconBg = isCuenta ? 'bg-primary-light' : 'bg-white/20'
 
   return createPortal(
     <div className={`fixed bottom-6 right-6 ${bgColor} text-white rounded-xl shadow-lg p-4 max-w-sm animate-in slide-in-from-bottom-4 z-[100]`}>
@@ -52,7 +52,7 @@ export function ToastVentaRegistrada({ comprobanteId, ticketNumero, tipo, onCerr
           <p className="font-bold">{isCuenta ? 'Venta registrada a cuenta' : '¡Venta completada!'}</p>
           <p className={`text-sm ${textColor}`}>Ticket: {ticketNumero}</p>
         </div>
-        <button onClick={handleCerrar} className={`${isCuenta ? 'text-blue-200' : 'text-green-200'} hover:text-white`}>
+        <button onClick={handleCerrar} className={`${isCuenta ? 'text-primary-light' : 'text-green-200'} hover:text-white`}>
           <X size={18} />
         </button>
       </div>
@@ -68,7 +68,7 @@ export function ToastVentaRegistrada({ comprobanteId, ticketNumero, tipo, onCerr
         {isCuenta && (
           <button 
             onClick={handleCerrar}
-            className="flex-1 bg-white text-blue-700 py-2 rounded-lg text-sm font-medium hover:bg-blue-50"
+            className="flex-1 bg-white text-primary-hover py-2 rounded-lg text-sm font-medium hover:bg-primary-light"
           >
             Aceptar
           </button>

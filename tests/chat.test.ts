@@ -13,7 +13,7 @@ describe('classifyIntent', () => {
   it('debería clasificar "precios" desde varias frases', () => {
     const tests: [string, IntentType][] = [
       ['precios', 'precios'],
-      ['cuánto cuesta el pollo', 'precios'],
+      ['cuánto cuesta el angus', 'precios'],
       ['dame la lista de precios', 'precios'],
       ['qué costo tiene', 'precios'],
       ['cuánto vale', 'precios'],

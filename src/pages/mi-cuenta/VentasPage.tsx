@@ -70,7 +70,7 @@ useEffect(() => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
       </div>
     )
   }
@@ -88,7 +88,7 @@ useEffect(() => {
           <select
             value={filtroEstado}
             onChange={e => setFiltroEstado(e.target.value as FiltroEstado)}
-            className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-blue-300"
+            className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-primary"
           >
             <option value="todos">Todos los estados</option>
             <option value="completada">Completadas</option>
@@ -97,7 +97,7 @@ useEffect(() => {
           <select
             value={filtroPago}
             onChange={e => setFiltroPago(e.target.value as FiltroPago)}
-            className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-blue-300"
+            className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-primary"
           >
             <option value="todos">Todos los pagos</option>
             <option value="pagado">Pagado</option>
@@ -115,7 +115,7 @@ useEffect(() => {
           </div>
           <div className="text-right">
             <p className="text-xs text-gray-400 uppercase">Registros</p>
-            <p className="text-xl font-bold text-blue-600">{ventasFiltradas.length}</p>
+            <p className="text-xl font-bold text-primary">{ventasFiltradas.length}</p>
           </div>
         </div>
       </div>
@@ -137,8 +137,8 @@ useEffect(() => {
                 onClick={() => navigate(`${RUTAS.CLIENTE.VENTAS}/${venta.id}`)}
                 className="w-full flex items-center gap-3 md:gap-4 p-4 hover:bg-gray-50 transition-colors text-left"
               >
-                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Receipt size={20} className="text-blue-600" />
+                <div className="w-10 h-10 bg-primary-light rounded-full flex items-center justify-center flex-shrink-0">
+                  <Receipt size={20} className="text-primary" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-semibold text-gray-900">{venta.ticket_numero}</p>

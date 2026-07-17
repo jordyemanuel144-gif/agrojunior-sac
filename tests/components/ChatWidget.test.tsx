@@ -61,7 +61,7 @@ describe('ChatWidget', () => {
     const { container } = render(<ChatWidget />)
 
     // ChatPanel returns null when closed — no header should be present
-    expect(screen.queryByText('Sam José Avícola')).not.toBeInTheDocument()
+    expect(screen.queryByText('AGROJUNIOR SAC')).not.toBeInTheDocument()
     // No input field
     expect(screen.queryByPlaceholderText(/escribí/i)).not.toBeInTheDocument()
   })

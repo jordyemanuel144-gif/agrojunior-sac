@@ -39,7 +39,7 @@ export default function DetalleCompra() {
   if (cargando) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
       </div>
     )
   }
@@ -96,7 +96,7 @@ export default function DetalleCompra() {
                 </div>
                 <div className="flex justify-between text-lg font-bold pt-2 border-t">
                   <span className="text-gray-900">Total</span>
-                  <span className={esAnulada ? 'text-gray-400 line-through' : 'text-blue-600'}>
+                  <span className={esAnulada ? 'text-gray-400 line-through' : 'text-primary'}>
                     S/ {compra.total.toFixed(2)}
                   </span>
                 </div>

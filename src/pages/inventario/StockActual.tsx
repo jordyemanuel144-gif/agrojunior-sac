@@ -63,7 +63,7 @@ export default function StockActual() {
   if (cargando) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
       </div>
     )
   }
@@ -89,7 +89,7 @@ export default function StockActual() {
           <div className="flex gap-2 mb-4">
             <button
               onClick={() => navigate(RUTAS.ADMIN.INVENTARIO_CONTEO)}
-              className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors font-medium text-sm"
+              className="flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl hover:bg-primary-hover transition-colors font-medium text-sm"
             >
               Ajuste de Inventario
             </button>
@@ -113,7 +113,7 @@ export default function StockActual() {
               {(busqueda || filtroEstado !== 'todos') && (
                 <button
                   onClick={() => { setBusqueda(''); setFiltroEstado('todos') }}
-                  className="mt-4 text-blue-600 hover:underline"
+                  className="mt-4 text-primary hover:underline"
                 >
                   Limpiar filtros
                 </button>

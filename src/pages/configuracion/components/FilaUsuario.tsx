@@ -13,8 +13,8 @@ export function FilaUsuario({ usuario, onEditar, onEliminar, onToggleActivo }: F
     <tr className="border-b border-gray-100 hover:bg-gray-50 transition">
       <td className="py-3 px-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-            <span className="text-blue-600 font-semibold">
+          <div className="w-10 h-10 bg-primary-light rounded-full flex items-center justify-center">
+            <span className="text-primary font-semibold">
               {usuario.name.charAt(0).toUpperCase()}
             </span>
           </div>
@@ -28,7 +28,7 @@ export function FilaUsuario({ usuario, onEditar, onEliminar, onToggleActivo }: F
         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
           usuario.role === 'admin' 
             ? 'bg-purple-100 text-purple-700' 
-            : 'bg-blue-100 text-blue-700'
+            : 'bg-primary-light text-primary-hover'
         }`}>
           {usuario.role === 'admin' ? 'Administrador' : 'Vendedor'}
         </span>
@@ -57,7 +57,7 @@ export function FilaUsuario({ usuario, onEditar, onEliminar, onToggleActivo }: F
           </button>
           <button
             onClick={() => onEditar(usuario)}
-            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
+            className="p-2 text-primary hover:bg-primary-light rounded-lg transition"
             title="Editar"
           >
             <Edit2 size={18} />

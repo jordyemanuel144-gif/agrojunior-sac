@@ -56,7 +56,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                   to={item.ruta}
                   onClick={onClose}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive(item.ruta)
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-primary text-white'
                       : 'text-gray-600 hover:bg-gray-100'
                     }`}
                 >
@@ -70,8 +70,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           <div className="p-4 border-t border-gray-100">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 bg-blue-100 rounded-full flex items-center justify-center">
-                  <span className="text-sm font-bold text-blue-600">{user?.name?.charAt(0).toUpperCase()}</span>
+                <div className="w-9 h-9 bg-primary-light rounded-full flex items-center justify-center">
+                  <span className="text-sm font-bold text-primary">{user?.name?.charAt(0).toUpperCase()}</span>
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-gray-900">{user?.name || 'Usuario'}</p>
@@ -104,7 +104,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                   key={item.ruta}
                   to={item.ruta}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive(item.ruta)
-                      ? 'bg-blue-600 text-white'
+                      ? 'bg-primary text-white'
                       : 'text-gray-600 hover:bg-gray-100'
                     }`}
                 >
@@ -118,8 +118,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           <div className="p-4 border-t border-gray-100 bg-gray-50">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 bg-blue-100 rounded-full flex items-center justify-center">
-                  <span className="text-sm font-bold text-blue-600">{user?.name?.charAt(0).toUpperCase()}</span>
+                <div className="w-9 h-9 bg-primary-light rounded-full flex items-center justify-center">
+                  <span className="text-sm font-bold text-primary">{user?.name?.charAt(0).toUpperCase()}</span>
                 </div>
                 <div>
                   <p className="text-sm font-semibold text-gray-900">{user?.name || 'Usuario'}</p>

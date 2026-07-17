@@ -44,8 +44,8 @@ export function ClientePickerModal({ clientes, clienteActual, onSeleccionar, onC
       <div className="bg-white w-full md:w-[420px] md:rounded-3xl rounded-t-3xl p-4 max-h-[85%] flex flex-col">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-              <UserCircle size={16} className="text-blue-600" />
+            <div className="w-8 h-8 bg-primary-light rounded-full flex items-center justify-center">
+              <UserCircle size={16} className="text-primary" />
             </div>
             <h3 className="font-bold text-gray-900">Cambiar Cliente</h3>
           </div>
@@ -58,7 +58,7 @@ export function ClientePickerModal({ clientes, clienteActual, onSeleccionar, onC
           <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input type="text" value={busqueda} onChange={(e) => setBusqueda(e.target.value)} 
             placeholder="Buscar por nombre, DNI/RUC o teléfono..."
-            className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
         </div>
 
         <div className="flex gap-2 mb-4 overflow-x-auto pb-1">
@@ -66,7 +66,7 @@ export function ClientePickerModal({ clientes, clienteActual, onSeleccionar, onC
             <button key={tipo.value} onClick={() => setFiltroTipo(tipo.value)}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
                 filtroTipo === tipo.value 
-                  ? tipo.value === 'todos' ? 'bg-blue-600 text-white' 
+                  ? tipo.value === 'todos' ? 'bg-primary text-white' 
                   : tipo.value === 'mayorista' ? 'bg-green-600 text-white' 
                   : tipo.value === 'especial' ? 'bg-purple-600 text-white' 
                   : 'bg-gray-600 text-white'
@@ -86,10 +86,10 @@ export function ClientePickerModal({ clientes, clienteActual, onSeleccionar, onC
             clientesFiltrados.map(c => (
               <button key={c.id} onClick={() => handleSelect(c)}
                 className={`w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all ${
-                  clienteActual.id === c.id ? 'bg-blue-50 border-2 border-blue-200' : 'bg-gray-50 hover:bg-gray-100'
+                  clienteActual.id === c.id ? 'bg-primary-light border-2 border-primary-light' : 'bg-gray-50 hover:bg-gray-100'
                 }`}>
-                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <UserCircle size={20} className="text-blue-600" />
+                <div className="w-10 h-10 bg-primary-light rounded-full flex items-center justify-center flex-shrink-0">
+                  <UserCircle size={20} className="text-primary" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-gray-900 truncate">{c.nombre}</p>

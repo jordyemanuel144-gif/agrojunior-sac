@@ -119,7 +119,7 @@ return (
           const diffColor = item.diferencia === 0 
             ? 'bg-green-50 text-green-600' 
             : item.diferencia > 0 
-              ? 'bg-blue-50 text-blue-600' 
+              ? 'bg-primary-light text-primary' 
               : 'bg-red-50 text-red-600'
           
           return (
@@ -199,9 +199,9 @@ return (
 
       {conteo.estado === 'completado' && (
         <div className="mt-4 grid grid-cols-2 gap-4">
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
-            <p className="text-sm text-blue-600">Entradas</p>
-            <p className="text-2xl font-bold text-blue-700">+{totalEntradas.toFixed(1)}</p>
+          <div className="bg-primary-light border border-primary-light rounded-xl p-4 text-center">
+            <p className="text-sm text-primary">Entradas</p>
+            <p className="text-2xl font-bold text-primary-hover">+{totalEntradas.toFixed(1)}</p>
           </div>
           <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-center">
             <p className="text-sm text-red-600">Salidas</p>

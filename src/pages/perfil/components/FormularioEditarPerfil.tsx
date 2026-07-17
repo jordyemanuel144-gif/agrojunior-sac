@@ -22,8 +22,8 @@ export function FormularioEditarPerfil({ usuario, guardando, onGuardar, error, e
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
       <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-          <Save className="text-blue-600" size={20} />
+        <div className="w-10 h-10 bg-primary-light rounded-xl flex items-center justify-center">
+          <Save className="text-primary" size={20} />
         </div>
         <div>
           <h3 className="font-semibold text-gray-900">Información Personal</h3>
@@ -41,7 +41,7 @@ export function FormularioEditarPerfil({ usuario, guardando, onGuardar, error, e
             name="name"
             defaultValue={usuario.name}
             type="text"
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-300"
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary"
             required
           />
         </div>
@@ -52,7 +52,7 @@ export function FormularioEditarPerfil({ usuario, guardando, onGuardar, error, e
             name="email"
             defaultValue={usuario.email}
             type="email"
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-300"
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary"
             required
           />
         </div>
@@ -70,7 +70,7 @@ export function FormularioEditarPerfil({ usuario, guardando, onGuardar, error, e
         <button
           type="submit"
           disabled={guardando}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition disabled:opacity-50"
+          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-xl hover:bg-primary-hover transition disabled:opacity-50"
         >
           {guardando ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <Save size={18} />}
           {guardando ? 'Guardando...' : 'Guardar cambios'}

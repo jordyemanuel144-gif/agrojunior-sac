@@ -31,7 +31,7 @@ export function ModalProducto({ producto, precio, tipoCliente, onClose }: ModalP
           {producto.imagen_url ? (
             <img src={producto.imagen_url} alt={producto.nombre} className="w-full h-full object-cover" />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-6xl">🐔</div>
+            <div className="w-full h-full flex items-center justify-center text-6xl">🥩</div>
           )}
 
           <div className="absolute top-3 left-3 flex flex-col gap-1">
@@ -52,7 +52,7 @@ export function ModalProducto({ producto, precio, tipoCliente, onClose }: ModalP
 
           <div className="mt-4 flex items-center justify-between">
             <div>
-              <p className="text-blue-600 font-bold text-2xl">{formatMoneda(precio)}</p>
+              <p className="text-primary font-bold text-2xl">{formatMoneda(precio)}</p>
               <p className="text-xs text-gray-400">
                 Precio {tipoCliente === 'mayorista' ? 'mayorista' : tipoCliente === 'especial' ? 'especial' : 'minorista'}
               </p>

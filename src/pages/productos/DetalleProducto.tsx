@@ -52,7 +52,7 @@ export default function DetalleProducto() {
   if (cargando) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
       </div>
     )
   }
@@ -109,7 +109,7 @@ export default function DetalleProducto() {
               <h1 className="text-xl md:text-2xl font-bold text-gray-900 truncate">{producto.nombre}</h1>
               <div className="flex items-center gap-3 mt-1">
                 <span className="text-gray-500">Código: {producto.codigo}</span>
-                <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full text-sm">{nombreCategoria}</span>
+                <span className="bg-primary-light text-primary-hover px-2 py-0.5 rounded-full text-sm">{nombreCategoria}</span>
               </div>
             </div>
           </div>
@@ -173,7 +173,7 @@ export default function DetalleProducto() {
               <div className="space-y-2">
                 <button
                   onClick={() => setMostrarEditar(true)}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition-colors font-medium text-sm"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-primary-light text-primary rounded-xl hover:bg-primary-light transition-colors font-medium text-sm"
                 >
                   <Edit2 size={18} />
                   Editar Producto

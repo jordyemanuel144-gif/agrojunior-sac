@@ -15,8 +15,8 @@ export function HeaderVentas({ ventas }: Props) {
   return (
     <div className="mb-4 md:mb-6 max-w-screen-xl mx-auto">
       <div className="flex items-center gap-3 mb-3 md:mb-4">
-        <div className="w-9 md:w-10 bg-blue-100 rounded-xl flex items-center justify-center">
-          <Receipt size={18} className="text-blue-600 md:w-5" />
+        <div className="w-9 md:w-10 bg-primary-light rounded-xl flex items-center justify-center">
+          <Receipt size={18} className="text-primary md:w-5" />
         </div>
         <div>
           <h1 className="text-lg md:text-2xl font-bold text-gray-900">Historial de Ventas</h1>

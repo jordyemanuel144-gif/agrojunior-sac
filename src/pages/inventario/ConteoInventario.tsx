@@ -96,7 +96,7 @@ export default function ConteoInventario() {
   if (cargando) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
       </div>
     )
   }
@@ -134,7 +134,7 @@ export default function ConteoInventario() {
             <>
               <div className="w-px bg-amber-300 h-4"></div>
               <div className="flex items-center gap-2">
-                <span className="text-blue-600 font-medium">+{totalEntradas.toFixed(1)}</span>
+                <span className="text-primary font-medium">+{totalEntradas.toFixed(1)}</span>
                 <span className="text-amber-700">entradas</span>
               </div>
               <div className="flex items-center gap-2">
@@ -153,7 +153,7 @@ export default function ConteoInventario() {
               placeholder="Buscar producto..."
               value={busqueda}
               onChange={e => setBusqueda(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 text-base bg-white rounded-xl border border-gray-200 focus:border-blue-300 focus:ring-2 focus:ring-blue-200 outline-none"
+              className="w-full pl-10 pr-4 py-3 text-base bg-white rounded-xl border border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary-light outline-none"
             />
           </div>
         </div>
@@ -174,7 +174,7 @@ export default function ConteoInventario() {
               : diferencia === 0 
                 ? 'bg-green-50 text-green-600' 
                 : diferencia > 0 
-                  ? 'bg-blue-50 text-blue-600' 
+                  ? 'bg-primary-light text-primary' 
                   : 'bg-red-50 text-red-600'
 
             return (
@@ -205,7 +205,7 @@ export default function ConteoInventario() {
                     : diferencia === 0 
                       ? 'text-green-600' 
                       : diferencia > 0 
-                        ? 'text-blue-600' 
+                        ? 'text-primary' 
                         : 'text-red-500'
                 }`}>
                   {diferencia === null ? '—' : `${diferencia > 0 ? '+' : ''}${diferencia.toFixed(1)}`}
@@ -225,7 +225,7 @@ export default function ConteoInventario() {
           <button
             onClick={guardarConteo}
             disabled={guardando}
-            className="flex-1 py-3 bg-blue-600 text-white rounded-xl font-bold text-sm hover:bg-blue-700 disabled:opacity-50"
+            className="flex-1 py-3 bg-primary text-white rounded-xl font-bold text-sm hover:bg-primary-hover disabled:opacity-50"
           >
             {guardando ? 'Guardando...' : 'Crear Conteo'}
           </button>
@@ -249,7 +249,7 @@ export default function ConteoInventario() {
       <div className="max-w-screen-xl mx-auto">
         <button
           onClick={iniciarNuevoConteo}
-          className="w-full md:w-auto flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors mb-4"
+          className="w-full md:w-auto flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-xl hover:bg-primary-hover transition-colors mb-4"
         >
           <Plus size={20} />
           <span className="font-medium">Nuevo Conteo</span>
@@ -315,7 +315,7 @@ export default function ConteoInventario() {
                     {conteo.estado === 'completado' && (entradas > 0 || salidas > 0) && (
                       <div className="flex gap-2 mt-1">
                         {entradas > 0 && (
-                          <span className="text-xs text-blue-600">+{entradas.toFixed(1)}</span>
+                          <span className="text-xs text-primary">+{entradas.toFixed(1)}</span>
                         )}
                         {salidas > 0 && (
                           <span className="text-xs text-red-600">-{salidas.toFixed(1)}</span>

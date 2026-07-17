@@ -92,7 +92,7 @@ export default function DetalleVenta() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
       </div>
     )
   }
@@ -104,7 +104,7 @@ export default function DetalleVenta() {
         <p className="text-lg">{errorAcceso ? 'No tienes acceso a esta venta' : 'Venta no encontrada'}</p>
         <button
           onClick={() => navigate(RUTAS.ADMIN.VENTAS)}
-          className="mt-2 text-blue-600 hover:underline"
+          className="mt-2 text-primary hover:underline"
         >
           Volver al historial
         </button>

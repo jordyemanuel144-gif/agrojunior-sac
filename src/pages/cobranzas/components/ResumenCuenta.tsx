@@ -11,8 +11,8 @@ export function ResumenCuenta({ cuenta }: ResumenCuentaProps) {
     <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
       <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
         <div className="flex items-center gap-2 mb-2">
-          <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-            <Tag size={16} className="text-blue-600" />
+          <div className="w-8 h-8 bg-primary-light rounded-lg flex items-center justify-center">
+            <Tag size={16} className="text-primary" />
           </div>
           <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total S/Desc.</span>
         </div>
@@ -21,8 +21,8 @@ export function ResumenCuenta({ cuenta }: ResumenCuentaProps) {
 
       <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
         <div className="flex items-center gap-2 mb-2">
-          <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-            <DollarSign size={16} className="text-blue-600" />
+          <div className="w-8 h-8 bg-primary-light rounded-lg flex items-center justify-center">
+            <DollarSign size={16} className="text-primary" />
           </div>
           <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total Deuda</span>
         </div>

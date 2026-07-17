@@ -39,7 +39,7 @@ export default function LoginCliente() {
       <div className="min-h-screen bg-gray-50 py-8 md:py-12">
         <div className="max-w-lg mx-auto px-4">
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
               <User className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Iniciar Sesión</h1>
@@ -89,7 +89,7 @@ export default function LoginCliente() {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full pl-11 pr-4 py-3 text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100 transition-all"
+                    className="w-full pl-11 pr-4 py-3 text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary-light transition-all"
                     placeholder="tu@email.com"
                   />
                 </div>
@@ -107,7 +107,7 @@ export default function LoginCliente() {
                     value={formData.password}
                     onChange={handleChange}
                     required
-                    className="w-full pl-11 pr-12 py-3 text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100 transition-all"
+                    className="w-full pl-11 pr-12 py-3 text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary-light transition-all"
                     placeholder="••••••••"
                   />
                   <button
@@ -123,7 +123,7 @@ export default function LoginCliente() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 bg-blue-600 text-white font-bold rounded-2xl hover:bg-blue-700 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-4 bg-primary text-white font-bold rounded-2xl hover:bg-primary-hover active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
               </button>
@@ -131,7 +131,7 @@ export default function LoginCliente() {
 
             <p className="mt-6 text-center text-sm text-gray-500">
               ¿No tienes cuenta?{' '}
-              <Link to={RUTAS.PUBLICO.REGISTRO} className="text-blue-600 font-medium hover:underline">
+              <Link to={RUTAS.PUBLICO.REGISTRO} className="text-primary font-medium hover:underline">
                 Regístrate aquí
               </Link>
             </p>
@@ -139,7 +139,7 @@ export default function LoginCliente() {
 
           <p className="mt-6 text-center text-xs text-gray-400 md:hidden">
             ¿Eres empleado?{' '}
-            <Link to={RUTAS.AUTH.LOGIN} className="text-blue-600 font-medium">
+            <Link to={RUTAS.AUTH.LOGIN} className="text-primary font-medium">
               Iniciar sesión como empleado
             </Link>
           </p>

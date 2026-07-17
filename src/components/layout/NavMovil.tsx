@@ -19,7 +19,7 @@ export function NavMovil() {
             to={item.ruta}
             className={`flex flex-col items-center justify-center gap-0.5 px-2 py-1 rounded-xl min-w-[60px] ${
               isActive(item.ruta)
-                ? 'text-blue-600 bg-blue-50'
+                ? 'text-primary bg-primary-light'
                 : 'text-gray-500'
             }`}
           >

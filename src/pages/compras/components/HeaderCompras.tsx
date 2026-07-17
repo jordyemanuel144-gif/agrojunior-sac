@@ -19,8 +19,8 @@ export function HeaderCompras({ compras }: Props) {
     <div className="mb-4 md:mb-6 max-w-screen-xl mx-auto">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-9 md:w-12 bg-blue-100 rounded-xl md:rounded-2xl flex items-center justify-center">
-            <ShoppingCart size={18} className="text-blue-600 md:w-6" />
+          <div className="w-9 md:w-12 bg-primary-light rounded-xl md:rounded-2xl flex items-center justify-center">
+            <ShoppingCart size={18} className="text-primary md:w-6" />
           </div>
           <div>
             <h1 className="text-lg md:text-2xl md:text-3xl font-bold text-gray-900">Historial de Compras</h1>

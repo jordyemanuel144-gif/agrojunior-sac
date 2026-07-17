@@ -47,7 +47,7 @@ export default function DetalleInventario() {
   if (cargando) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
       </div>
     )
   }
@@ -95,7 +95,7 @@ export default function DetalleInventario() {
               <h1 className="text-xl font-bold text-gray-900 truncate">{item.nombre}</h1>
               <div className="flex items-center gap-3 mt-1">
                 {item.codigo && <span className="text-gray-500">Código: {item.codigo}</span>}
-                <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full text-sm">{item.categoria}</span>
+                <span className="bg-primary-light text-primary-hover px-2 py-0.5 rounded-full text-sm">{item.categoria}</span>
               </div>
             </div>
           </div>
@@ -154,7 +154,7 @@ export default function DetalleInventario() {
                       <div 
                         key={mov.id} 
                         onClick={esClickeable ? handleClick : undefined}
-                        className={`flex items-center gap-3 p-2 rounded-lg ${esClickeable ? 'hover:bg-blue-50 cursor-pointer' : 'hover:bg-gray-50'}`}
+                        className={`flex items-center gap-3 p-2 rounded-lg ${esClickeable ? 'hover:bg-primary-light cursor-pointer' : 'hover:bg-gray-50'}`}
                       >
                         {mov.tipo === 'entrada' ? (
                           <ArrowUpCircle size={20} className="text-green-600 flex-shrink-0" />
@@ -192,7 +192,7 @@ export default function DetalleInventario() {
               <div className="space-y-2">
                 <button
                   onClick={() => navigate(`${RUTAS.ADMIN.PRODUCTOS}/${item.id}`)}
-                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition-colors font-medium text-sm"
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-primary-light text-primary rounded-xl hover:bg-primary-light transition-colors font-medium text-sm"
                 >
                   <Edit2 size={18} />
                   Editar en Productos

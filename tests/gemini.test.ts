@@ -41,7 +41,7 @@ describe('askGemini (integration - fetch)', () => {
       candidates: [
         {
           content: {
-            parts: [{ text: 'Hola, soy el asistente de Sam José Avícola' }],
+            parts: [{ text: 'Hola, soy el asistente de AGROJUNIOR SAC' }],
           },
         },
       ],
@@ -55,7 +55,7 @@ describe('askGemini (integration - fetch)', () => {
     const { askGemini } = await import('@/lib/gemini')
     const result = await askGemini('Hola')
 
-    expect(result).toBe('Hola, soy el asistente de Sam José Avícola')
+    expect(result).toBe('Hola, soy el asistente de AGROJUNIOR SAC')
     expect(globalThis.fetch).toHaveBeenCalledTimes(1)
 
     // Verify it was called with the correct URL
@@ -89,7 +89,7 @@ describe('askGemini (integration - fetch)', () => {
 
     // Business info now lives in systemInstruction, not in contents
     const systemText = callBody.systemInstruction.parts[0].text
-    expect(systemText).toContain('Sam José Avícola')
+    expect(systemText).toContain('AGROJUNIOR SAC')
     expect(systemText).toContain('Arequipa')
     expect(systemText).toContain('916 794 870')
 

@@ -94,7 +94,7 @@ describe('ChatHeader', () => {
   it('debería mostrar el título y subtítulo para modo public', () => {
     render(<ChatHeader mode="public" onClose={onClose} />)
 
-    expect(screen.getByText('Sam José Avícola')).toBeInTheDocument()
+    expect(screen.getByText('AGROJUNIOR SAC')).toBeInTheDocument()
     expect(screen.getByText('Consultas')).toBeInTheDocument()
   })
 
@@ -119,12 +119,12 @@ describe('ChatHeader', () => {
 
 describe('MessageBubble', () => {
   it('debería renderizar un mensaje de usuario con estilo azul', () => {
-    const msg = createMessage({ sender: 'user', text: '¿Cuánto cuesta el pollo?' })
+    const msg = createMessage({ sender: 'user', text: '¿Cuánto cuesta el angus?' })
     render(<MessageBubble message={msg} />)
 
-    expect(screen.getByText('¿Cuánto cuesta el pollo?')).toBeInTheDocument()
+    expect(screen.getByText('¿Cuánto cuesta el angus?')).toBeInTheDocument()
     // User message should have blue background
-    const bubble = screen.getByText('¿Cuánto cuesta el pollo?').closest('div')
+    const bubble = screen.getByText('¿Cuánto cuesta el angus?').closest('div')
     expect(bubble?.className).toContain('bg-blue-100')
     expect(bubble?.className).toContain('rounded-br-sm')
   })
@@ -139,14 +139,14 @@ describe('MessageBubble', () => {
     expect(bubble?.className).toContain('bg-gray-100')
     expect(bubble?.className).toContain('rounded-bl-sm')
     // Bot should have avatar
-    expect(screen.getByRole('img', { name: /pollo/i })).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: /carne/i })).toBeInTheDocument()
   })
 
   it('debería NO mostrar avatar para mensajes de usuario', () => {
     const msg = createMessage({ sender: 'user', text: 'Hola' })
     render(<MessageBubble message={msg} />)
 
-    expect(screen.queryByRole('img', { name: /pollo/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('img', { name: /carne/i })).not.toBeInTheDocument()
   })
 
   it('debería mostrar el timestamp formateado', () => {
@@ -381,7 +381,7 @@ describe('ChatPanel', () => {
     )
 
     // Header
-    expect(screen.getByText('Sam José Avícola')).toBeInTheDocument()
+    expect(screen.getByText('AGROJUNIOR SAC')).toBeInTheDocument()
     // Messages
     expect(screen.getByText('¡Hola!')).toBeInTheDocument()
     expect(screen.getByText('Hola bot')).toBeInTheDocument()

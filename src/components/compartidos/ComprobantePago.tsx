@@ -36,7 +36,7 @@ export function ComprobantePago({ comprobante, onCerrar }: Props) {
       `✅ VENTAS CANCELADAS: ${ventasPagadas}\n` +
       `▸ VENTAS PARCIALES: ${ventasParciales}\n\n` +
       `Gracias por su pago! 🙏\n` +
-      `📍 Sam José Avícola`
+      `📍 AGROJUNIOR SAC`
     )
     window.open(`https://wa.me/?text=${msg}`, '_blank')
   }
@@ -94,10 +94,10 @@ export function ComprobantePago({ comprobante, onCerrar }: Props) {
 
       <div className="flex-1 overflow-y-auto px-4 py-4">
         <div id="comprobante-pago-content" className="bg-white rounded-2xl shadow-sm overflow-hidden print:shadow-none">
-          <div className="bg-blue-600 text-white text-center py-4 px-4">
+          <div className="bg-primary text-white text-center py-4 px-4">
             <p className="text-base font-bold">{comprobante.negocio_nombre.toUpperCase()}</p>
-            <p className="text-blue-200 text-xs mt-0.5">RUC: {comprobante.negocio_ruc}</p>
-            <p className="text-blue-200 text-xs">{comprobante.negocio_direccion}</p>
+            <p className="text-primary-light text-xs mt-0.5">RUC: {comprobante.negocio_ruc}</p>
+            <p className="text-primary-light text-xs">{comprobante.negocio_direccion}</p>
           </div>
 
           <div className="px-4 py-4 space-y-4 text-sm">
@@ -132,22 +132,22 @@ export function ComprobantePago({ comprobante, onCerrar }: Props) {
                 </div>
               </div>
 
-              <div className="bg-blue-50 rounded-xl p-3 mt-3">
+              <div className="bg-primary-light rounded-xl p-3 mt-3">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="font-bold text-blue-900">MONTO PAGADO:</span>
-                  <span className="text-xl font-bold text-blue-600">{formatMoneda(comprobante.monto_pagado)}</span>
+                  <span className="font-bold text-neutral-900">MONTO PAGADO:</span>
+                  <span className="text-xl font-bold text-primary">{formatMoneda(comprobante.monto_pagado)}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-blue-700">Nueva Deuda:</span>
-                  <span className="font-bold text-blue-700">{formatMoneda(comprobante.nueva_deuda)}</span>
+                  <span className="text-primary-hover">Nueva Deuda:</span>
+                  <span className="font-bold text-primary-hover">{formatMoneda(comprobante.nueva_deuda)}</span>
                 </div>
-                <div className="mt-2 h-2 bg-blue-200 rounded-full overflow-hidden">
+                <div className="mt-2 h-2 bg-primary-light rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-blue-600 transition-all"
+                    className="h-full bg-primary transition-all"
                     style={{ width: `${Math.min(100, porcentajePagado)}%` }}
                   />
                 </div>
-                <p className="text-xs text-blue-600 mt-1 text-center">{porcentajePagado}% cancelado</p>
+                <p className="text-xs text-primary mt-1 text-center">{porcentajePagado}% cancelado</p>
               </div>
             </div>
 
@@ -224,7 +224,7 @@ export function ComprobantePago({ comprobante, onCerrar }: Props) {
 
       <div className="bg-white px-4 py-4 border-t border-gray-100 space-y-3 print:hidden">
         <div className="grid grid-cols-2 gap-3">
-          <button onClick={handleImprimir} className="flex items-center justify-center gap-2 bg-blue-600 text-white py-3.5 rounded-2xl font-bold text-sm">
+          <button onClick={handleImprimir} className="flex items-center justify-center gap-2 bg-primary text-white py-3.5 rounded-2xl font-bold text-sm">
             <Printer size={18} />Imprimir
           </button>
           <button onClick={handleWhatsappTexto} className="flex items-center justify-center gap-2 bg-green-500 text-white py-3.5 rounded-2xl font-bold text-sm">

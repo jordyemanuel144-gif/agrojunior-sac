@@ -109,7 +109,7 @@ export function ModalWhatsAppEnvio({ cuenta, ventas, onCerrar, onTelefonoGuardad
               <p className="text-gray-600">
                 Cliente: <span className="font-medium">{cuenta.cliente_nombre}</span>
               </p>
-              <p className="text-2xl font-bold text-blue-600 mt-2">
+              <p className="text-2xl font-bold text-primary mt-2">
                 {formatMoneda(cuenta.saldo_pendiente)}
               </p>
               <p className="text-sm text-gray-500">
@@ -165,7 +165,7 @@ export function ModalWhatsAppEnvio({ cuenta, ventas, onCerrar, onTelefonoGuardad
               value={telefono}
               onChange={(e) => setTelefono(e.target.value)}
               placeholder="999123456"
-              className="w-full px-4 py-3 border border-gray-300 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-blue-200"
+              className="w-full px-4 py-3 border border-gray-300 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-primary-light"
             />
 
             <div className="flex gap-3">

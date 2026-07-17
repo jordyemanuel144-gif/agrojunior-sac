@@ -16,7 +16,7 @@ export function SeccionProductos() {
             Nuestros Productos Destacados
           </h2>
           <p className="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
-            Encuentra los mejores productos avícolas en un solo lugar
+            Cortes premium de Angus y Holstein, directo del establo
           </p>
         </div>
 
@@ -24,7 +24,7 @@ export function SeccionProductos() {
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {productos.map((producto) => (
               <div key={producto.id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
-                <div className="h-48 bg-blue-50 flex items-center justify-center">
+                <div className="h-48 bg-primary-light flex items-center justify-center">
                   {producto.imagen_url ? (
                     <img
                       className="w-full h-full object-cover"
@@ -32,7 +32,7 @@ export function SeccionProductos() {
                       alt={producto.nombre}
                     />
                   ) : (
-                    <span className="text-6xl">🍗</span>
+                    <span className="text-6xl">🥩</span>
                   )}
                   <div className="absolute top-3 left-3 flex gap-2">
                     {producto.destacado && (
@@ -41,7 +41,7 @@ export function SeccionProductos() {
                       </span>
                     )}
                     {producto.tag && (
-                      <span className="px-3 py-1 text-xs font-bold text-white bg-blue-600 rounded-full">
+                      <span className="px-3 py-1 text-xs font-bold text-white bg-primary rounded-full">
                         {producto.tag === 'oferta' ? 'Oferta' : producto.tag === 'nuevo' ? 'Nuevo' : producto.tag}
                       </span>
                     )}
@@ -51,10 +51,10 @@ export function SeccionProductos() {
                   <h3 className="text-lg font-bold text-gray-900">{producto.nombre}</h3>
                   <p className="mt-1 text-sm text-gray-500">Por {producto.tipo_medida}</p>
                   <div className="mt-3 flex items-center justify-between">
-                    <span className="text-xl font-bold text-blue-600">{formatMoneda(producto.precio_minorista)}</span>
+                    <span className="text-xl font-bold text-primary">{formatMoneda(producto.precio_minorista)}</span>
                     <Link
                       to={RUTAS.PUBLICO.CATALOGO}
-                      className="text-sm font-medium text-blue-600 hover:text-blue-700"
+                      className="text-sm font-medium text-primary hover:text-primary-hover"
                     >
                       Ver más →
                     </Link>
@@ -68,7 +68,7 @@ export function SeccionProductos() {
         <div className="mt-10 text-center">
           <Link
             to={RUTAS.PUBLICO.CATALOGO}
-            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-primary hover:bg-primary-hover transition-colors"
           >
             Ver Catálogo Completo
           </Link>

@@ -9,8 +9,8 @@ interface Props {
 function BotAvatar() {
   return (
     <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 shrink-0">
-      <span className="text-xl leading-none" role="img" aria-label="pollo">
-        🐔
+      <span className="text-xl leading-none" role="img" aria-label="carne">
+        🥩
       </span>
     </div>
   )
@@ -26,7 +26,7 @@ export function ChatHeader({ mode, onClose }: Props) {
     <div className="relative flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white shrink-0">
       <BotAvatar />
       <div className="flex-1 min-w-0">
-        <h2 className="text-sm font-semibold truncate">Sam José Avícola</h2>
+        <h2 className="text-sm font-semibold truncate">AGROJUNIOR SAC</h2>
         <p className="text-xs text-white/80">{subtitulos[mode]}</p>
       </div>
       <button

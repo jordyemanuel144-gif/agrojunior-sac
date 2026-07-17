@@ -60,7 +60,7 @@ export default function DetalleVenta() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
       </div>
     )
   }
@@ -71,7 +71,7 @@ export default function DetalleVenta() {
         <p className="text-lg text-center">Venta no encontrada</p>
         <button
           onClick={() => navigate('/mi-cuenta/ventas')}
-          className="mt-2 text-blue-600 hover:underline"
+          className="mt-2 text-primary hover:underline"
         >
           Volver a mis ventas
         </button>
@@ -142,7 +142,7 @@ export default function DetalleVenta() {
           )}
           <div className="flex justify-between text-lg font-bold">
             <span className="text-gray-900">Total</span>
-            <span className="text-blue-600">{formatMoneda(venta.total)}</span>
+            <span className="text-primary">{formatMoneda(venta.total)}</span>
           </div>
         </div>
       </div>
@@ -183,7 +183,7 @@ export default function DetalleVenta() {
           </button>
           <button
             onClick={handleImprimir}
-            className="flex items-center justify-center gap-2 bg-blue-600 text-white py-3.5 rounded-xl font-semibold text-sm hover:bg-blue-700 transition-colors"
+            className="flex items-center justify-center gap-2 bg-primary text-white py-3.5 rounded-xl font-semibold text-sm hover:bg-primary-hover transition-colors"
           >
             <Printer size={18} />
             Imprimir

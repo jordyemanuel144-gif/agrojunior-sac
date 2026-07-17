@@ -64,7 +64,7 @@ export function FormularioCliente({ cliente, onCerrar, onGuardar }: Props) {
               type="text"
               value={form.nombre}
               onChange={e => setForm({ ...form, nombre: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
               placeholder="Nombre completo o razón social"
               required
             />
@@ -75,7 +75,7 @@ export function FormularioCliente({ cliente, onCerrar, onGuardar }: Props) {
             <select
               value={form.tipo}
               onChange={e => setForm({ ...form, tipo: e.target.value as TipoCliente })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
             >
               <option value="minorista">Minorista - Precio al público</option>
               <option value="mayorista">Mayorista - Descuento por volumen</option>
@@ -91,7 +91,7 @@ export function FormularioCliente({ cliente, onCerrar, onGuardar }: Props) {
               type="text"
               value={form.dni_ruc}
               onChange={e => setForm({ ...form, dni_ruc: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
               placeholder={form.tipo === 'minorista' ? '12345678' : '20XXXXXXXXX'}
               maxLength={form.tipo === 'minorista' ? 8 : 11}
             />
@@ -103,7 +103,7 @@ export function FormularioCliente({ cliente, onCerrar, onGuardar }: Props) {
               type="tel"
               value={form.telefono}
               onChange={e => setForm({ ...form, telefono: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
               placeholder="999123456"
             />
           </div>
@@ -119,7 +119,7 @@ export function FormularioCliente({ cliente, onCerrar, onGuardar }: Props) {
             <button
               type="submit"
               disabled={guardando}
-              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+              className="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors disabled:opacity-50"
             >
               {guardando ? 'Guardando...' : 'Guardar'}
             </button>

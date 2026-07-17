@@ -33,7 +33,7 @@ export function FormularioImpuestos({ config, onGuardar, guardando }: Props) {
         <button
           type="button"
           onClick={() => setForm({ ...form, igv_activo: !form.igv_activo })}
-          className={`relative w-12 h-6 rounded-full transition ${form.igv_activo ? 'bg-blue-600' : 'bg-gray-300'}`}
+          className={`relative w-12 h-6 rounded-full transition ${form.igv_activo ? 'bg-primary' : 'bg-gray-300'}`}
         >
           <span className={`absolute top-1 w-4 h-4 bg-white rounded-full transition ${form.igv_activo ? 'left-7' : 'left-1'}`} />
         </button>
@@ -48,11 +48,11 @@ export function FormularioImpuestos({ config, onGuardar, guardando }: Props) {
           min={0}
           max={100}
           step={0.5}
-          className="w-full md:w-40 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+          className="w-full md:w-40 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-light"
         />
       </div>
 
-      <button type="submit" disabled={guardando} className="flex items-center justify-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-medium disabled:opacity-50">
+      <button type="submit" disabled={guardando} className="flex items-center justify-center gap-2 px-6 py-2.5 bg-primary text-white rounded-xl hover:bg-primary-hover transition font-medium disabled:opacity-50">
         <Save size={16} />
         {guardando ? 'Guardando...' : 'Guardar'}
       </button>

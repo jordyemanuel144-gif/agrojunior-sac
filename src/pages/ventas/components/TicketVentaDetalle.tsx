@@ -14,10 +14,10 @@ export function TicketVentaDetalle({ venta, cliente, esAnulada }: Props) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       {/* Cabecera del ticket */}
-      <div className="bg-blue-600 text-white text-center py-6 px-4">
+      <div className="bg-primary text-white text-center py-6 px-4">
         <p className="text-lg font-bold tracking-wide">{nombre}</p>
-        <p className="text-blue-200 text-xs mt-1">RUC: {ruc}</p>
-        <p className="text-blue-200 text-xs">{direccion}</p>
+        <p className="text-primary-light text-xs mt-1">RUC: {ruc}</p>
+        <p className="text-primary-light text-xs">{direccion}</p>
       </div>
 
       {/* Cuerpo del ticket */}
@@ -82,7 +82,7 @@ export function TicketVentaDetalle({ venta, cliente, esAnulada }: Props) {
 
           <div className="flex justify-between items-center pt-3 border-t border-gray-200">
             <span className="font-bold text-gray-900">TOTAL</span>
-            <span className={`text-xl font-bold ${esAnulada ? 'text-gray-400 line-through' : 'text-blue-600'}`}>
+            <span className={`text-xl font-bold ${esAnulada ? 'text-gray-400 line-through' : 'text-primary'}`}>
               S/ {venta.total.toFixed(2)}
             </span>
           </div>

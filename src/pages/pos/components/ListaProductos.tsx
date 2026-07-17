@@ -23,7 +23,7 @@ export function ListaProductos({
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
       <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
         <h2 className="font-bold text-gray-900">Resumen de Venta</h2>
-        <span className="bg-blue-50 text-blue-600 text-xs font-semibold px-2.5 py-1 rounded-full">
+        <span className="bg-primary-light text-primary text-xs font-semibold px-2.5 py-1 rounded-full">
           {items.length} {items.length === 1 ? 'Item' : 'Items'}
         </span>
       </div>
@@ -38,7 +38,7 @@ export function ListaProductos({
               <div className="w-12 h-12 rounded-lg bg-gray-100 flex-shrink-0">
                 {item.producto.imagen_url 
                   ? <img src={item.producto.imagen_url} alt={item.producto.nombre} className="w-full h-full object-cover" /> 
-                  : <div className="w-full h-full flex items-center justify-center text-xl">🐔</div>}
+                  : <div className="w-full h-full flex items-center justify-center text-xl">🥩</div>}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-gray-900 truncate">{item.producto.nombre}</p>
@@ -65,7 +65,7 @@ export function ListaProductos({
                 </button>
               </div>
               <div className="w-20 text-right">
-                <p className="text-blue-600 font-bold text-sm">S/ {subtotalTemporal.toFixed(2)}</p>
+                <p className="text-primary font-bold text-sm">S/ {subtotalTemporal.toFixed(2)}</p>
                 <p className={`text-[10px] font-medium ${bajoStock ? 'text-yellow-600' : 'text-green-600'}`}>
                   Stock: {stockDisponible.toFixed(1)}
                 </p>

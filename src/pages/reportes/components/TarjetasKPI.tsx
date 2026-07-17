@@ -20,7 +20,7 @@ function KPICard({
   color: 'blue' | 'green' | 'red' | 'gray'
 }) {
   const colores = {
-    blue: 'bg-blue-50 text-blue-600 border-blue-100',
+    blue: 'bg-primary-light text-primary border-primary-light',
     green: 'bg-green-50 text-green-600 border-green-100',
     red: 'bg-red-50 text-red-500 border-red-100',
     gray: 'bg-gray-50 text-gray-600 border-gray-100',

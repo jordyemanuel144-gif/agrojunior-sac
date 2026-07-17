@@ -21,7 +21,7 @@ export function LayoutCliente({ children }: LayoutClienteProps) {
           >
             <Menu size={24} className="text-gray-600" />
           </button>
-          <span className="ml-3 font-semibold text-gray-900">Sam José Avícola</span>
+          <span className="ml-3 font-semibold text-gray-900">AGROJUNIOR SAC</span>
         </header>
 
         <main>{children}</main>

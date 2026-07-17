@@ -17,7 +17,7 @@ export function MontoParcialInput({ montoRecibido, setMontoRecibido, total, camb
         <span className="text-sm font-semibold text-gray-700">Monto recibido</span>
         <button 
           onClick={handlePagarCompleto}
-          className="text-xs text-blue-600 hover:underline font-medium"
+          className="text-xs text-primary hover:underline font-medium"
         >
           Pagar todo
         </button>
@@ -34,7 +34,7 @@ export function MontoParcialInput({ montoRecibido, setMontoRecibido, total, camb
           min="0" 
           max={total} 
           autoFocus
-          className="w-full pl-10 pr-3 py-2.5 text-base font-bold text-gray-900 outline-none bg-gray-50 border border-gray-200 rounded-xl focus:border-blue-300" 
+          className="w-full pl-10 pr-3 py-2.5 text-base font-bold text-gray-900 outline-none bg-gray-50 border border-gray-200 rounded-xl focus:border-primary" 
         />
       </div>
       

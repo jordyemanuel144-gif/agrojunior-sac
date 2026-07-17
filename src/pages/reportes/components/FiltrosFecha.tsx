@@ -50,7 +50,7 @@ export function FiltrosFecha({ filtro, onCambiar }: FiltrosFechaProps) {
               onClick={() => handleTipoChange(opcion.valor)}
               className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
                 filtro.tipo === opcion.valor
-                  ? 'bg-blue-600 text-white'
+                  ? 'bg-primary text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
@@ -67,7 +67,7 @@ export function FiltrosFecha({ filtro, onCambiar }: FiltrosFechaProps) {
                 type="date"
                 value={formatearFechaInput(filtro.fechaInicio)}
                 onChange={handleFechaInicio}
-                className="px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-blue-300"
+                className="px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-primary"
               />
             </div>
             <div>
@@ -76,7 +76,7 @@ export function FiltrosFecha({ filtro, onCambiar }: FiltrosFechaProps) {
                 type="date"
                 value={formatearFechaInput(filtro.fechaFin)}
                 onChange={handleFechaFin}
-                className="px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-blue-300"
+                className="px-3 py-2 text-sm border border-gray-200 rounded-lg outline-none focus:border-primary"
               />
             </div>
           </div>

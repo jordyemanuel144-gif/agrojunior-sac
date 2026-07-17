@@ -33,7 +33,7 @@ export function FormularioSistema({ config, onGuardar, guardando }: Props) {
             value={form.stock_minimo_alerta}
             onChange={e => setForm({ ...form, stock_minimo_alerta: Number(e.target.value) })}
             min={0}
-            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-light"
           />
           <p className="text-xs text-gray-400 mt-1">Productos con stock menor mostrarán alerta</p>
         </div>
@@ -43,7 +43,7 @@ export function FormularioSistema({ config, onGuardar, guardando }: Props) {
             type="text"
             value={form.terminal}
             onChange={e => setForm({ ...form, terminal: e.target.value })}
-            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-light"
           />
         </div>
         <div>
@@ -52,12 +52,12 @@ export function FormularioSistema({ config, onGuardar, guardando }: Props) {
             type="text"
             value={form.caja_principal}
             onChange={e => setForm({ ...form, caja_principal: e.target.value })}
-            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-light"
           />
         </div>
       </div>
 
-      <button type="submit" disabled={guardando} className="flex items-center justify-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-medium disabled:opacity-50">
+      <button type="submit" disabled={guardando} className="flex items-center justify-center gap-2 px-6 py-2.5 bg-primary text-white rounded-xl hover:bg-primary-hover transition font-medium disabled:opacity-50">
         <Save size={16} />
         {guardando ? 'Guardando...' : 'Guardar'}
       </button>

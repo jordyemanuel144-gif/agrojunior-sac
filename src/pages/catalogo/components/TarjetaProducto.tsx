@@ -38,7 +38,7 @@ export function TarjetaProducto({ producto, precio, tipoCliente, onClick }: Tarj
         {producto.imagen_url ? (
           <img src={producto.imagen_url} alt={producto.nombre} className="w-full h-full object-cover" />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-4xl">🐔</div>
+          <div className="w-full h-full flex items-center justify-center text-4xl">🥩</div>
         )}
 
         <div className="absolute top-2 left-2 flex flex-col gap-1">
@@ -59,7 +59,7 @@ export function TarjetaProducto({ producto, precio, tipoCliente, onClick }: Tarj
         </p>
 
         <div className="flex items-center justify-between">
-          <p className="text-blue-600 font-bold text-base">
+          <p className="text-primary font-bold text-base">
             {formatMoneda(precio)}
             <span className="text-gray-400 font-normal text-xs ml-1">/ {producto.tipo_medida}</span>
           </p>

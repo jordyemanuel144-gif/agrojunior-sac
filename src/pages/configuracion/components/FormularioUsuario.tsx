@@ -57,7 +57,7 @@ export function FormularioUsuario({ usuario, onCerrar, onGuardar }: FormularioUs
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-300"
+              className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary"
               required
             />
           </div>
@@ -68,7 +68,7 @@ export function FormularioUsuario({ usuario, onCerrar, onGuardar }: FormularioUs
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-300"
+              className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary"
               required
             />
           </div>
@@ -80,7 +80,7 @@ export function FormularioUsuario({ usuario, onCerrar, onGuardar }: FormularioUs
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder={usuario ? 'Dejar vacío para mantener' : 'samjose123'}
-              className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-300"
+              className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary"
             />
             <p className="text-xs text-gray-500 mt-1">Contraseña por defecto: samjose123</p>
           </div>
@@ -90,7 +90,7 @@ export function FormularioUsuario({ usuario, onCerrar, onGuardar }: FormularioUs
             <select
               value={role}
               onChange={(e) => setRole(e.target.value as 'admin' | 'vendedor')}
-              className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-blue-300"
+              className="w-full px-3 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-primary"
             >
               <option value="vendedor">Vendedor</option>
               <option value="admin">Administrador</option>
@@ -103,7 +103,7 @@ export function FormularioUsuario({ usuario, onCerrar, onGuardar }: FormularioUs
               id="active"
               checked={active}
               onChange={(e) => setActive(e.target.checked)}
-              className="w-4 h-4 text-blue-600 rounded"
+              className="w-4 h-4 text-primary rounded"
             />
             <label htmlFor="active" className="text-sm text-gray-700">Usuario activo</label>
           </div>
@@ -118,7 +118,7 @@ export function FormularioUsuario({ usuario, onCerrar, onGuardar }: FormularioUs
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition"
+              className="flex-1 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary-hover transition"
             >
               {usuario ? 'Guardar' : 'Crear'}
             </button>

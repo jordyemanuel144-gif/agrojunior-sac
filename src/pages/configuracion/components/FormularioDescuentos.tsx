@@ -35,7 +35,7 @@ export function FormularioDescuentos({ config, onGuardar, guardando }: Props) {
             min={0}
             max={100}
             step={0.5}
-            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-light"
           />
           <p className="text-xs text-gray-400 mt-1">Aplicado automáticamente a clientes mayoristas</p>
         </div>
@@ -48,13 +48,13 @@ export function FormularioDescuentos({ config, onGuardar, guardando }: Props) {
             min={0}
             max={100}
             step={0.5}
-            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-light"
           />
           <p className="text-xs text-gray-400 mt-1">Aplicado automáticamente a clientes especiales</p>
         </div>
       </div>
 
-      <button type="submit" disabled={guardando} className="flex items-center justify-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition font-medium disabled:opacity-50">
+      <button type="submit" disabled={guardando} className="flex items-center justify-center gap-2 px-6 py-2.5 bg-primary text-white rounded-xl hover:bg-primary-hover transition font-medium disabled:opacity-50">
         <Save size={16} />
         {guardando ? 'Guardando...' : 'Guardar'}
       </button>

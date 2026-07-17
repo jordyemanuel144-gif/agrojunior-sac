@@ -15,9 +15,9 @@ interface DatosPago {
 function obtenerDatosPago(): DatosPago {
   const negocio = configuracionService.getNegocio()
   return {
-    yape: negocio.yape || '916794870',
+    yape: negocio.yape || '970995140',
     banco: negocio.banco_nombre || 'Banco de Crédito',
-    titular: negocio.banco_titular || 'Juan Pérez',
+    titular: negocio.banco_titular || 'Darly Sanchez Cutipa',
     cuenta: negocio.banco_cuenta || '215-55555555',
   }
 }
@@ -114,7 +114,7 @@ export function generarHtmlDeuda(
 
   return `
 <div style="width: 420px; font-family: Arial, sans-serif; font-size: 14px; color: #1f2937; background: white; padding: 24px;">
-  <div style="background: #2563eb; color: white; padding: 16px; text-align: center; border-radius: 8px 8px 0 0;">
+  <div style="background: #111111; color: white; padding: 16px; text-align: center; border-radius: 8px 8px 0 0;">
     <div style="font-size: 20px; font-weight: bold;">RESUMEN DE CUENTA</div>
   </div>
   

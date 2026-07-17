@@ -75,7 +75,7 @@ export function PasoProductos({
               value={busqueda}
               onChange={e => setBusqueda(e.target.value)}
               placeholder="Buscar por nombre o código..."
-              className="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full pl-8 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
             />
           </div>
           <div className="flex items-center gap-2">
@@ -86,7 +86,7 @@ export function PasoProductos({
           </div>
           <div className="text-right min-w-[80px]">
             <p className="text-xs text-gray-500">Total</p>
-            <p className="text-sm font-bold text-blue-600">
+            <p className="text-sm font-bold text-primary">
               {MONEDA} {(totalCompra ?? 0).toFixed(2)}
             </p>
           </div>
@@ -124,7 +124,7 @@ export function PasoProductos({
                 key={producto.id}
                 className={`bg-white rounded-lg px-2 py-1.5 border transition-all ${
                   estaSeleccionado
-                    ? 'border-blue-400 bg-blue-50/50'
+                    ? 'border-primary bg-primary-light/50'
                     : 'border-gray-100 hover:border-gray-200'
                 }`}
               >
@@ -154,7 +154,7 @@ export function PasoProductos({
                       inputMode="decimal"
                       value={cantidad > 0 ? cantidad : ''}
                       onChange={e => handleCantidadChange(producto, e.target.value)}
-                      className="w-12 px-1 py-1 border border-gray-300 rounded text-xs text-center focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
+                      className="w-12 px-1 py-1 border border-gray-300 rounded text-xs text-center focus:ring-2 focus:ring-primary focus:border-primary text-base"
                       placeholder="0"
                     />
                     <input
@@ -163,11 +163,11 @@ export function PasoProductos({
                       step="0.01"
                       value={precioUnitario || ''}
                       onChange={e => handlePrecioChange(producto.id, e.target.value, producto.precio_costo)}
-                      className="w-14 px-1 py-1 border border-gray-300 rounded text-xs text-center focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base"
+                      className="w-14 px-1 py-1 border border-gray-300 rounded text-xs text-center focus:ring-2 focus:ring-primary focus:border-primary text-base"
                       placeholder="0"
                     />
                     {estaSeleccionado && (
-                      <span className="text-xs font-bold text-blue-600 whitespace-nowrap min-w-[50px] text-right">
+                      <span className="text-xs font-bold text-primary whitespace-nowrap min-w-[50px] text-right">
                         {MONEDA} {(cantidad * precioUnitario).toFixed(2)}
                       </span>
                     )}

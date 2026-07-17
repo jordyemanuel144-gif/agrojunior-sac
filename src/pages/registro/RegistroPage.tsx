@@ -22,7 +22,7 @@ function RegistroExitoso() {
           </p>
           <Link
             to={RUTAS.CLIENTE.LOGIN}
-            className="mt-6 inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition-colors"
+            className="mt-6 inline-flex items-center justify-center px-6 py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary-hover transition-colors"
           >
             Iniciar sesión
           </Link>
@@ -65,7 +65,7 @@ export default function RegistroPage() {
       <div className="min-h-screen bg-gray-50 py-8 md:py-12">
         <div className="max-w-lg mx-auto px-4">
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4">
               <User className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Regístrate como Cliente</h1>
@@ -73,11 +73,11 @@ export default function RegistroPage() {
           </div>
 
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
-            <div className="mb-6 p-4 bg-blue-50 rounded-xl flex items-start gap-3">
-              <ShieldCheck className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            <div className="mb-6 p-4 bg-primary-light rounded-xl flex items-start gap-3">
+              <ShieldCheck className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-medium text-blue-900">Asignación de tipo de cliente</p>
-                <p className="text-xs text-blue-700 mt-1">
+                <p className="text-sm font-medium text-neutral-900">Asignación de tipo de cliente</p>
+                <p className="text-xs text-primary-hover mt-1">
                   Nuestro equipo revisará tu solicitud y asignará el tipo de cliente según tu perfil (minorista, mayorista o especial).
                 </p>
               </div>
@@ -121,7 +121,7 @@ export default function RegistroPage() {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full pl-11 pr-4 py-3 text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100 transition-all"
+                    className="w-full pl-11 pr-4 py-3 text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary-light transition-all"
                     placeholder="tu@email.com"
                   />
                 </div>
@@ -139,7 +139,7 @@ export default function RegistroPage() {
                     value={formData.password}
                     onChange={handlePasswordChange}
                     required
-                    className="w-full pl-11 pr-12 py-3 text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100 transition-all"
+                    className="w-full pl-11 pr-12 py-3 text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary-light transition-all"
                     placeholder="••••••••"
                   />
                   <button
@@ -164,7 +164,7 @@ export default function RegistroPage() {
                     value={formData.confirmPassword}
                     onChange={handleChange}
                     required
-                    className="w-full pl-11 pr-12 py-3 text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100 transition-all"
+                    className="w-full pl-11 pr-12 py-3 text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary-light transition-all"
                     placeholder="••••••••"
                   />
                   <button
@@ -195,7 +195,7 @@ export default function RegistroPage() {
                     value={formData.nombre}
                     onChange={handleChange}
                     required
-                    className="w-full pl-11 pr-4 py-3 text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100 transition-all"
+                    className="w-full pl-11 pr-4 py-3 text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary-light transition-all"
                     placeholder="Juan Pérez"
                   />
                 </div>
@@ -213,7 +213,7 @@ export default function RegistroPage() {
                     value={formData.telefono}
                     onChange={handleChange}
                     required
-                    className="w-full pl-11 pr-4 py-3 text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100 transition-all"
+                    className="w-full pl-11 pr-4 py-3 text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary-light transition-all"
                     placeholder="+51 999 999 999"
                   />
                 </div>
@@ -230,7 +230,7 @@ export default function RegistroPage() {
                     name="direccion"
                     value={formData.direccion}
                     onChange={handleChange}
-                    className="w-full pl-11 pr-4 py-3 text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100 transition-all"
+                    className="w-full pl-11 pr-4 py-3 text-base bg-gray-50 border border-gray-200 rounded-xl outline-none focus:border-primary focus:ring-2 focus:ring-primary-light transition-all"
                     placeholder="Av. Example 123"
                   />
                 </div>
@@ -239,7 +239,7 @@ export default function RegistroPage() {
               <button
                 type="submit"
                 disabled={enviando}
-                className="w-full py-4 bg-blue-600 text-white font-bold rounded-2xl hover:bg-blue-700 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-4 bg-primary text-white font-bold rounded-2xl hover:bg-primary-hover active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {enviando ? (
                   <>
@@ -257,7 +257,7 @@ export default function RegistroPage() {
 
             <p className="mt-6 text-center text-sm text-gray-500">
               ¿Ya tienes cuenta?{' '}
-              <Link to={RUTAS.CLIENTE.LOGIN} className="text-blue-600 font-medium hover:underline">
+              <Link to={RUTAS.CLIENTE.LOGIN} className="text-primary font-medium hover:underline">
                 Iniciar sesión
               </Link>
             </p>

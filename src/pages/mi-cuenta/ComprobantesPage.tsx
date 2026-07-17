@@ -49,7 +49,7 @@ export default function ComprobantesPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
       </div>
     )
   }
@@ -67,7 +67,7 @@ export default function ComprobantesPage() {
           <select
             value={filtroEstado}
             onChange={e => setFiltroEstado(e.target.value as FiltroEstado)}
-            className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-blue-300"
+            className="text-sm bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 outline-none focus:border-primary"
           >
             <option value="todos">Todos los estados</option>
             <option value="activo">Activos</option>

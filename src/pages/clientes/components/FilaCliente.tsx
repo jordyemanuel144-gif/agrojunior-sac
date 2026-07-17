@@ -9,7 +9,7 @@ interface Props {
 }
 
 const TIPO_CONFIG: Record<TipoCliente, { label: string; color: string; bg: string; text: string }> = {
-  minorista: { label: 'Minorista', color: 'blue', bg: 'bg-blue-100', text: 'text-blue-700' },
+  minorista: { label: 'Minorista', color: 'blue', bg: 'bg-primary-light', text: 'text-primary-hover' },
   mayorista: { label: 'Mayorista', color: 'green', bg: 'bg-green-100', text: 'text-green-700' },
   especial: { label: 'Especial', color: 'purple', bg: 'bg-purple-100', text: 'text-purple-700' },
 }

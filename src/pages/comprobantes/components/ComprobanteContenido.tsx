@@ -11,7 +11,7 @@ interface BadgeTipoCliente {
 function getTipoClienteBadge(tipo?: string): BadgeTipoCliente | null {
   if (!tipo) return null
   const config: Record<string, BadgeTipoCliente> = {
-    minorista: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Minorista' },
+    minorista: { bg: 'bg-primary-light', text: 'text-primary-hover', label: 'Minorista' },
     mayorista: { bg: 'bg-green-100', text: 'text-green-700', label: 'Mayorista' },
     especial: { bg: 'bg-purple-100', text: 'text-purple-700', label: 'Especial' },
   }
@@ -31,10 +31,10 @@ export function ComprobanteContenido({ comprobante, ventaInfo }: ComprobanteCont
 
   return (
     <div id="comprobante-detalle-content" className="print:shadow-none">
-      <div className="bg-blue-600 text-white text-center py-6 px-4">
+      <div className="bg-primary text-white text-center py-6 px-4">
         <p className="text-lg font-bold">{(comprobante.negocio_nombre || 'MI NEGOCIO').toUpperCase()}</p>
-        <p className="text-blue-200 text-sm">RUC: {comprobante.negocio_ruc || '-'}</p>
-        <p className="text-blue-200 text-sm">{comprobante.negocio_direccion || '-'}</p>
+        <p className="text-primary-light text-sm">RUC: {comprobante.negocio_ruc || '-'}</p>
+        <p className="text-primary-light text-sm">{comprobante.negocio_direccion || '-'}</p>
       </div>
 
       <div className="p-6 space-y-6">
@@ -121,7 +121,7 @@ function ContenidoVenta({ venta, ventaInfo }: { venta: ComprobanteVenta; ventaIn
         )}
         <div className="flex justify-between font-bold text-lg border-t pt-2">
           <span>Total</span>
-          <span className="text-blue-600">{formatMoneda(venta.total)}</span>
+          <span className="text-primary">{formatMoneda(venta.total)}</span>
         </div>
         {ventaInfo && (
           <>
@@ -176,14 +176,14 @@ function ContenidoPago({ pago }: { pago: ComprobantePago }) {
         </div>
       </div>
 
-      <div className="bg-blue-50 rounded-xl p-4">
+      <div className="bg-primary-light rounded-xl p-4">
         <div className="flex justify-between mb-2">
-          <span className="font-bold text-blue-900">Pago realizado ahora</span>
-          <span className="font-bold text-blue-600 text-lg">{formatMoneda(pago.monto_pagado)}</span>
+          <span className="font-bold text-neutral-900">Pago realizado ahora</span>
+          <span className="font-bold text-primary text-lg">{formatMoneda(pago.monto_pagado)}</span>
         </div>
-        <div className="flex justify-between border-t border-blue-200 pt-2">
-          <span className="text-blue-700 font-medium">Nueva deuda</span>
-          <span className="font-bold text-blue-700">{formatMoneda(pago.nueva_deuda)}</span>
+        <div className="flex justify-between border-t border-primary-light pt-2">
+          <span className="text-primary-hover font-medium">Nueva deuda</span>
+          <span className="font-bold text-primary-hover">{formatMoneda(pago.nueva_deuda)}</span>
         </div>
       </div>
 
@@ -239,9 +239,9 @@ function ContenidoPago({ pago }: { pago: ComprobantePago }) {
                   <span>Lo que se había pagado:</span>
                   <span className="text-green-600">{formatMoneda(v.monto_pagado_anterior)}</span>
                 </div>
-                <div className="flex justify-between font-bold bg-blue-100 -mx-4 px-4 py-2">
-                  <span className="text-blue-800">Pago realizado ahora:</span>
-                  <span className="text-blue-800">{formatMoneda(v.monto_pagado_ahora)}</span>
+                <div className="flex justify-between font-bold bg-primary-light -mx-4 px-4 py-2">
+                  <span className="text-primary-dark">Pago realizado ahora:</span>
+                  <span className="text-primary-dark">{formatMoneda(v.monto_pagado_ahora)}</span>
                 </div>
                 {v.estado === 'parcial' && (
                   <div className="flex justify-between font-semibold border-t border-gray-200 pt-2">

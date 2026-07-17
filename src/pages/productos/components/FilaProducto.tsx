@@ -51,7 +51,7 @@ export function FilaProducto({ producto, nombreCategoria }: Props) {
         </div>
         <div className="flex items-center gap-3 mt-1">
           <span className="text-xs text-gray-400">Código: {producto.codigo}</span>
-          <span className="text-xs bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">
+          <span className="text-xs bg-primary-light text-primary-hover px-2 py-0.5 rounded-full">
             {nombreCategoria}
           </span>
         </div>

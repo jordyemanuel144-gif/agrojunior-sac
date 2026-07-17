@@ -27,7 +27,7 @@ export function ResumenCobranzas({ resumen }: ResumenCobranzasProps) {
 
       <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
         <div className="flex items-center gap-2 mb-2">
-          <Users className="w-4 h-4 text-blue-500" />
+          <Users className="w-4 h-4 text-primary" />
           <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Clientes</span>
         </div>
         <p className="text-xl font-bold text-gray-900">{resumen.cantidad_clientes_con_deuda}</p>

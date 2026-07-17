@@ -86,7 +86,7 @@ describe('generarMensajeDeuda', () => {
 
   it('debería incluir datos bancarios por defecto', () => {
     const msg = generarMensajeDeuda('Juan Pérez', 150, ventasMock)
-    expect(msg).toContain('Yape: 916794870')
+    expect(msg).toContain('Yape: 970995140')
     expect(msg).toContain('Banco de Crédito')
   })
 

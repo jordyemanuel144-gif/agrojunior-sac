@@ -20,14 +20,14 @@ export function FilaProveedor({ proveedor }: Props) {
       onClick={handleClick}
       className="w-full flex items-center gap-3 md:gap-4 p-4 bg-white hover:bg-gray-50 transition-colors text-left border-b border-gray-100 last:border-0"
     >
-      <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
-        <Building2 size={24} className="text-blue-600" />
+      <div className="w-12 h-12 bg-primary-light rounded-xl flex items-center justify-center flex-shrink-0">
+        <Building2 size={24} className="text-primary" />
       </div>
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="font-semibold text-gray-900">{proveedor.nombre}</span>
-          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-blue-100 text-blue-700">
+          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase bg-primary-light text-primary-hover">
             RUC {proveedor.ruc}
           </span>
         </div>

@@ -28,13 +28,13 @@ export function ConfirmarAccion({
   if (!abierto) return null
 
   const iconBg = {
-    info: 'bg-blue-50',
+    info: 'bg-primary-light',
     warning: 'bg-amber-50',
     success: 'bg-green-50',
   }[tipo]
 
   const iconColor = {
-    info: 'text-blue-600',
+    info: 'text-primary',
     warning: 'text-amber-600',
     success: 'text-green-600',
   }[tipo]
@@ -46,7 +46,7 @@ export function ConfirmarAccion({
   }[tipo]
 
   const botonConfirmar = {
-    info: 'bg-blue-600 hover:bg-blue-700',
+    info: 'bg-primary hover:bg-primary-hover',
     warning: 'bg-amber-600 hover:bg-amber-700',
     success: 'bg-green-600 hover:bg-green-700',
   }[tipo]

@@ -178,21 +178,21 @@ export function ConfirmarPedido({ items, cliente, clientes, stockInfo: _stockInf
                 value={busquedaCliente}
                 onChange={(e) => setBusquedaCliente(e.target.value)}
                 placeholder="Buscar cliente..."
-                className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
             <div className="flex gap-1.5 mb-3 overflow-x-auto pb-1">
               {(['todos', 'minorista', 'mayorista', 'especial'] as const).map(tipo => (
-                <button key={tipo} onClick={() => setFiltroTipo(tipo)} className={`px-2.5 py-1 rounded-lg text-[10px] font-semibold whitespace-nowrap transition-all ${filtroTipo === tipo ? (tipo === 'todos' ? 'bg-blue-600 text-white' : tipo === 'mayorista' ? 'bg-green-600 text-white' : tipo === 'especial' ? 'bg-purple-600 text-white' : 'bg-gray-600 text-white') : 'bg-gray-100 text-gray-500'}`}>
+                <button key={tipo} onClick={() => setFiltroTipo(tipo)} className={`px-2.5 py-1 rounded-lg text-[10px] font-semibold whitespace-nowrap transition-all ${filtroTipo === tipo ? (tipo === 'todos' ? 'bg-primary text-white' : tipo === 'mayorista' ? 'bg-green-600 text-white' : tipo === 'especial' ? 'bg-purple-600 text-white' : 'bg-gray-600 text-white') : 'bg-gray-100 text-gray-500'}`}>
                   {tipo === 'todos' ? 'Todos' : tipo === 'minorista' ? 'Minorista' : tipo === 'mayorista' ? 'Mayorista' : 'Especial'}
                 </button>
               ))}
             </div>
             <div className="space-y-1.5 max-h-48 overflow-y-auto">
               {clientesFiltrados.map(c => (
-                <button key={c.id} onClick={() => handleSelectCliente(c)} className={`w-full flex items-center gap-2 p-2 rounded-xl text-left transition-all ${cliente.id === c.id ? 'bg-blue-50 border-2 border-blue-200' : 'bg-gray-50 hover:bg-gray-100'}`}>
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${c.tipo === 'mayorista' ? 'bg-green-100' : c.tipo === 'especial' ? 'bg-purple-100' : 'bg-blue-100'}`}>
-                    <UserCircle size={14} className={`${c.tipo === 'mayorista' ? 'text-green-600' : c.tipo === 'especial' ? 'text-purple-600' : 'text-blue-600'}`} />
+                <button key={c.id} onClick={() => handleSelectCliente(c)} className={`w-full flex items-center gap-2 p-2 rounded-xl text-left transition-all ${cliente.id === c.id ? 'bg-primary-light border-2 border-primary-light' : 'bg-gray-50 hover:bg-gray-100'}`}>
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${c.tipo === 'mayorista' ? 'bg-green-100' : c.tipo === 'especial' ? 'bg-purple-100' : 'bg-primary-light'}`}>
+                    <UserCircle size={14} className={`${c.tipo === 'mayorista' ? 'text-green-600' : c.tipo === 'especial' ? 'text-purple-600' : 'text-primary'}`} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-semibold text-gray-900 truncate">{c.nombre}</p>
@@ -208,10 +208,10 @@ export function ConfirmarPedido({ items, cliente, clientes, stockInfo: _stockInf
         ) : (
           <button 
             onClick={() => setShowClientSelector(true)}
-            className={`w-full relative bg-white rounded-2xl p-4 flex items-center gap-3 shadow-sm border border-gray-100 hover:border-blue-300 transition-colors text-left ${cliente.tipo !== 'minorista' ? 'pr-14' : ''}`}
+            className={`w-full relative bg-white rounded-2xl p-4 flex items-center gap-3 shadow-sm border border-gray-100 hover:border-primary transition-colors text-left ${cliente.tipo !== 'minorista' ? 'pr-14' : ''}`}
           >
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${cliente.tipo === 'mayorista' ? 'bg-green-100' : cliente.tipo === 'especial' ? 'bg-purple-100' : 'bg-blue-100'}`}>
-              <UserCircle size={20} className={`${cliente.tipo === 'mayorista' ? 'text-green-600' : cliente.tipo === 'especial' ? 'text-purple-600' : 'text-blue-600'}`} />
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${cliente.tipo === 'mayorista' ? 'bg-green-100' : cliente.tipo === 'especial' ? 'bg-purple-100' : 'bg-primary-light'}`}>
+              <UserCircle size={20} className={`${cliente.tipo === 'mayorista' ? 'text-green-600' : cliente.tipo === 'especial' ? 'text-purple-600' : 'text-primary'}`} />
             </div>
             <div className={`flex-1 min-w-0 ${cliente.tipo !== 'minorista' ? '' : 'pr-3'}`}>
               <p className={`text-[11px] font-semibold ${cliente.tipo === 'mayorista' ? 'text-green-600' : cliente.tipo === 'especial' ? 'text-purple-600' : 'text-gray-400'}`}>
@@ -239,17 +239,17 @@ export function ConfirmarPedido({ items, cliente, clientes, stockInfo: _stockInf
         <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
             <h2 className="font-bold text-gray-900">Resumen de Venta</h2>
-            <span className="bg-blue-50 text-blue-600 text-xs font-semibold px-2.5 py-1 rounded-full">{items.length} {items.length === 1 ? 'Item' : 'Items'}</span>
+            <span className="bg-primary-light text-primary text-xs font-semibold px-2.5 py-1 rounded-full">{items.length} {items.length === 1 ? 'Item' : 'Items'}</span>
           </div>
           <div className="divide-y divide-gray-50">
             {items.map(item => (
               <div key={item.producto.id} className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors">
                 <div className="w-14 h-14 rounded-xl bg-gray-100 overflow-hidden flex-shrink-0">
-                  {item.producto.imagen_url ? <img src={item.producto.imagen_url} alt={item.producto.nombre} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-2xl">🐔</div>}
+                  {item.producto.imagen_url ? <img src={item.producto.imagen_url} alt={item.producto.nombre} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-2xl">🥩</div>}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-gray-900 truncate">{item.producto.nombre}</p>
-                  <p className="text-blue-600 font-bold text-sm mt-0.5">S/ {item.subtotal.toFixed(2)}</p>
+                  <p className="text-primary font-bold text-sm mt-0.5">S/ {item.subtotal.toFixed(2)}</p>
                   <p className="text-xs text-gray-400">S/ {item.precio_unitario.toFixed(2)} c/u</p>
                 </div>
                 <div className="flex items-center gap-1 bg-gray-100 rounded-full px-1 py-1">
@@ -286,10 +286,10 @@ export function ConfirmarPedido({ items, cliente, clientes, stockInfo: _stockInf
                   }
                 }} 
                 disabled={!esClienteRegistrado && (tp.id === 'parcial' || tp.id === 'pendiente')}
-                className={`flex flex-col items-center gap-1 py-3 rounded-2xl border-2 transition-all ${esClienteRegistrado || tp.id === 'pagado' ? '' : 'opacity-50 cursor-not-allowed'} ${tipoPago === tp.id ? 'border-blue-600 bg-blue-50' : 'border-gray-200 bg-white'}`}
+                className={`flex flex-col items-center gap-1 py-3 rounded-2xl border-2 transition-all ${esClienteRegistrado || tp.id === 'pagado' ? '' : 'opacity-50 cursor-not-allowed'} ${tipoPago === tp.id ? 'border-primary bg-primary-light' : 'border-gray-200 bg-white'}`}
               >
-                <span className={tipoPago === tp.id ? 'text-blue-600' : 'text-gray-400'}>{tp.icon}</span>
-                <span className={`text-xs font-semibold ${tipoPago === tp.id ? 'text-blue-600' : 'text-gray-500'}`}>{tp.label}</span>
+                <span className={tipoPago === tp.id ? 'text-primary' : 'text-gray-400'}>{tp.icon}</span>
+                <span className={`text-xs font-semibold ${tipoPago === tp.id ? 'text-primary' : 'text-gray-500'}`}>{tp.label}</span>
               </button>
             ))}
           </div>
@@ -308,7 +308,7 @@ export function ConfirmarPedido({ items, cliente, clientes, stockInfo: _stockInf
                   value={montoPagadoInput}
                   onChange={(e) => setMontoPagadoInput(e.target.value)}
                   placeholder="0.00"
-                  className="w-full pl-8 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-base font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pl-8 pr-3 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-base font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
               </div>
               {montoPagadoInput && parseFloat(montoPagadoInput) > total && (
@@ -330,9 +330,9 @@ export function ConfirmarPedido({ items, cliente, clientes, stockInfo: _stockInf
           <h2 className="font-bold text-gray-900 mb-3">Método de Pago</h2>
           <div className="grid grid-cols-3 gap-2">
             {METODOS.map(m => (
-              <button key={m.id} onClick={() => setMetodo(m.id)} className={`flex flex-col items-center gap-2 py-4 rounded-2xl border-2 transition-all ${metodo === m.id ? 'border-blue-600 bg-blue-50' : 'border-gray-200 bg-white'}`}>
-                <span className={metodo === m.id ? 'text-blue-600' : 'text-gray-400'}>{m.icon}</span>
-                <span className={`text-xs font-semibold ${metodo === m.id ? 'text-blue-600' : 'text-gray-500'}`}>{m.label}</span>
+              <button key={m.id} onClick={() => setMetodo(m.id)} className={`flex flex-col items-center gap-2 py-4 rounded-2xl border-2 transition-all ${metodo === m.id ? 'border-primary bg-primary-light' : 'border-gray-200 bg-white'}`}>
+                <span className={metodo === m.id ? 'text-primary' : 'text-gray-400'}>{m.icon}</span>
+                <span className={`text-xs font-semibold ${metodo === m.id ? 'text-primary' : 'text-gray-500'}`}>{m.label}</span>
               </button>
             ))}
           </div>
@@ -346,7 +346,7 @@ export function ConfirmarPedido({ items, cliente, clientes, stockInfo: _stockInf
           <div className="flex justify-between text-sm text-gray-500"><span>Subtotal</span><span className="font-medium text-gray-900">S/ {subtotalCalculado.toFixed(2)}</span></div>
           {pctDescuento > 0 && <div className="flex justify-between text-sm"><span className="text-green-600 font-medium">Descuento {tipoLabel[cliente.tipo]} (-{pctDescuento.toFixed(0)}%)</span><span className="text-green-600 font-semibold">-S/ {montoDescuento.toFixed(2)}</span></div>}
           {igvActivo && <div className="flex justify-between text-sm text-gray-500"><span>IGV (18%)</span><span className="font-medium text-gray-900">S/ {igv.toFixed(2)}</span></div>}
-          <div className="border-t border-gray-100 pt-2 flex justify-between items-center"><span className="text-base font-bold text-gray-900">Total</span><span className="text-2xl font-bold text-blue-600">S/ {total.toFixed(2)}</span></div>
+          <div className="border-t border-gray-100 pt-2 flex justify-between items-center"><span className="text-base font-bold text-gray-900">Total</span><span className="text-2xl font-bold text-primary">S/ {total.toFixed(2)}</span></div>
           {(tipoPago === 'parcial' || tipoPago === 'pendiente') && (
             <div className="pt-2 border-t border-dashed border-gray-200 space-y-1">
               <div className="flex justify-between text-xs text-gray-500"><span>Monto Recibido</span><span className={`font-medium ${estadoPagoCalculado === 'pagado' ? 'text-green-600' : 'text-gray-900'}`}>S/ {montoPagado.toFixed(2)}</span></div>
@@ -369,7 +369,7 @@ export function ConfirmarPedido({ items, cliente, clientes, stockInfo: _stockInf
             handleConfirmar()
           }}
           disabled={cargando || montoInvalido}
-          className={`w-full font-bold py-4 rounded-2xl flex items-center justify-center gap-2 text-base transition-all active:scale-[.98] ${cargando || montoInvalido ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}
+          className={`w-full font-bold py-4 rounded-2xl flex items-center justify-center gap-2 text-base transition-all active:scale-[.98] ${cargando || montoInvalido ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-primary hover:bg-primary-hover text-white'}`}
         >
           {cargando ? (
             <span className="animate-pulse">Procesando...</span>
@@ -380,7 +380,7 @@ export function ConfirmarPedido({ items, cliente, clientes, stockInfo: _stockInf
             </>
           )}
         </button>
-        <p className="text-center text-xs text-gray-400 mt-2">Sam José Avícola · Terminal POS #01</p>
+        <p className="text-center text-xs text-gray-400 mt-2">AGROJUNIOR SAC · Terminal POS #01</p>
       </div>
     </div>
   )

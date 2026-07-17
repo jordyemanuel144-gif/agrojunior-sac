@@ -20,13 +20,13 @@ export function SelectorTipoCliente({ tipoSeleccionado, onCambiar }: SelectorTip
           onClick={() => onCambiar(tipo.value)}
           className={`px-3 py-1.5 md:px-4 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-semibold transition-all duration-200 ${
             tipoSeleccionado === tipo.value
-              ? 'bg-blue-600 text-white shadow-md'
+              ? 'bg-primary text-white shadow-md'
               : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
           }`}
         >
           {tipo.label}
           {tipo.descuento && (
-            <span className={`ml-1 text-[10px] ${tipoSeleccionado === tipo.value ? 'text-blue-200' : 'text-green-600'}`}>
+            <span className={`ml-1 text-[10px] ${tipoSeleccionado === tipo.value ? 'text-primary-light' : 'text-green-600'}`}>
               {tipo.descuento}
             </span>
           )}

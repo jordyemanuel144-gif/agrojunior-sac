@@ -29,7 +29,7 @@ export function GraficoLinea({ datos, titulo }: GraficoLineaProps) {
               contentStyle={{ backgroundColor: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', fontSize: '12px' }}
               formatter={(value) => [`S/ ${Number(value).toFixed(2)}`, 'Ingresos']}
             />
-            <Line type="monotone" dataKey="valor" stroke="#2563eb" strokeWidth={3} dot={{ fill: '#2563eb', strokeWidth: 2, r: 4 }} activeDot={{ r: 6 }} />
+            <Line type="monotone" dataKey="valor" stroke="#D4A017" strokeWidth={3} dot={{ fill: '#D4A017', strokeWidth: 2, r: 4 }} activeDot={{ r: 6 }} />
           </LineChart>
         </ResponsiveContainer>
       </div>

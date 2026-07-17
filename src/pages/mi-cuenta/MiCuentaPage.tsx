@@ -53,7 +53,7 @@ export default function MiCuentaPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
       </div>
     )
   }
@@ -72,12 +72,12 @@ export default function MiCuentaPage() {
 
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-4">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center">
-            <User className="w-7 h-7 text-blue-600" />
+          <div className="w-14 h-14 bg-primary-light rounded-full flex items-center justify-center">
+            <User className="w-7 h-7 text-primary" />
           </div>
           <div>
             <h2 className="text-lg font-bold text-gray-900">{user?.name || 'Cliente'}</h2>
-            <p className="text-sm text-blue-600 font-medium">Cliente {getTipoLabel(clienteData?.tipo)}</p>
+            <p className="text-sm text-primary font-medium">Cliente {getTipoLabel(clienteData?.tipo)}</p>
           </div>
         </div>
       </div>
@@ -97,7 +97,7 @@ export default function MiCuentaPage() {
               <span className="text-sm text-gray-700">{clienteData.telefono}</span>
             </div>
           )}
-          <Link to={RUTAS.CLIENTE.EDITAR} className="flex items-center gap-2 text-blue-600 hover:text-blue-700 text-sm font-medium">
+          <Link to={RUTAS.CLIENTE.EDITAR} className="flex items-center gap-2 text-primary hover:text-primary-hover text-sm font-medium">
             <Settings size={16} />
             <span>Editar mis datos</span>
           </Link>
@@ -109,21 +109,21 @@ export default function MiCuentaPage() {
         <div className="space-y-2">
           <Link to={RUTAS.CLIENTE.VENTAS} className="flex items-center justify-between bg-white rounded-xl shadow-sm border border-gray-100 p-4 hover:bg-gray-50 transition-colors">
             <div className="flex items-center gap-3">
-              <Receipt className="w-5 h-5 text-blue-600" />
+              <Receipt className="w-5 h-5 text-primary" />
               <span className="text-sm font-medium text-gray-900">Mis Compras</span>
             </div>
             <span className="text-gray-400">→</span>
           </Link>
           <Link to={RUTAS.CLIENTE.COMPROBANTES} className="flex items-center justify-between bg-white rounded-xl shadow-sm border border-gray-100 p-4 hover:bg-gray-50 transition-colors">
             <div className="flex items-center gap-3">
-              <FileText className="w-5 h-5 text-blue-600" />
+              <FileText className="w-5 h-5 text-primary" />
               <span className="text-sm font-medium text-gray-900">Mis Comprobantes</span>
             </div>
             <span className="text-gray-400">→</span>
           </Link>
           <Link to={RUTAS.CLIENTE.DEUDAS} className="flex items-center justify-between bg-white rounded-xl shadow-sm border border-gray-100 p-4 hover:bg-gray-50 transition-colors">
             <div className="flex items-center gap-3">
-              <CreditCard className="w-5 h-5 text-blue-600" />
+              <CreditCard className="w-5 h-5 text-primary" />
               <span className="text-sm font-medium text-gray-900">Mis Deudas</span>
             </div>
             <span className="text-gray-400">→</span>

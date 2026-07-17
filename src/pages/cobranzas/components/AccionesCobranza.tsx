@@ -22,7 +22,7 @@ export function AccionesCobranza({ cuenta, onPagar, onWhatsApp, onDescargar, onE
         {cuenta.saldo_pendiente > 0 && (
           <button
             onClick={onPagar}
-            className="flex items-center justify-center gap-2 py-3 bg-blue-600 text-white rounded-xl font-medium text-sm hover:bg-blue-700 transition-colors"
+            className="flex items-center justify-center gap-2 py-3 bg-primary text-white rounded-xl font-medium text-sm hover:bg-primary-hover transition-colors"
           >
             <Wallet size={18} />
             Registrar Pago
@@ -79,7 +79,7 @@ export function AccionesCobranza({ cuenta, onPagar, onWhatsApp, onDescargar, onE
 
         <button
           onClick={onEditarCliente}
-          className="flex items-center justify-center gap-2 py-3 bg-blue-50 text-blue-600 rounded-xl font-medium text-sm hover:bg-blue-100 transition-colors"
+          className="flex items-center justify-center gap-2 py-3 bg-primary-light text-primary rounded-xl font-medium text-sm hover:bg-primary-light transition-colors"
         >
           <Edit size={18} />
           Editar Cliente

@@ -37,7 +37,7 @@ export function TotalesCard({ subtotal, descuento, igv, total, cliente, igvActiv
       )}
       <div className="flex justify-between pt-2 border-t border-gray-100">
         <span className="font-bold text-gray-900">Total</span>
-        <span className="text-2xl font-bold text-blue-600">S/ {total.toFixed(2)}</span>
+        <span className="text-2xl font-bold text-primary">S/ {total.toFixed(2)}</span>
       </div>
     </div>
   )

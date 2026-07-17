@@ -34,7 +34,7 @@ export function FormularioPassword({ handleSubmit, passwordData, handleChange, s
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input type={showActual ? 'text' : 'password'} name="actual" value={passwordData.actual} onChange={handleChange}
-              className="w-full pl-10 pr-12 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+              className="w-full pl-10 pr-12 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary text-sm"
               placeholder="••••••••" />
             <button type="button" onClick={() => setShowActual(!showActual)} className="absolute right-3 top-1/2 -translate-y-1/2 p-1">
               {showActual ? <EyeOff size={18} className="text-gray-400" /> : <Eye size={18} className="text-gray-400" />}
@@ -46,7 +46,7 @@ export function FormularioPassword({ handleSubmit, passwordData, handleChange, s
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input type={showNueva ? 'text' : 'password'} name="nueva" value={passwordData.nueva} onChange={handleChange}
-              className="w-full pl-10 pr-12 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+              className="w-full pl-10 pr-12 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary text-sm"
               placeholder="Mínimo 6 caracteres" />
             <button type="button" onClick={() => setShowNueva(!showNueva)} className="absolute right-3 top-1/2 -translate-y-1/2 p-1">
               {showNueva ? <EyeOff size={18} className="text-gray-400" /> : <Eye size={18} className="text-gray-400" />}
@@ -58,7 +58,7 @@ export function FormularioPassword({ handleSubmit, passwordData, handleChange, s
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input type={showConfirmar ? 'text' : 'password'} name="confirmar" value={passwordData.confirmar} onChange={handleChange}
-              className="w-full pl-10 pr-12 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+              className="w-full pl-10 pr-12 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary text-sm"
               placeholder="Repite la nueva contraseña" />
             <button type="button" onClick={() => setShowConfirmar(!showConfirmar)} className="absolute right-3 top-1/2 -translate-y-1/2 p-1">
               {showConfirmar ? <EyeOff size={18} className="text-gray-400" /> : <Eye size={18} className="text-gray-400" />}

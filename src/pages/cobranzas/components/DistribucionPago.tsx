@@ -92,7 +92,7 @@ export function DistribucionPago({ ventas, ventasSeleccionadas, monto }: Distrib
                 </div>
                 <div>
                   <p className="text-gray-400">Pagando</p>
-                  <p className="font-medium text-blue-600">{formatMoneda(montoAplicar)}</p>
+                  <p className="font-medium text-primary">{formatMoneda(montoAplicar)}</p>
                 </div>
                 <div>
                   <p className="text-gray-400">Deuda después</p>
