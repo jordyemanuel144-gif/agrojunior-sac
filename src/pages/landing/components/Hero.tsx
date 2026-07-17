@@ -1,22 +1,37 @@
 import { Link } from 'react-router-dom'
 import { RUTAS } from '@/config/rutas'
 import { WHATSAPP } from '@/config/constantes'
+import landingCarnes from '@/assets/landing-carnes.png'
 
 export function Hero() {
   return (
-    <section className="relative bg-white overflow-hidden">
+    <section className="relative bg-neutral-950 overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <div className="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
+        <div className="relative z-10 pb-8 bg-neutral-950 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
+          {/* Diagonal que funde el bloque de texto con la imagen en desktop */}
+          <svg
+            className="hidden lg:block absolute right-0 inset-y-0 h-full w-48 text-neutral-950 transform translate-x-1/2"
+            fill="currentColor"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <polygon points="50,0 100,0 50,100 0,100" />
+          </svg>
+
           <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
             <div className="sm:text-center lg:text-left">
-              <h1 className="text-3xl tracking-tight font-extrabold text-gray-900 sm:text-4xl md:text-5xl">
+              <p className="text-sm font-bold tracking-widest text-primary uppercase mb-3">
+                Directo del productor · Majes, Arequipa
+              </p>
+              <h1 className="text-3xl tracking-tight font-extrabold text-white sm:text-4xl md:text-5xl">
                 <span className="block xl:inline">Carne premium de res</span>{' '}
-                <span className="block text-primary xl:inline">directo de Majes al gancho</span>
+                <span className="block text-primary xl:inline">de Majes al gancho</span>
               </h1>
-              <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+              <p className="mt-3 text-base text-neutral-300 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
                 Toro Angus de marmoleo superior y Holstein de carne magra.
-                Venta por mayor y por menor, directo del productor —
-                sin intermediarios y con +15% de rendimiento cárnico.
+                Venta por mayor y por menor, sin intermediarios y con
+                +15% de rendimiento cárnico.
               </p>
               <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start gap-3">
                 <div className="rounded-xl shadow">
@@ -40,16 +55,16 @@ export function Hero() {
                     Hacer Pedido
                   </a>
                 </div>
-</div>
               </div>
-            </main>
+            </div>
+          </main>
         </div>
       </div>
       <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
         <img
           className="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full"
-          src="https://images.unsplash.com/photo-1551028150-64b9f398f678?w=1200&q=80"
-          alt="Carne de res premium"
+          src={landingCarnes}
+          alt="Ganado Angus y Holstein con cortes de carne premium — AGROJUNIOR SAC"
         />
       </div>
     </section>

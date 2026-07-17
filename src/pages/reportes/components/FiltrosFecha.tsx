@@ -50,7 +50,7 @@ export function FiltrosFecha({ filtro, onCambiar }: FiltrosFechaProps) {
               onClick={() => handleTipoChange(opcion.valor)}
               className={`px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
                 filtro.tipo === opcion.valor
-                  ? 'bg-primary text-white'
+                  ? 'bg-primary text-neutral-900'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >

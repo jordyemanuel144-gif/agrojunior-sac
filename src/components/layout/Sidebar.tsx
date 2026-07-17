@@ -56,7 +56,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                   to={item.ruta}
                   onClick={onClose}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive(item.ruta)
-                      ? 'bg-primary text-white'
+                      ? 'bg-primary text-neutral-900'
                       : 'text-gray-600 hover:bg-gray-100'
                     }`}
                 >
@@ -104,7 +104,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                   key={item.ruta}
                   to={item.ruta}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all ${isActive(item.ruta)
-                      ? 'bg-primary text-white'
+                      ? 'bg-primary text-neutral-900'
                       : 'text-gray-600 hover:bg-gray-100'
                     }`}
                 >

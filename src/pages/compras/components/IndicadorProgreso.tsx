@@ -30,7 +30,7 @@ export function IndicadorProgreso({ pasoActual }: Props) {
                   esCompletado
                     ? 'bg-green-500 text-white'
                     : esActual
-                    ? 'bg-primary text-white'
+                    ? 'bg-primary text-neutral-900'
                     : 'bg-gray-200 text-gray-500'
                 }`}
               >

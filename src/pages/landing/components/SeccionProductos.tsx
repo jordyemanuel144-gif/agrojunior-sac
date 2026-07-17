@@ -41,7 +41,7 @@ export function SeccionProductos() {
                       </span>
                     )}
                     {producto.tag && (
-                      <span className="px-3 py-1 text-xs font-bold text-white bg-primary rounded-full">
+                      <span className="px-3 py-1 text-xs font-bold text-neutral-900 bg-primary rounded-full">
                         {producto.tag === 'oferta' ? 'Oferta' : producto.tag === 'nuevo' ? 'Nuevo' : producto.tag}
                       </span>
                     )}
@@ -68,7 +68,7 @@ export function SeccionProductos() {
         <div className="mt-10 text-center">
           <Link
             to={RUTAS.PUBLICO.CATALOGO}
-            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-primary hover:bg-primary-hover transition-colors"
+            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-neutral-900 bg-primary hover:bg-primary-hover transition-colors"
           >
             Ver Catálogo Completo
           </Link>

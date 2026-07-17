@@ -168,7 +168,7 @@ export function FormularioNuevaCompra({ onCerrar, onGuardar }: Props) {
             <button
               onClick={irASiguiente}
               disabled={!puedeIrAdelante}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl hover:bg-primary-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-neutral-900 rounded-xl hover:bg-primary-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Siguiente
               <ChevronRight size={18} />

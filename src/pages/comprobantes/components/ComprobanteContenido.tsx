@@ -31,7 +31,7 @@ export function ComprobanteContenido({ comprobante, ventaInfo }: ComprobanteCont
 
   return (
     <div id="comprobante-detalle-content" className="print:shadow-none">
-      <div className="bg-primary text-white text-center py-6 px-4">
+      <div className="bg-neutral-900 text-primary text-center py-6 px-4">
         <p className="text-lg font-bold">{(comprobante.negocio_nombre || 'MI NEGOCIO').toUpperCase()}</p>
         <p className="text-primary-light text-sm">RUC: {comprobante.negocio_ruc || '-'}</p>
         <p className="text-primary-light text-sm">{comprobante.negocio_direccion || '-'}</p>

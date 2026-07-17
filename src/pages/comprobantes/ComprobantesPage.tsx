@@ -227,7 +227,7 @@ export default function ComprobantesPage() {
                 onClick={() => setFiltroTipo(tipo)}
                 className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
                   filtroTipo === tipo
-                    ? 'bg-primary text-white'
+                    ? 'bg-primary text-neutral-900'
                     : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
                 }`}
               >

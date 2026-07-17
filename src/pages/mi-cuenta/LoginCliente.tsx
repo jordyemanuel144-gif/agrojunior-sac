@@ -123,7 +123,7 @@ export default function LoginCliente() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-4 bg-primary text-white font-bold rounded-2xl hover:bg-primary-hover active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-4 bg-primary text-neutral-900 font-bold rounded-2xl hover:bg-primary-hover active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
               </button>

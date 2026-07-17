@@ -180,7 +180,7 @@ export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoPr
               onClick={handlePagoRapido}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                 modoPago === 'rapido'
-                  ? 'bg-primary text-white'
+                  ? 'bg-primary text-neutral-900'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
@@ -191,7 +191,7 @@ export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoPr
               onClick={handlePagoAvanzado}
               className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                 modoPago === 'avanzado'
-                  ? 'bg-primary text-white'
+                  ? 'bg-primary text-neutral-900'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
@@ -246,7 +246,7 @@ export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoPr
                   onClick={() => setMetodoPago(metodo)}
                   className={`px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                     metodoPago === metodo
-                      ? 'bg-primary text-white'
+                      ? 'bg-primary text-neutral-900'
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
@@ -345,7 +345,7 @@ export function ModalRegistrarPago({ clienteId, onCerrar }: ModalRegistrarPagoPr
             disabled={!puedePagar || loading}
             className={`w-full py-3.5 rounded-xl font-bold text-sm transition-colors flex items-center justify-center gap-2 ${
               puedePagar
-                ? 'bg-primary text-white hover:bg-primary-hover'
+                ? 'bg-primary text-neutral-900 hover:bg-primary-hover'
                 : 'bg-gray-200 text-gray-400 cursor-not-allowed'
             }`}
           >

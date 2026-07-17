@@ -70,7 +70,7 @@ export function FormularioEditarPerfil({ usuario, guardando, onGuardar, error, e
         <button
           type="submit"
           disabled={guardando}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-xl hover:bg-primary-hover transition disabled:opacity-50"
+          className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-neutral-900 rounded-xl hover:bg-primary-hover transition disabled:opacity-50"
         >
           {guardando ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" /> : <Save size={18} />}
           {guardando ? 'Guardando...' : 'Guardar cambios'}

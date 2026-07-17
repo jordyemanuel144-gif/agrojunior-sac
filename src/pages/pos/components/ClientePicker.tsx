@@ -79,7 +79,7 @@ export function ClientePicker({ clientes, clienteSeleccionado, onSeleccionar, on
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
                 filtroTipo === tipo.value
                   ? tipo.value === 'todos'
-                    ? 'bg-primary text-white'
+                    ? 'bg-primary text-neutral-900'
                     : tipo.value === 'mayorista'
                     ? 'bg-green-600 text-white'
                     : tipo.value === 'especial'

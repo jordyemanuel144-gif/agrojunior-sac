@@ -89,7 +89,7 @@ export default function StockActual() {
           <div className="flex gap-2 mb-4">
             <button
               onClick={() => navigate(RUTAS.ADMIN.INVENTARIO_CONTEO)}
-              className="flex items-center gap-2 px-4 py-2.5 bg-primary text-white rounded-xl hover:bg-primary-hover transition-colors font-medium text-sm"
+              className="flex items-center gap-2 px-4 py-2.5 bg-primary text-neutral-900 rounded-xl hover:bg-primary-hover transition-colors font-medium text-sm"
             >
               Ajuste de Inventario
             </button>

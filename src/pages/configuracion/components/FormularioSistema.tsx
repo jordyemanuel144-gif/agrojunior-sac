@@ -57,7 +57,7 @@ export function FormularioSistema({ config, onGuardar, guardando }: Props) {
         </div>
       </div>
 
-      <button type="submit" disabled={guardando} className="flex items-center justify-center gap-2 px-6 py-2.5 bg-primary text-white rounded-xl hover:bg-primary-hover transition font-medium disabled:opacity-50">
+      <button type="submit" disabled={guardando} className="flex items-center justify-center gap-2 px-6 py-2.5 bg-primary text-neutral-900 rounded-xl hover:bg-primary-hover transition font-medium disabled:opacity-50">
         <Save size={16} />
         {guardando ? 'Guardando...' : 'Guardar'}
       </button>

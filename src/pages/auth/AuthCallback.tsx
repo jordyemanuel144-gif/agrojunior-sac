@@ -106,7 +106,7 @@ export default function AuthCallback() {
             <p className="mt-2 text-gray-500">{error}</p>
             <a
               href={RUTAS.CLIENTE.LOGIN}
-              className="mt-6 inline-block px-6 py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary-hover transition-colors"
+              className="mt-6 inline-block px-6 py-3 bg-primary text-neutral-900 font-bold rounded-xl hover:bg-primary-hover transition-colors"
             >
               Volver al login
             </a>

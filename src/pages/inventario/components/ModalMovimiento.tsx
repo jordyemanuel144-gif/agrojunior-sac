@@ -147,7 +147,7 @@ export function ModalMovimiento({ producto, onCerrar, onRegistrado }: Props) {
           <button
             type="submit"
             disabled={guardando || !cantidad || parseFloat(cantidad) <= 0}
-            className="w-full py-3 bg-primary text-white rounded-xl font-bold text-sm hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full py-3 bg-primary text-neutral-900 rounded-xl font-bold text-sm hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {guardando ? 'Guardando...' : 'Registrar Movimiento'}
           </button>

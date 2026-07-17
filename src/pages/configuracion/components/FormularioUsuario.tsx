@@ -118,7 +118,7 @@ export function FormularioUsuario({ usuario, onCerrar, onGuardar }: FormularioUs
             </button>
             <button
               type="submit"
-              className="flex-1 px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary-hover transition"
+              className="flex-1 px-4 py-2 bg-primary text-neutral-900 rounded-xl hover:bg-primary-hover transition"
             >
               {usuario ? 'Guardar' : 'Crear'}
             </button>

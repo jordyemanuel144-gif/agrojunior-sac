@@ -265,7 +265,7 @@ export function FormularioProducto({ producto, onCerrar, onGuardar }: Props) {
             <button
               type="submit"
               disabled={guardando}
-              className="flex-1 px-4 py-2.5 bg-primary text-white rounded-xl hover:bg-primary-hover transition-colors font-medium disabled:opacity-50"
+              className="flex-1 px-4 py-2.5 bg-primary text-neutral-900 rounded-xl hover:bg-primary-hover transition-colors font-medium disabled:opacity-50"
             >
               {guardando ? 'Guardando...' : 'Guardar'}
             </button>

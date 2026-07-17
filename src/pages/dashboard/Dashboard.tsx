@@ -294,7 +294,7 @@ export default function Dashboard() {
         </div>
         <Link 
           to={RUTAS.ADMIN.POS} 
-          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-white font-bold rounded-xl hover:bg-primary-hover transition-colors"
+          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-primary text-neutral-900 font-bold rounded-xl hover:bg-primary-hover transition-colors"
         >
           <DollarSign size={18} />
           <span>Nueva Venta</span>

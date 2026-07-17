@@ -20,7 +20,7 @@ export function SelectorTipoCliente({ tipoSeleccionado, onCambiar }: SelectorTip
           onClick={() => onCambiar(tipo.value)}
           className={`px-3 py-1.5 md:px-4 md:py-2 rounded-lg md:rounded-xl text-xs md:text-sm font-semibold transition-all duration-200 ${
             tipoSeleccionado === tipo.value
-              ? 'bg-primary text-white shadow-md'
+              ? 'bg-primary text-neutral-900 shadow-md'
               : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
           }`}
         >

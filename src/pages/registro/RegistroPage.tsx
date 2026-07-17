@@ -22,7 +22,7 @@ function RegistroExitoso() {
           </p>
           <Link
             to={RUTAS.CLIENTE.LOGIN}
-            className="mt-6 inline-flex items-center justify-center px-6 py-3 bg-primary text-white font-bold rounded-xl hover:bg-primary-hover transition-colors"
+            className="mt-6 inline-flex items-center justify-center px-6 py-3 bg-primary text-neutral-900 font-bold rounded-xl hover:bg-primary-hover transition-colors"
           >
             Iniciar sesión
           </Link>
@@ -239,7 +239,7 @@ export default function RegistroPage() {
               <button
                 type="submit"
                 disabled={enviando}
-                className="w-full py-4 bg-primary text-white font-bold rounded-2xl hover:bg-primary-hover active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-4 bg-primary text-neutral-900 font-bold rounded-2xl hover:bg-primary-hover active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {enviando ? (
                   <>

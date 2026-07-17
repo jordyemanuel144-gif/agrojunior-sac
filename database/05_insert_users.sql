@@ -1,4 +1,10 @@
--- Insertar usuarios de staff con sus UUIDs de auth.users
+-- Insertar usuarios de staff con sus UUIDs de auth.users.
+--
+-- IMPORTANTE: primero crea el usuario en Supabase Dashboard →
+-- Authentication → Users → Add user (con su email y contraseña).
+-- Copia el UUID que Supabase le asigna y reemplázalo abajo antes
+-- de correr este script. No puedes insertar un UUID inventado:
+-- la tabla "usuarios" tiene FK contra auth.users(id).
+
 INSERT INTO usuarios (id, email, name, role) VALUES
-  ('8f6e2683-e4bf-496a-817e-dbdc69335c05', 'admin@samjose.com', 'Administrador', 'admin'),
-  ('b5b76f4b-0829-43d1-9e4e-2f88d7661b1a', 'vendedor@samjose.com', 'Juan Pérez', 'vendedor');
+  ('1b5192fc-5015-45b8-b158-4daf778e43d1', 'admin@agrojuniorsac.com', 'Darly Sanchez Cutipa', 'admin');

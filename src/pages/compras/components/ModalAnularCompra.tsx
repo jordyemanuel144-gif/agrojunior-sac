@@ -57,7 +57,7 @@ export function ConfirmarAnulacion({ onConfirm }: { onConfirm: () => void }) {
         <p className="text-gray-500 text-center mb-6">La compra ha sido anulada correctamente.</p>
         <button
           onClick={onConfirm}
-          className="w-full px-4 py-2.5 bg-primary text-white rounded-xl hover:bg-primary-hover transition-colors font-medium"
+          className="w-full px-4 py-2.5 bg-primary text-neutral-900 rounded-xl hover:bg-primary-hover transition-colors font-medium"
         >
           Entendido
         </button>

@@ -183,7 +183,7 @@ export function ConfirmarPedido({ items, cliente, clientes, stockInfo: _stockInf
             </div>
             <div className="flex gap-1.5 mb-3 overflow-x-auto pb-1">
               {(['todos', 'minorista', 'mayorista', 'especial'] as const).map(tipo => (
-                <button key={tipo} onClick={() => setFiltroTipo(tipo)} className={`px-2.5 py-1 rounded-lg text-[10px] font-semibold whitespace-nowrap transition-all ${filtroTipo === tipo ? (tipo === 'todos' ? 'bg-primary text-white' : tipo === 'mayorista' ? 'bg-green-600 text-white' : tipo === 'especial' ? 'bg-purple-600 text-white' : 'bg-gray-600 text-white') : 'bg-gray-100 text-gray-500'}`}>
+                <button key={tipo} onClick={() => setFiltroTipo(tipo)} className={`px-2.5 py-1 rounded-lg text-[10px] font-semibold whitespace-nowrap transition-all ${filtroTipo === tipo ? (tipo === 'todos' ? 'bg-primary text-neutral-900' : tipo === 'mayorista' ? 'bg-green-600 text-white' : tipo === 'especial' ? 'bg-purple-600 text-white' : 'bg-gray-600 text-white') : 'bg-gray-100 text-gray-500'}`}>
                   {tipo === 'todos' ? 'Todos' : tipo === 'minorista' ? 'Minorista' : tipo === 'mayorista' ? 'Mayorista' : 'Especial'}
                 </button>
               ))}
@@ -369,7 +369,7 @@ export function ConfirmarPedido({ items, cliente, clientes, stockInfo: _stockInf
             handleConfirmar()
           }}
           disabled={cargando || montoInvalido}
-          className={`w-full font-bold py-4 rounded-2xl flex items-center justify-center gap-2 text-base transition-all active:scale-[.98] ${cargando || montoInvalido ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-primary hover:bg-primary-hover text-white'}`}
+          className={`w-full font-bold py-4 rounded-2xl flex items-center justify-center gap-2 text-base transition-all active:scale-[.98] ${cargando || montoInvalido ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-primary hover:bg-primary-hover text-neutral-900'}`}
         >
           {cargando ? (
             <span className="animate-pulse">Procesando...</span>

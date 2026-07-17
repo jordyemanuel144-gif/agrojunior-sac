@@ -94,7 +94,7 @@ export function ComprobantePago({ comprobante, onCerrar }: Props) {
 
       <div className="flex-1 overflow-y-auto px-4 py-4">
         <div id="comprobante-pago-content" className="bg-white rounded-2xl shadow-sm overflow-hidden print:shadow-none">
-          <div className="bg-primary text-white text-center py-4 px-4">
+          <div className="bg-neutral-900 text-primary text-center py-4 px-4">
             <p className="text-base font-bold">{comprobante.negocio_nombre.toUpperCase()}</p>
             <p className="text-primary-light text-xs mt-0.5">RUC: {comprobante.negocio_ruc}</p>
             <p className="text-primary-light text-xs">{comprobante.negocio_direccion}</p>
@@ -224,7 +224,7 @@ export function ComprobantePago({ comprobante, onCerrar }: Props) {
 
       <div className="bg-white px-4 py-4 border-t border-gray-100 space-y-3 print:hidden">
         <div className="grid grid-cols-2 gap-3">
-          <button onClick={handleImprimir} className="flex items-center justify-center gap-2 bg-primary text-white py-3.5 rounded-2xl font-bold text-sm">
+          <button onClick={handleImprimir} className="flex items-center justify-center gap-2 bg-primary text-neutral-900 py-3.5 rounded-2xl font-bold text-sm">
             <Printer size={18} />Imprimir
           </button>
           <button onClick={handleWhatsappTexto} className="flex items-center justify-center gap-2 bg-green-500 text-white py-3.5 rounded-2xl font-bold text-sm">

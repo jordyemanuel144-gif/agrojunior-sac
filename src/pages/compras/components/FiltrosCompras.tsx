@@ -68,7 +68,7 @@ export function FiltrosCompras({
               }}
               className={`px-3 py-2 rounded-lg text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${
                 filtroFecha === btn.value
-                  ? 'bg-primary text-white shadow-md'
+                  ? 'bg-primary text-neutral-900 shadow-md'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >

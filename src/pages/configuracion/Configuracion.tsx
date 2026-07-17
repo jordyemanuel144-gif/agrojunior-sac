@@ -79,7 +79,7 @@ export default function Configuracion() {
             onClick={() => setTabActivo(tab.id as typeof tabActivo)}
             className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium whitespace-nowrap transition ${
               tabActivo === tab.id
-                ? 'bg-primary text-white rounded-xl'
+                ? 'bg-primary text-neutral-900 rounded-xl'
                 : 'text-gray-500 hover:bg-gray-100 rounded-xl'
             }`}
           >
@@ -114,7 +114,7 @@ export default function Configuracion() {
         <div className="mt-6">
           <div className="flex justify-between items-center mb-4">
             <p className="text-gray-500 text-sm">Gestiona los usuarios del sistema</p>
-            <button onClick={handleCrear} className="px-4 py-2 bg-primary text-white rounded-xl hover:bg-primary-hover transition text-sm font-medium">
+            <button onClick={handleCrear} className="px-4 py-2 bg-primary text-neutral-900 rounded-xl hover:bg-primary-hover transition text-sm font-medium">
               + Nuevo Usuario
             </button>
           </div>

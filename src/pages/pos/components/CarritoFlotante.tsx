@@ -19,7 +19,7 @@ export function CarritoFlotante({ totalItems, subtotal, onContinuar, onCancelar 
         </button>
         <button
           onClick={onContinuar}
-          className="flex-1 bg-primary text-white rounded-2xl py-3.5 px-4 flex items-center justify-between shadow-xl shadow-primary/50 active:scale-[0.98] transition-transform"
+          className="flex-1 bg-primary text-neutral-900 rounded-2xl py-3.5 px-4 flex items-center justify-between shadow-xl shadow-primary/50 active:scale-[0.98] transition-transform"
         >
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-primary rounded-xl flex items-center justify-center text-sm font-bold">
@@ -52,7 +52,7 @@ export function CarritoFlotante({ totalItems, subtotal, onContinuar, onCancelar 
         </button>
         <button
           onClick={onContinuar}
-          className="bg-primary text-white rounded-xl px-4 py-3 flex items-center gap-3 shadow-xl shadow-primary/30 active:scale-[.98] transition-all"
+          className="bg-primary text-neutral-900 rounded-xl px-4 py-3 flex items-center gap-3 shadow-xl shadow-primary/30 active:scale-[.98] transition-all"
         >
           <div className="w-8 h-8 bg-primary rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0">
             {totalItems}

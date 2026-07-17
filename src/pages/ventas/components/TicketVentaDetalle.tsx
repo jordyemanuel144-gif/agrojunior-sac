@@ -14,7 +14,7 @@ export function TicketVentaDetalle({ venta, cliente, esAnulada }: Props) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
       {/* Cabecera del ticket */}
-      <div className="bg-primary text-white text-center py-6 px-4">
+      <div className="bg-neutral-900 text-primary text-center py-6 px-4">
         <p className="text-lg font-bold tracking-wide">{nombre}</p>
         <p className="text-primary-light text-xs mt-1">RUC: {ruc}</p>
         <p className="text-primary-light text-xs">{direccion}</p>

@@ -56,7 +56,7 @@ export function ComprobanteAcciones({ comprobante, enviandoImagen, onEnviandoIma
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <button 
           onClick={() => window.print()} 
-          className="flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-xl text-sm font-bold hover:bg-primary-hover transition-colors"
+          className="flex items-center justify-center gap-2 px-4 py-3 bg-primary text-neutral-900 rounded-xl text-sm font-bold hover:bg-primary-hover transition-colors"
         >
           <Printer size={18} />
           <span className="hidden sm:inline">Imprimir</span>

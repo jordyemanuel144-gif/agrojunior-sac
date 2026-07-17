@@ -128,7 +128,7 @@ export default function DetalleComprobante() {
             </button>
             <button
               onClick={handleImprimir}
-              className="flex items-center justify-center gap-2 bg-primary text-white py-3.5 rounded-xl font-semibold text-sm hover:bg-primary-hover transition-colors"
+              className="flex items-center justify-center gap-2 bg-primary text-neutral-900 py-3.5 rounded-xl font-semibold text-sm hover:bg-primary-hover transition-colors"
             >
               <Printer size={18} />
               Imprimir

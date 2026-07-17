@@ -22,7 +22,7 @@ export function FiltroCategorias({ categoriaSeleccionada, onCambiar }: FiltroCat
           onClick={() => onCambiar(categoria.id)}
           className={`px-3 py-1.5 md:px-4 md:py-2 rounded-lg text-xs md:text-sm font-medium transition-colors flex-shrink-0 ${
             categoriaSeleccionada === categoria.id
-              ? 'bg-primary text-white'
+              ? 'bg-primary text-neutral-900'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >

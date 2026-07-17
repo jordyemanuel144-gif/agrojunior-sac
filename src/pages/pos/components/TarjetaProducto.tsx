@@ -103,7 +103,7 @@ export function TarjetaProducto({ producto, precio, stockDisponible, cantidadEnC
         )}
 
         {cantidadEnCarrito > 0 && (
-          <div className="absolute bottom-1.5 right-1.5 flex items-center gap-1 bg-primary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-md">
+          <div className="absolute bottom-1.5 right-1.5 flex items-center gap-1 bg-primary text-neutral-900 text-[10px] font-bold px-1.5 py-0.5 rounded-md">
             <ShoppingCart size={9} />
             {esKg ? cantidadEnCarrito.toFixed(1) : cantidadEnCarrito}
           </div>
@@ -146,7 +146,7 @@ export function TarjetaProducto({ producto, precio, stockDisponible, cantidadEnC
                 onClick={() => agregarCantidadRapida(1)}
                 disabled={sinStock || stockMaximo < 1}
                 className={`flex-1 py-1.5 rounded-md text-[10px] font-semibold transition-all
-                  ${sinStock || stockMaximo < 1 ? 'bg-gray-100 text-gray-400' : 'bg-primary text-white hover:bg-primary-hover'}`}>
+                  ${sinStock || stockMaximo < 1 ? 'bg-gray-100 text-gray-400' : 'bg-primary text-neutral-900 hover:bg-primary-hover'}`}>
                 +1 kg
               </button>
               <button
@@ -187,7 +187,7 @@ export function TarjetaProducto({ producto, precio, stockDisponible, cantidadEnC
                 onClick={() => agregarCantidadRapida(1)}
                 disabled={sinStock}
                 className={`flex-1 py-1.5 rounded-md text-[10px] font-medium transition-all
-                  ${sinStock ? 'bg-gray-100 text-gray-400' : 'bg-primary text-white hover:bg-primary-hover'}`}>
+                  ${sinStock ? 'bg-gray-100 text-gray-400' : 'bg-primary text-neutral-900 hover:bg-primary-hover'}`}>
                 +1
               </button>
               <button

@@ -66,7 +66,7 @@ export function ClientePickerModal({ clientes, clienteActual, onSeleccionar, onC
             <button key={tipo.value} onClick={() => setFiltroTipo(tipo.value)}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
                 filtroTipo === tipo.value 
-                  ? tipo.value === 'todos' ? 'bg-primary text-white' 
+                  ? tipo.value === 'todos' ? 'bg-primary text-neutral-900' 
                   : tipo.value === 'mayorista' ? 'bg-green-600 text-white' 
                   : tipo.value === 'especial' ? 'bg-purple-600 text-white' 
                   : 'bg-gray-600 text-white'

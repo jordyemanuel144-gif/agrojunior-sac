@@ -225,7 +225,7 @@ export default function ConteoInventario() {
           <button
             onClick={guardarConteo}
             disabled={guardando}
-            className="flex-1 py-3 bg-primary text-white rounded-xl font-bold text-sm hover:bg-primary-hover disabled:opacity-50"
+            className="flex-1 py-3 bg-primary text-neutral-900 rounded-xl font-bold text-sm hover:bg-primary-hover disabled:opacity-50"
           >
             {guardando ? 'Guardando...' : 'Crear Conteo'}
           </button>
@@ -249,7 +249,7 @@ export default function ConteoInventario() {
       <div className="max-w-screen-xl mx-auto">
         <button
           onClick={iniciarNuevoConteo}
-          className="w-full md:w-auto flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-xl hover:bg-primary-hover transition-colors mb-4"
+          className="w-full md:w-auto flex items-center justify-center gap-2 px-4 py-3 bg-primary text-neutral-900 rounded-xl hover:bg-primary-hover transition-colors mb-4"
         >
           <Plus size={20} />
           <span className="font-medium">Nuevo Conteo</span>
