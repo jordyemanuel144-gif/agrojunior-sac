@@ -663,6 +663,9 @@ $$ LANGUAGE sql SECURITY DEFINER STABLE;
 -- Lectura: todos los autenticados
 CREATE POLICY categorias_select ON categorias
   FOR SELECT TO authenticated USING (true);
+-- Lectura pública para el catálogo (anon)
+CREATE POLICY categorias_public ON categorias
+  FOR SELECT TO anon USING (true);
 -- Escritura: solo admin
 CREATE POLICY categorias_admin ON categorias
   FOR ALL TO authenticated USING (auth_user_role() = 'admin');
@@ -771,6 +774,9 @@ CREATE POLICY comprobantes_cliente ON comprobantes
 -- ═══ POLÍTICAS: CONFIGURACIÓN ══════════════════════════════
 CREATE POLICY config_read ON configuracion
   FOR SELECT TO authenticated USING (true);
+-- Lectura pública (nombre, horario, contacto para la web pública)
+CREATE POLICY config_public ON configuracion
+  FOR SELECT TO anon USING (true);
 CREATE POLICY config_admin ON configuracion
   FOR ALL TO authenticated USING (auth_user_role() = 'admin');
 -- ============================================================
